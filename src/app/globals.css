@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-primary: #60BC9B;
+  --color-primary-hover: #4ba88a;
+  --color-primary-disabled: #a8d8c2;
 }
 
 @theme inline {
@@ -10,7 +13,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-button: var(--color-primary);
+  --color-button-hover: var(--color-primary-hover);
+  --color-button-disabled: var(--color-primary-disabled);
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -22,5 +29,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Saira Condensed", sans-serif;
 }
