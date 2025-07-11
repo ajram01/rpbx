@@ -32,7 +32,7 @@ export default function Home() {
           
           {/* Your main content goes here */}
           <p className="text-lg mb-4">
-            This is where you'd put your main page content like:
+            This is where you&#39;d put your main page content like:
           </p>
           
           <ul className="list-disc list-inside space-y-2 mb-6">
