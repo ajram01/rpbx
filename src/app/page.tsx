@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Navbar from "./components/Navbar";
+import Button from "./components/Button";
 
 export default function Home() {
   return (
@@ -6,7 +8,7 @@ export default function Home() {
       {/* Div 1: 2 rows */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-cover bg-center">
         <div>
-          <h1>header will go somewhere in this div</h1>
+          <Navbar />
         </div>
         <div className="flex flex-row">
           <div className="flex-1 flex justify-end items-center p-[15px]">
@@ -31,10 +33,58 @@ export default function Home() {
 
       {/* Div 2: 1 div containing 3 div columns */}
       <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed flex justify-center p-[15px]">
-        <div className="flex flex-row gap-x-[15px] w-[1140px] ">
-          <div className="bg-white flex-1 min-h-[500px]">Div 2 - Col 1</div>
-          <div className="bg-white flex-1 min-h-[500px]">Div 2 - Col 2</div>
-          <div className="bg-white flex-1 min-h-[500px]">Div 2 - Col 3</div>
+        <div className="flex flex-row gap-x-[15px] w-[1140px]">
+          <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl">
+            <p className="font-semibold">Business Owner Lite</p>
+            <h3>Free</h3>
+            <p className="text-grey">Access</p>
+            <ul className="list-image-[url(/images/icons/circle-mint.png)] pl-10 font-light">
+              <li>A Unique Opportunity for Local Entrepreneurs</li>
+              <li>Comprehensive & Secure Space to Tell Your Story</li>
+              <li>Connecting You with a Community of Investors</li>
+              <li>Supporting Your Business’s Growth at Every Stage</li>
+              <li>Maximizing Visibility & Achieving Strategic Goals</li>
+            </ul>
+            <ul className="list-image-[url(/images/icons/circle-grey.png)] pl-10 font-light ">
+              <li className="text-grey">View Comprehensive Profiles of Interested Investors</li>
+              <li className="text-grey">Directly Connect with Potential Investors</li>
+            </ul>
+
+            <Button variant="charcoal">Get Started</Button>
+          </div>
+          <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl">
+            <p className="font-semibold">Business Owner Legacy</p>
+            <h3>$34</h3>
+            <p className="text-grey">Per Month</p>
+            <ul className="list-image-[url(/images/icons/circle-mint.png)] pl-10 font-light">
+              <li>A Unique Opportunity for Local Entrepreneurs</li>
+              <li>Comprehensive & Secure Space to Tell Your Story</li>
+              <li>Connecting You with a Community of Investors</li>
+              <li>Supporting Your Business’s Growth at Every Stage</li>
+              <li>Maximizing Visibility & Achieving Strategic Goals</li>
+              <li>View Comprehensive Profiles of Interested Investors</li>
+              <li>Directly Connect with Potential Investors</li>
+            </ul>
+
+            <Button variant="charcoal">Get Started</Button>
+
+          </div>
+          <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl">
+            <p className="font-semibold">Investor Plan</p>
+            <h3>$76</h3>
+            <p className="text-grey">Per Month</p>
+            <ul className="list-image-[url(/images/icons/circle-mint.png)] pl-10 font-light">
+              <li>Join a Network of Forward-Thinking Investors</li>
+              <li>Comprehensive Insights at Your Fingertips</li>
+              <li>Align Your Investments with Your Financial Goals</li>
+              <li>Unlock Full Access to Detailed Business Listings</li>
+              <li>Directly Connect with Business Owners</li>
+              <li>Stay Informed with Tailored Notifications for Your Business Interests</li>
+            </ul>
+
+            <Button variant="charcoal">Get Started</Button>
+
+          </div>
         </div>
       </div>
 
@@ -58,7 +108,7 @@ export default function Home() {
 
         
         <div className="flex flex-row gap-x-[15px] w-full">
-          <div className="bg-white shadow-md flex-1 flex justify-end">
+          <div className="bg-white shadow-md flex-1 flex justify-end rounded-r-2xl">
             <div className="flex flex-col items-start w-[560px]">
               <h2>Who is RPBX for?</h2>
               <p>Connecting small business owners with the right investors to help them grow, succeed, and achieve their goals. Join RioPlex Business Exchange and be part of a platform built for ambitious businesses and forward-thinking investors.</p>
@@ -129,7 +179,7 @@ export default function Home() {
 
       {/* Div 4: 1 div */}
       <div className="bg-purple-300 flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed p-[15px]">
-        <div className="bg-white flex flex-col items-center items-center w-[1140px] min-h-[300px]">
+        <div className="bg-white flex flex-col items-center items-center w-[1140px] min-h-[300px] rounded-2xl">
           <h2>Unlock Your Growth with Expert Insights</h2>
           <p>Join our monthly RPBX newsletter for exclusive resources, investor opportunities, and expert advice to fuel your business success. It’s free, insightful, and spam-free!</p>
           <p>Join our monthly RPBX newsletter for exclusive resources, investor opportunities, and expert advice to fuel your business success. It’s free, insightful, and spam-free!</p>

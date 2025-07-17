@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -29,5 +30,37 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Saira Condensed", sans-serif;
+  /* font-family: "Saira Condensed", sans-serif; */
+}
+
+p {
+  font-family: var(--font-poppins), sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.625;
+  color: #333333;
+}
+
+p.text-grey {
+  color: #A1A1A1;
+}
+
+li.text-grey {
+  color: #CDCDCD;
+}
+
+p.font-semibold {
+  font-weight: 600;
+}
+
+p.font-light {
+  font-weight: 300;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-saira), sans-serif;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 1.625;
+  color: #333333;
 }
