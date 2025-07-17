@@ -17,7 +17,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-[9999] w-full px-4 py-4 bg-white bg-opacity-80 backdrop-blur-lg backdrop-saturate-150 shadow-md lg:px-8">
+    <nav className="top-0 z-[9999] w-[1140px] mx-auto py-4 backdrop-saturate-150">
         <div className="container mx-auto flex flex-wrap items-center justify-between text-slate-800">
         <Link href="/" className="flex items-center">
           <Image
@@ -34,7 +34,7 @@ export default function Navbar() {
             onClick={toggleMobileMenu}
             type="button"
             aria-label="Toggle Mobile Menu"
-            className="relative ml-auto h-10 w-10 text-inherit transition-all hover:bg-gray-100 focus:outline-none"
+            className="relative ml-auto h-10 w-10 text-inherit transition-all hover:bg-gray-100 focus:outline-none "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
