@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Saira_Condensed } from "next/font/google";
+import Footer from "./components/Footer";
 import "./globals.css";
 
 const sairaCondensed = Saira_Condensed({
@@ -30,8 +31,9 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${sairaCondensed.variable} antialiased`}
       >
-        {/* <Navbar /> */}
+
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Navbar from "./components/Navbar";
-import Button from "./components/Button";
+import Navbar from "../components/Navbar";
+import Button from "../components/Button";
 
-export default function Home() {
+export default function Investor() {
   return (
     <div>
       {/* Div 1: 2 rows */}
@@ -13,7 +13,7 @@ export default function Home() {
         <div className="flex flex-row">
           <div className="flex-1 flex justify-end items-center p-[15px]">
             <div className="flex flex-col items-center w-[560px]">
-              <h1>Unlock Your Business Potential</h1>
+              <h1>Buy A Business</h1>
               <input type="email" placeholder="Email" className="mt-5 w-lg px-6 py-2 rounded-full font-medium bg-white" />
               <button className="mt-5 w-lg px-6 py-2 rounded-full font-medium transition bg-white hover:bg-[var(--color-primary)] text-black">Sign In</button>
               <p className="mt-5 text-center">By clicking Continue to join or sign in, you agree to RioPlex’s User Agreement, Privacy Policy, and Cookie Policy.</p>
@@ -22,7 +22,7 @@ export default function Home() {
           </div>
           <div className="flex-1">
             <Image
-              src="/images/header/home-header.png"
+              src="/images/header/investor-header.png"
               alt="Investors and Business Owners"
               width={2000}
               height={450}
