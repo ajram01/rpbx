@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Saira_Condensed } from "next/font/google";
-import "./globals.css";
+import "./globals.css"; 
 
 const sairaCondensed = Saira_Condensed({
   subsets: ["latin"],
