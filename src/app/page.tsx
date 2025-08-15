@@ -2,9 +2,32 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Button from "./components/Button";
 
-export default function Home() {
+import { createClient } from "../../utils/supabase/server";
+import { cookies } from "next/headers";
+
+
+export default async function Home() {
+
+  // ===== Supabase query =====
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { data: product, error } = await supabase.from('public.products').select('*').order("id").limit(5)
+  // ===========================
+
   return (
     <div>
+      <section className="p-4">
+        <h2 className="text-lg font-semibold">Product</h2>
+        {error && <p className="text-red-600">Failed to load todos.</p>}
+        <ul>
+          {product?.map((todo: any) => (
+            <li key={todo.id ?? JSON.stringify(todo)}>
+              {todo.title ?? JSON.stringify(todo)}
+            </li>
+          ))}
+        </ul>
+      </section>
       {/* Div 1: 2 rows */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-cover bg-center">
         <div>
