@@ -1,34 +1,66 @@
-import React from "react";
+import React, { type ReactNode } from "react";
+import Link from "next/link";
 
-type ButtonProps = {
-  variant?: "primary" | "secondary" | "charcoal" | "white";
+type Variant = "primary" | "secondary" | "charcoal" | "white";
+
+type CommonProps = {
+  variant?: Variant;
   disabled?: boolean;
-  children: React.ReactNode;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+  className?: string;
+  children: ReactNode;
+};
 
-export default function Button({
-  variant = "primary",
-  disabled = false,
-  children,
-  className = "",
-  ...props
-}: ButtonProps) {
-  const baseStyles = "px-6 py-2 rounded-full font-medium transition";
-  const variantStyles = {
+// When used as a real <button>
+type ButtonAsButtonProps = CommonProps &
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className"> & {
+    href?: undefined;
+  };
+
+// When used as a link (<Link> renders an <a> under the hood)
+type ButtonAsLinkProps = CommonProps &
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "className" | "href"> & {
+    href: string;
+  };
+
+export type ButtonProps = ButtonAsButtonProps | ButtonAsLinkProps;
+
+export default function Button(props: ButtonProps) {
+  const { variant = "primary", disabled = false, className = "", children, ...rest } = props;
+
+  const baseStyles = "px-6 py-2 rounded-full font-medium transition inline-flex items-center justify-center";
+  const variantStyles: Record<Variant, string> = {
     primary: "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white",
     secondary: "bg-gray-700 hover:bg-gray-800 text-white",
     charcoal: "bg-[#333333] hover:bg-[#444444] text-white",
-    white: "bg-white hover:bg-[#444444] text-black border border-black w-auto px-[15px]"
+    white: "bg-white hover:bg-[#444444] text-black border border-black w-auto px-[15px]",
   };
+  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";
+  const classes = [baseStyles, variantStyles[variant], disabledStyles, className].filter(Boolean).join(" ");
 
-  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed" : "";
+  // Link version
+  if ("href" in props && props.href) {
+    const { href, ...linkProps } = rest as Omit<ButtonAsLinkProps, "children" | "variant" | "disabled" | "className">;
 
+    // If "disabled" with a link, render a non-interactive span
+    if (disabled) {
+      return (
+        <span aria-disabled="true" className={classes}>
+          {children}
+        </span>
+      );
+    }
+
+    return (
+      <Link href={href} className={classes} {...linkProps}>
+        {children}
+      </Link>
+    );
+  }
+
+  // Button version
+  const buttonProps = rest as Omit<ButtonAsButtonProps, "children" | "variant" | "className">;
   return (
-    <button
-      className={`${baseStyles} ${variantStyles[variant]} ${disabledStyles} ${className}`}
-      disabled={disabled}
-      {...props}
-    >
+    <button className={classes} disabled={disabled} {...buttonProps}>
       {children}
     </button>
   );
