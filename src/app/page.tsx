@@ -9,8 +9,7 @@ import { cookies } from "next/headers";
 export default async function Home() {
 
   // ===== Supabase query =====
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createClient()
 
   const { data: product, error } = await supabase.from('public.products').select('*').order("id").limit(5)
   // ===========================
