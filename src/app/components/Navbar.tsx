@@ -83,7 +83,7 @@ export default function Navbar() {
                 Join Now
               </li>
               <li>
-                <Button>Sign In</Button>
+                <Button href="/login">Sign In</Button>
               </li>
             </ul>
           </div>
