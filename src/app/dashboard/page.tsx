@@ -65,7 +65,7 @@ export default async function Dashboard() {
               <h3 className="text-white pb-5">Recent Activity</h3>
               <ul className="list-disc list-inside space-y-2">
                 <li className="text-white">
-                  John S. viewed your listing "RGV Logistics"
+                  John S. viewed your listing &quot;RGV Logistics&quot;
                 </li>
                 <li className="text-white">New message from Investor Carla D.</li>
                 <li className="text-white">Your listing was updated 2 days ago</li>
