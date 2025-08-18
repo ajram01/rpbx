@@ -31,7 +31,6 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${sairaCondensed.variable} antialiased`}
       >
-
         {children}
         <Footer />
       </body>

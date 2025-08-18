@@ -98,16 +98,16 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="top-0 z-[9999] w-full py-4 backdrop-saturate-150">
-      <div className="mx-auto w-full lg:w-[1140px] px-4">
+    <nav className="sticky top-0 z-[9999] w-full py-10 backdrop-saturate-150 px-5 lg:px-0 ">
+      <div className="mx-auto w-full lg:w-[1140px] lg:px-10 px-7 py-2 bg-white rounded-full shadow-md">
         <div className="flex flex-wrap items-center justify-between text-slate-800">
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/logos/Rio-Plex-Logo-Main-Mint-&-Charcoal.png"
+              src="/images/logos/RPBX-logo.png"
               width={150}
               height={200}
               alt="RioPlex logo"
-              className="h-auto w-[150px]"
+              className="h-auto w-[80px]"
               priority
             />
           </Link>
@@ -119,7 +119,7 @@ export default function Navbar() {
               type="button"
               aria-label="Toggle Mobile Menu"
               aria-expanded={isMobileMenuOpen}
-              className="relative ml-auto h-10 w-10 rounded-md text-inherit transition-all hover:bg-gray-100 focus:outline-none"
+              className="relative ml-auto h-10 w-10 rounded-md text-inherit transition-all hover:bg-gray-100 focus:outline-none flex items-center justify-center -mb-1"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -131,6 +131,7 @@ export default function Navbar() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
+
           </div>
 
           {/* Desktop Navigation */}
@@ -147,11 +148,15 @@ export default function Navbar() {
                 </li>
               ))}
               <li>|</li>
-              <li className="text-[18px] font-medium hover:text-[var(--color-button)]">
-                Join Now
+              <li>
+                <a href="#" className="green-nav">Dashboard</a>
               </li>
               <li>
-                <Button href="/login">Sign In</Button>
+                <a href="#" className="green-nav">Listings</a>
+              </li>
+              <li>
+
+                <Button href="/">Log Out</Button>
               </li>
             </ul>
           </div>
