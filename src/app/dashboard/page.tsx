@@ -1,6 +1,7 @@
-import Image from "next/image";
 import Navbar from "../components/Navbar-2";
 import Button from "../components/Button";
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default async function Dashboard() {
   return (
@@ -38,24 +39,24 @@ export default async function Dashboard() {
 
           {/* buttons */}
           <div className="flex flex-col lg:flex-row gap-5">
-            <a
+            <Link
               href="/"
               className="flex-1 flex flex-col items-center p-5 bg-[#60A1BC] rounded-2xl hover:opacity-90 transition"
             >
               <p className="text-white">Update Listing Info</p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="flex-1 flex flex-col items-center p-5 bg-[#60BC9B] rounded-2xl hover:opacity-90 transition"
             >
               <p className="text-white">Request Valuation</p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="flex-1 flex flex-col items-center p-5 bg-[#E79F3C] rounded-2xl hover:opacity-90 transition"
             >
               <p className="text-white">Promote Listing</p>
-            </a>
+            </Link>
           </div>
 
           {/* activity */}
@@ -94,10 +95,12 @@ export default async function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pb-5">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="flex-1">
-                  <img
-                    src="../images/test/chen-lee.png"
+                  <Image
+                    src="/images/test/chen-lee.png"
                     alt="Investor Avatar"
                     className="rounded-t-lg w-full"
+                    width={200}
+                    height={100}
                   />
                   <div className="bg-[#F3F3F3] p-5 rounded-b-lg">
                     <h4>Chen Lee</h4>
@@ -118,16 +121,16 @@ export default async function Dashboard() {
                 <div className="bg-[#F3F3F3] rounded-2xl p-5">
                 <h4 className="pb-1">Blog: Writing a Strong Listing</h4>
                 <p>Crafting a listing that stands out.</p>
-                <a href="/" className="blue-link">
+                <Link href="/" className="blue-link">
                     Read More
-                </a>
+                </Link>
                 </div>
                 <div className="bg-[#F3F3F3] rounded-2xl p-5">
                 <h4 className="pb-1">Guide: Due Diligence Checklist</h4>
                 <p>Prepare for investor review.</p>
-                <a href="/" className="green-link">
+                <Link href="/" className="green-link">
                     Download PDF
-                </a>
+                </Link>
                 </div>
             </div>
 
@@ -135,16 +138,16 @@ export default async function Dashboard() {
                 <div className="bg-[#F3F3F3] rounded-2xl p-5">
                 <h4 className="pb-1">Blog: Writing a Strong Listing</h4>
                 <p>Crafting a listing that stands out.</p>
-                <a href="/" className="blue-link">
+                <Link href="/" className="blue-link">
                     Read More
-                </a>
+                </Link>
                 </div>
                 <div className="bg-[#F3F3F3] rounded-2xl p-5">
                 <h4 className="pb-1">Guide: Due Diligence Checklist</h4>
                 <p>Prepare for investor review.</p>
-                <a href="/" className="green-link">
+                <Link href="/" className="green-link">
                     Download PDF
-                </a>
+                </Link>
                 </div>
             </div>
 
