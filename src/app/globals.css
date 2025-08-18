@@ -96,6 +96,30 @@ p {
   color: #333333;
 }
 
+a.green-nav {
+  font-family: var(--font-poppins), sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.625;
+  color: #60BC9B;
+}
+
+a.green-link {
+  font-family: var(--font-poppins), sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.625;
+  color: #60BC9B;
+}
+
+a.blue-link {
+  font-family: var(--font-poppins), sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.625;
+  color: #60A1BC;
+}
+
 p.text-white {
   color: #ffffff;
 }
@@ -122,6 +146,14 @@ h1, h2, h3 {
   font-size: 48px;
   line-height: 1;
   color: #333333;
+}
+
+h1.text-white, h2.text-white, h3.text-white {
+  font-family: var(--font-saira), sans-serif;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 1;
+  color: #ffffff;
 }
 
 h4 {
