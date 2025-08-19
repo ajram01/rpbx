@@ -1,9 +1,13 @@
-'use client'; // Needed for state in Next.js 13+ app directory
-
 import Navbar from "../components/Navbar";
 import Navbar2 from "../components/Navbar-2";
 import Accordion from '../../components/ui/accordion';
 import Link from 'next/link';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Support | RioPlex Business Exchange",
+  description: "Connecting Local Business Owners With Investors"
+};
 
 export default function Support() {
     const isLoggedIn = false;    
