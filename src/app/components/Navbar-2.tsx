@@ -52,7 +52,7 @@ export default function Navbar() {
         aria-hidden={!isMobileMenuOpen}
       >
         <div className="flex items-center justify-between px-4 py-4 border-b">
-          <Link href="/" className="flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link href="/dashboard" className="flex items-center" onClick={() => setIsMobileMenuOpen(false)}>
             <Image
               src="/images/logos/Rio-Plex-Logo-Main-Mint-&-Charcoal.png"
               width={120}
@@ -101,7 +101,7 @@ export default function Navbar() {
     <nav className="sticky top-0 z-[9999] w-full py-10 backdrop-saturate-150 px-5 lg:px-0 ">
       <div className="mx-auto w-full lg:w-[1140px] lg:px-10 px-7 py-2 bg-white rounded-full shadow-md">
         <div className="flex flex-wrap items-center justify-between text-slate-800">
-          <Link href="/" className="flex items-center">
+          <Link href="/dashboard" className="flex items-center">
             <Image
               src="/images/logos/RPBX-logo.png"
               width={150}
@@ -149,7 +149,7 @@ export default function Navbar() {
               ))}
               <li>|</li>
               <li>
-                <a href="#" className="green-nav">Dashboard</a>
+                <a href="/dashboard" className="green-nav">Dashboard</a>
               </li>
               <li>
                 <a href="#" className="green-nav">Listings</a>

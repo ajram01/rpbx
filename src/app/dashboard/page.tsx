@@ -7,7 +7,7 @@ export default async function Dashboard() {
   return (
     <div>
       {/* Div 1: 2 rows */}
-      <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-cover bg-center">
+      <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
         <div>
           <Navbar />
         </div>
