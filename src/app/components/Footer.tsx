@@ -22,12 +22,12 @@ export default function Footer() {
         </div>
 
         <div className="mt-5 pt-4 flex flex-wrap gap-x-15 text-white border-t-2 border-white">
-        <Link href="/">Terms of service</Link>
-        <Link href="/">Privacy Policy</Link>
-        <Link href="/">Cookie Policy</Link>
-        <Link href="/">User Agreement</Link>
-        <Link href="/">Support</Link>
-        <Link href="/">Languages</Link>
+        <Link href="/terms">Terms of service</Link>
+        <Link href="/privacy">Privacy Policy</Link>
+        <Link href="/cookies">Cookie Policy</Link>
+        <Link href="/languages">Languages</Link>
+        <Link href="/support">Support</Link>
+        <Link href="/faq">FAQ</Link>
         </div>
 
 

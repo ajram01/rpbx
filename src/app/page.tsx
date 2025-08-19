@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <div>
       {/* Div 1: 2 rows */}
-      <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-cover bg-center">
+      <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
         <div>
           <Navbar />
         </div>
@@ -107,7 +107,7 @@ export default async function Home() {
       </div>
 
       {/* Div 3: 3 rows */}
-      <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-cover bg-center py-[15px]">
+      <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top py-[15px]">
         {/* Row 1 */}
         <div className="w-full px-4 lg:w-[1140px] lg:px-0 mx-auto flex flex-col lg:flex-row gap-y-6 lg:gap-y-0 lg:gap-x-[45px] py-10">
           <div className="flex-1 flex justify-center lg:justify-end">
