@@ -29,8 +29,8 @@ export default function Navbar() {
   const navItems = [
     { name: "Blog", href: "/blog" },
     { name: "Events", href: "/events" },
-    { name: "Business", href: "/business" },
-    { name: "Investor", href: "/investor" },
+    { name: "Business Listings", href: "/business-listing" },
+    { name: "Browse Investors", href: "/investor-listing" },
   ];
 
   const mobileMenu = (

@@ -98,23 +98,23 @@ export default async function Dashboard() {
             <h2 className="pb-5">Investor Matches</h2>
 
             {/* Investors grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pb-5">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex-1">
-                  <Image
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pb-5 ">
+                {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex-1 ">
+                    <Image
                     src="/images/test/chen-lee.png"
                     alt="Investor Avatar"
-                    className="rounded-t-lg w-full"
+                    className="rounded-t-lg w-full shadow-lg border-x-2 border-t-2 border-grey-500"
                     width={200}
                     height={100}
-                  />
-                  <div className="bg-[#F3F3F3] p-5 rounded-b-lg">
+                    />
+                    <div className="bg-[#F3F3F3] p-5 rounded-b-lg shadow-lg border-x-2 border-b-2 border-grey-500">
                     <h4>Chen Lee</h4>
                     <p className="italic">Tech, Media, Real Estate</p>
                     <Button className="mt-3 w-full">View Profile</Button>
-                  </div>
+                    </div>
                 </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>
