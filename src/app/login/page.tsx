@@ -1,6 +1,12 @@
 import { LoginForm } from "../components/login-form"
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login | RioPlex Business Exchange",
+  description: "Connecting Local Business Owners With Investors"
+};
 
 export default function LoginPage() {
   return (

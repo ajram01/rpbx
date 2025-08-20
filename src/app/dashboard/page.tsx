@@ -2,6 +2,12 @@ import Navbar from "../components/Navbar-2";
 import Button from "../components/Button";
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User Dashboard | RioPlex Business Exchange",
+  description: "Connecting Local Business Owners With Investors"
+};
 
 export default async function Dashboard() {
   return (
