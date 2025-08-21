@@ -27,10 +27,22 @@ export default function FAQ() {
           {/* Accordion Section */}
           <div className="gap-5 flex flex-col">
 
+            <Accordion title="How much does it cost for a Business Valuation?">
+              <p>
+                The Business Valuation is priced at $1,850 for non-members and $850 for members. Reach out to us for more details and schedule your valuation today!
+              </p><br/>
+
+              <p>
+                Phone: (956) 322-5942<br />
+                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link><br />
+                Mailing Address: 100 E. Nolana Ave. Suite 130 McAllen, TX 78504
+              </p>
+            </Accordion>
+
             <Accordion title="Are there any additional costs beyond the subscription fees?">
               <p>
                 No, the subscription fees cover all the features and services available through your membership. 
-                There are no additional costs for using the platform’s core functions.
+                There are no additional costs for using the platform’s <b>core functions</b>.
               </p>
             </Accordion>
 
@@ -75,7 +87,7 @@ export default function FAQ() {
             <Accordion title="How can I contact RioPlex Business Exchange?">
               <p>
                 If you have any questions or concerns, please contact us at:
-              </p>
+              </p><br/>
               <p>
                 Phone: (956) 322-5942<br />
                 Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link><br />
