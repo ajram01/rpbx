@@ -120,16 +120,20 @@ a.blue-link {
   color: #60A1BC;
 }
 
+p.text-medium {
+  font-weight: 500;
+}
+
 p.text-white {
   color: #ffffff;
 }
 
 p.text-grey {
-  color: #A1A1A1;
+  color: #7e7d7d;
 }
 
 li.text-grey {
-  color: #CDCDCD;
+  color: #7e7d7d;
 }
 
 p.font-semibold {

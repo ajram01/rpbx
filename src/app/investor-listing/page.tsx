@@ -4,11 +4,11 @@ import Image from 'next/image';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Investor Listing | RioPlex Business Exchange",
+  title: "Investor Listings | RioPlex Business Exchange",
   description: "Connecting Local Business Owners With Investors"
 };
 
-export default async function Dashboard() {
+export default async function Investors() {
   return (
     <div>
       {/* Background and Navbar */}
@@ -19,10 +19,7 @@ export default async function Dashboard() {
 
         {/* Content Wrapper */}
         <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
-          <h1 className="text-3xl font-bold">Investors</h1>
-          <p className="-mt-2 text-gray-700">
-            Connect with active investors ready to fund growing businesses—explore opportunities and start meaningful conversations today.
-          </p>
+          <h1 className="text-3xl font-bold mx-auto">Investors</h1>
 
         {/* Search + Filter + Sort */}
         <div className="flex flex-col gap-4 mt-4">
@@ -78,9 +75,9 @@ export default async function Dashboard() {
                   width={200}
                   height={100}
                 />
-                <div className="bg-[#F3F3F3] p-5 rounded-b-lg shadow-lg border-x-2 border-b-2 border-grey-500">
+                <div className="bg-white p-5 rounded-b-lg shadow-lg border-x-2 border-b-2 border-grey-500">
                   <h4 className="text-lg font-semibold">Chen Lee</h4>
-                  <p className="italic text-sm text-gray-600">Tech, Media, Real Estate</p>
+                  <p className="italic text-md text-gray-600">Tech, Media, Real Estate</p>
                   <Button className="mt-3 w-full">View Profile</Button>
                 </div>
               </div>
@@ -88,11 +85,13 @@ export default async function Dashboard() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <Button>Previous</Button>
-            <p>Page 1 of 5</p>
-            <Button>Next</Button>
+          <div className="flex items-center justify-center space-x-4 mt-8">
+            <button className="text-gray-600 hover:text-black">&laquo; Previous</button>
+            <p>Page 1 of 4</p>
+            <button className="text-gray-600 hover:text-black">Next &raquo;</button>
           </div>
+
+
         </div>
       </div>
     </div>
