@@ -1,5 +1,4 @@
 'use server'
-import { redirect } from 'next/navigation'
 import { createClient } from '../../../../utils/supabase/server'
 
 export async function signUp(formData: FormData) {
@@ -21,7 +20,4 @@ export async function signUp(formData: FormData) {
   })
   if (error) throw new Error(error.message)
 
-  // If email confirmation is ON, user must confirm before session exists.
-  // Send them to a "Check your email" page, or straight to pricing if you disabled confirmations.
-  redirect('/check-email') // or redirect(next)
 }
