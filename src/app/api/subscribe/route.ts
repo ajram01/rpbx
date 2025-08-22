@@ -94,7 +94,7 @@ export async function POST(req: Request) {
           user_type_intended: intendedUserType,     // webhook can read this or compute from Price again
         },
       },
-      success_url: `${origin}/account?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/welcome?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/pricing`,
       allow_promotion_codes: true,
     })

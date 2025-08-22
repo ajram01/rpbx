@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       mode: 'subscription',
       customer: customerId,
       line_items: [{ price: priceId, quantity }],
-      success_url: `${origin}/account?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/welcome?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/pricing`,
       allow_promotion_codes: true,
     })
