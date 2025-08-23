@@ -120,8 +120,16 @@ a.blue-link {
   color: #60A1BC;
 }
 
+p.font-semibold {
+  font-weight: 600;
+}
+
 p.text-medium {
   font-weight: 500;
+}
+
+p.font-light {
+  font-weight: 300;
 }
 
 p.text-white {
@@ -136,13 +144,6 @@ li.text-grey {
   color: #7e7d7d;
 }
 
-p.font-semibold {
-  font-weight: 600;
-}
-
-p.font-light {
-  font-weight: 300;
-}
 
 h1, h2, h3 {
   font-family: var(--font-saira), sans-serif;
