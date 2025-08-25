@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar-2";
 import Button from "../components/Button";
 import Image from 'next/image';
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -78,7 +79,9 @@ export default async function Investors() {
                 <div className="bg-white p-5 rounded-b-lg shadow-lg border-x-2 border-b-2 border-grey-500">
                   <h4 className="text-lg font-semibold">Chen Lee</h4>
                   <p className="italic text-md text-gray-600">Tech, Media, Real Estate</p>
-                  <Button className="mt-3 w-full">View Profile</Button>
+                    <Link href="investor-listing/profile" target="_blank">
+                        <Button className="mt-4 w-full">View Profile</Button>
+                    </Link>
                 </div>
               </div>
             ))}

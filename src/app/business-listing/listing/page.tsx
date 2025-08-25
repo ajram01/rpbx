@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar-2";
-import Button from "../components/Button";
+import Navbar from "../../components/Navbar-2";
+import Button from "../../components/Button";
 import Image from 'next/image';
 import type { Metadata } from "next";
 
