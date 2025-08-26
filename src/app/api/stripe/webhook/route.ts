@@ -11,7 +11,7 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET! // from Dashboard
 
 function resolveUserType(price: Stripe.Price): 'investor' | 'business' | null {
   const meta = (price.metadata?.user_type ?? '').toLowerCase()
-  if (meta === 'investor' || meta === 'business') return meta as any
+  if (meta === 'investor' || meta === 'business') return meta
   const lk = (price.lookup_key ?? '').toLowerCase()
   if (lk.startsWith('investor_')) return 'investor'
   if (lk.startsWith('business_')) return 'business'
