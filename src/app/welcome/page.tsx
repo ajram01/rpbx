@@ -1,6 +1,5 @@
 // src/app/welcome/page.tsx
 export default async function Welcome({ searchParams }: { searchParams: Promise<{session_id?: string}> }) {
-  const { session_id } = await searchParams
   // ...fetch the Stripe session here if you want to show plan info...
   // DO NOT redirect if user is not logged in—show CTA instead.
   return (

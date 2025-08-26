@@ -2,7 +2,9 @@
 export const runtime = 'nodejs'
 
 import Stripe from 'stripe'
-import { supabaseAdmin } from '../../../../lib/supabase-admin'
+import { supabaseAdmin } from '@/lib/supabase-admin'
+
+import { NextRequest } from "next/server"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET! // from Dashboard
@@ -16,15 +18,26 @@ function resolveUserType(price: Stripe.Price): 'investor' | 'business' | null {
   return null
 }
 
-export async function POST(req: Request) {
+function toMessage(e: unknown): string {
+  if (typeof e === "object" && e !== null && "message" in e) {
+    const m = (e as { message?: unknown }).message
+    if (typeof m === "string") return m
+  }
+  if (typeof e === "string") return e
+  try { return JSON.stringify(e) } catch { /* noop */ }
+  return "Unknown error"
+}
+
+export async function POST(req: NextRequest) {
   // Verify signature with the RAW body
   const sig = req.headers.get('stripe-signature')!
   const body = await req.text()
   let event: Stripe.Event
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
-  } catch (err) {
-    return new Response(`Webhook signature verification failed.`, { status: 400 })
+  } catch (err: unknown) {
+    const msg = toMessage(err)
+    return new Response(`Webhook Error: ${msg}.`, { status: 400 })
   }
 
   // We care about subscription lifecycle

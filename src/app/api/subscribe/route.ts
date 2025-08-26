@@ -3,12 +3,13 @@ export const runtime = 'nodejs' // keep Node runtime for Stripe SDK
 
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
-import { createClient } from '../../../../utils/supabase/server'
+import { createClient } from '@/../utils/supabase/server'
 import { ensureCustomerFor } from '@/lib/ensure-customer-for' // make sure the path matches your file
+
 
 function deriveUserTypeFromPrice(price: Stripe.Price): 'investor' | 'business' | 'member' {
   const fromMeta = (price.metadata?.user_type ?? '').toLowerCase()
-  if (fromMeta === 'investor' || fromMeta === 'business') return fromMeta as any
+  if (fromMeta === 'investor' || fromMeta === 'business') return fromMeta
 
   const lk = (price.lookup_key ?? '').toLowerCase()
   if (lk.startsWith('investor_')) return 'investor'
