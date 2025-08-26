@@ -2,7 +2,7 @@
 export const runtime = 'nodejs'
 
 import Stripe from 'stripe'
-import { supabaseAdmin } from '@/lib/supabase-admin'
+import { getSupabaseAdmin } from '@/lib/supabase-admin'
 
 import { NextRequest } from "next/server"
 
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
   // Verify signature with the RAW body
   const sig = req.headers.get('stripe-signature')!
   const body = await req.text()
+  const supabase = getSupabaseAdmin()
   let event: Stripe.Event
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
       // Fallback: map via customers table (customer -> user_id)
       const stripeCustomerId =
         typeof full.customer === 'string' ? full.customer : full.customer?.id
-      const { data: mapRow } = await supabaseAdmin
+      const { data: mapRow } = await supabase
         .from('customers')
         .select('user_id')
         .eq('stripe_customer_id', stripeCustomerId)
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
           ? userType
           : 'member' // or null, up to you
 
-      await supabaseAdmin
+      await supabase
         .from('profiles')
         .update({ user_type: nextType })
         .eq('id', userId)
