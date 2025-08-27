@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       const admin = getSupabaseAdmin()
 
       // Prefer metadata set during Checkout Session: subscription_data.metadata.supabase_user_id
-      let userId = (full.metadata as any)?.supabase_user_id ?? null
+      let userId: string | null = full.metadata?.['supabase_user_id'] ?? null
       if (!userId) {
         const stripeCustomerId =
           typeof full.customer === 'string' ? full.customer : full.customer?.id
