@@ -161,6 +161,14 @@ h1.text-white, h2.text-white, h3.text-white {
   color: #ffffff;
 }
 
+h3.giant {
+  font-family: var(--font-saira), sans-serif;
+  font-weight: 600;
+  font-size: 98px;
+  line-height: 1;
+  color: #333333;
+}
+
 h4 {
   font-family: var(--font-poppins), sans-serif;
   font-weight: 600;
@@ -169,13 +177,14 @@ h4 {
   color: #333333;
 }
 
-h3.giant {
-  font-family: var(--font-saira), sans-serif;
+h4.text-white {
+  font-family: var(--font-poppins), sans-serif;
   font-weight: 600;
-  font-size: 98px;
+  font-size: 18px;
   line-height: 1;
-  color: #333333;
+  color: #ffffff;
 }
+
 
 
 .dark {
