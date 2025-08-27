@@ -2,12 +2,18 @@
 export const runtime = 'nodejs'
 
 import Stripe from 'stripe'
-import { getSupabaseAdmin } from '@/lib/supabase-admin'
-
-import { NextRequest } from "next/server"
+import { NextRequest } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET! // from Dashboard
+// ⬇For local dev, this must be the current `whsec_...` from `stripe listen`
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
+
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY! // correct name
+  return createClient(url, serviceKey, { auth: { persistSession: false } })
+}
 
 function resolveUserType(price: Stripe.Price): 'investor' | 'business' | null {
   const meta = (price.metadata?.user_type ?? '').toLowerCase()
@@ -18,79 +24,105 @@ function resolveUserType(price: Stripe.Price): 'investor' | 'business' | null {
   return null
 }
 
-function toMessage(e: unknown): string {
-  if (typeof e === "object" && e !== null && "message" in e) {
-    const m = (e as { message?: unknown }).message
-    if (typeof m === "string") return m
-  }
-  if (typeof e === "string") return e
-  try { return JSON.stringify(e) } catch { /* noop */ }
-  return "Unknown error"
-}
-
 export async function POST(req: NextRequest) {
-  // Verify signature with the RAW body
-  const sig = req.headers.get('stripe-signature')!
-  const body = await req.text()
-  const supabase = getSupabaseAdmin()
+  const sig = req.headers.get('stripe-signature')
+  if (!sig) return new Response('Missing signature', { status: 400 })
+
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
-  } catch (err: unknown) {
-    const msg = toMessage(err)
-    return new Response(`Webhook Error: ${msg}.`, { status: 400 })
+    const raw = await req.text()
+    event = stripe.webhooks.constructEvent(raw, sig, endpointSecret)
+  } catch (e) {
+    console.error('Signature verification failed:', e)
+    return new Response('Bad signature', { status: 400 })
   }
 
-  // We care about subscription lifecycle
-  if (
-    event.type === 'customer.subscription.created' ||
-    event.type === 'customer.subscription.updated' ||
-    event.type === 'customer.subscription.deleted'
-  ) {
-    const sub = event.data.object as Stripe.Subscription
+  try {
+    console.log('➡️ Event:', event.type)
 
-    // Ensure we have full price info (lookup_key/metadata)
-    const full = await stripe.subscriptions.retrieve(sub.id, {
-      expand: ['items.data.price'],
-    })
-    const item = full.items.data[0] // single-plan subs
-    const price = item.price as Stripe.Price
+    if (
+      event.type === 'customer.subscription.created' ||
+      event.type === 'customer.subscription.updated' ||
+      event.type === 'customer.subscription.deleted'
+    ) {
+      const sub = event.data.object as Stripe.Subscription
+      const full = await stripe.subscriptions.retrieve(sub.id, {
+        expand: ['items.data.price', 'customer'],
+      })
 
-    // who is the app user?
-    let userId = full.metadata?.supabase_user_id || null
-    if (!userId) {
-      // Fallback: map via customers table (customer -> user_id)
-      const stripeCustomerId =
-        typeof full.customer === 'string' ? full.customer : full.customer?.id
-      const { data: mapRow } = await supabase
-        .from('customers')
-        .select('user_id')
-        .eq('stripe_customer_id', stripeCustomerId)
-        .maybeSingle()
-      userId = mapRow?.user_id ?? null
-    }
+      const item = full.items?.data?.[0]
+      if (!item?.price) {
+        console.warn('Subscription has no item/price', { subId: full.id })
+        return new Response('ok', { status: 200 })
+      }
 
-    if (userId) {
+      const price = item.price as Stripe.Price
       const userType = resolveUserType(price)
+      if (!userType) {
+        console.warn('Could not resolve user_type from price', {
+          priceId: price.id,
+          lookup_key: price.lookup_key,
+          metadata: price.metadata,
+        })
+        return new Response('ok', { status: 200 })
+      }
 
-      // Decide when to set vs clear. Common pattern:
-      // - active/trialing => set type
-      // - canceled/paused/past_due => clear to 'member' (or null)
-      const status = full.status // 'active' | 'trialing' | 'canceled' | ...
+      const admin = getSupabaseAdmin()
+
+      // Prefer metadata set during Checkout Session: subscription_data.metadata.supabase_user_id
+      let userId = (full.metadata as any)?.supabase_user_id ?? null
+      if (!userId) {
+        const stripeCustomerId =
+          typeof full.customer === 'string' ? full.customer : full.customer?.id
+        if (!stripeCustomerId) {
+          console.warn('Missing stripe customer on subscription', full.id)
+          return new Response('ok', { status: 200 })
+        }
+
+        const { data: mapRow, error: mapErr } = await admin
+          .from('customers')
+          .select('user_id')
+          .eq('stripe_customer_id', stripeCustomerId)
+          .maybeSingle()
+
+        if (mapErr) {
+          console.error('customers lookup error:', mapErr)
+          return new Response('DB map error', { status: 500 })
+        }
+
+        userId = mapRow?.user_id ?? null
+      }
+
+      if (!userId) {
+        console.warn('Could not resolve userId for sub', { subId: full.id })
+        return new Response('ok', { status: 200 })
+      }
+
+      const status = full.status // active | trialing | past_due | canceled | ...
       const nextType =
-        userType && (status === 'active' || status === 'trialing')
-          ? userType
-          : 'member' // or null, up to you
+        (status === 'active' || status === 'trialing') ? userType : 'member'
 
-      await supabase
+      const { error: updErr } = await admin
         .from('profiles')
         .update({ user_type: nextType })
         .eq('id', userId)
+
+      if (updErr) {
+        console.error('profiles update error:', {
+          code: updErr.code,
+          message: updErr.message,
+          details: updErr.details,
+          hint: updErr.hint,
+        })
+        return new Response('DB update error', { status: 500 })
+      }
+
+      console.log(`Set profiles.user_type=${nextType} for user ${userId}`)
     }
 
-    // (Optional) also mirror the subscription row here for quick checks
-    // await supabaseAdmin.from('subscriptions').upsert({...})
+    return new Response('ok', { status: 200 })
+  } catch (e) {
+    console.error('Unhandled webhook error:', e)
+    return new Response('Internal error', { status: 500 })
   }
-
-  return new Response('ok', { status: 200 })
 }
