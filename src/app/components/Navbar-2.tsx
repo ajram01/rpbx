@@ -155,8 +155,9 @@ export default function Navbar() {
                 <a href="#" className="green-nav">Listings</a>
               </li>
               <li>
-
-                <Button href="/">Log Out</Button>
+                <form action="/signout" method="post">
+                  <Button type="submit">Log Out</Button>
+                </form>
               </li>
             </ul>
           </div>
