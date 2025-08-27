@@ -2,14 +2,12 @@
 export const runtime = 'nodejs'
 import { stripe } from '@/lib/stripe'
 import { ensureCustomer } from '@/lib/ensure-customer'
-import { cookies } from "next/headers"
 import { createClient } from "@supabase/supabase-js"
 
 
 export async function POST(req: Request) {
   try {
     // Support both JSON and form posts (handy for future flexibility)
-    const cookieStore = cookies()
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_ANON_KEY!,
@@ -24,7 +22,6 @@ export async function POST(req: Request) {
     if (error || !user){
       return new Response('Unauthorized', { status: 401 })
     }
-    const supabaseUserId = user.id
 
 
     const ct = req.headers.get('content-type') ?? ''
