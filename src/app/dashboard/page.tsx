@@ -51,26 +51,6 @@ export default async function Dashboard() {
           <h1>Welcome back, {displayName}</h1>
           <p className="-mt-2">Here’s what’s happening in your business today.</p>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 bg-white rounded-2xl">
-            <div className="flex flex-col items-center p-5">
-              <h3>2</h3>
-              <p className="text-grey">Active Listings</p>
-            </div>
-            <div className="flex flex-col items-center p-5">
-              <h3>14</h3>
-              <p className="text-grey">Investor Views</p>
-            </div>
-            <div className="flex flex-col items-center p-5">
-              <h3>3</h3>
-              <p className="text-grey">Interests</p>
-            </div>
-            <div className="flex flex-col items-center p-5">
-              <h3>1</h3>
-              <p className="text-grey">Pending Update</p>
-            </div>
-          </div>
-
           {/* buttons */}
           <div className="flex flex-col lg:flex-row gap-5">
             <Link
