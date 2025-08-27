@@ -2,10 +2,28 @@
 export const runtime = 'nodejs'
 import { stripe } from '@/lib/stripe'
 import { ensureCustomer } from '@/lib/ensure-customer'
+import { createClient } from "@supabase/supabase-js"
+
 
 export async function POST(req: Request) {
   try {
     // Support both JSON and form posts (handy for future flexibility)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          persistSession: false,
+        }
+      }
+    )
+
+    const { data: { user}, error } = await supabase.auth.getUser()
+    if (error || !user){
+      return new Response('Unauthorized', { status: 401 })
+    }
+
+
     const ct = req.headers.get('content-type') ?? ''
     let priceId: string
     let quantity = 1
@@ -36,6 +54,11 @@ export async function POST(req: Request) {
       line_items: [{ price: priceId, quantity }],
       success_url: `${origin}/welcome?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/pricing`,
+      subscription_data: {
+        metadata: {
+          supabase_user_id: user.id
+        },
+      },
       allow_promotion_codes: true,
     })
 
