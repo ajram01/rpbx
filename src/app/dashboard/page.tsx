@@ -4,12 +4,40 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from "next";
 
+import { createClient } from "@/../utils/supabase/server"
+import { redirect } from "next/navigation"
+
 export const metadata: Metadata = {
   title: "User Dashboard | RioPlex Business Exchange",
   description: "Connecting Local Business Owners With Investors"
 };
 
+
 export default async function Dashboard() {
+
+  const supabase = createClient();
+
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) return redirect("/login");
+
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("first_name")
+    .eq("id", user.id)
+    .maybeSingle<{ first_name: string | null}>();
+  if (error) {
+    console.error("Error fetching profile: ", error.message);
+  }
+
+  const displayName =
+    profile?.first_name ??
+    (user.user_metadata?.first_name as string | undefined) ??
+    user.email ??
+    "User";
+
   return (
     <div>
       {/* Div 1: 2 rows */}
@@ -20,7 +48,7 @@ export default async function Dashboard() {
 
         {/* listing stats */}
         <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
-          <h1>Welcome back, [Business Owner Name]</h1>
+          <h1>Welcome back, {displayName}</h1>
           <p className="-mt-2">Here’s what’s happening in your business today.</p>
 
           {/* Stats Grid */}
