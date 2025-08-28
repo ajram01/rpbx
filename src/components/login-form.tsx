@@ -7,7 +7,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { login, signup } from "@/app/login/actions"
+import { login } from "@/app/login/actions"
 
 export interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement>{
   next?: string
@@ -59,7 +59,6 @@ export function LoginForm({ className, next = "", ...props }: LoginFormProps) {
               </div>
 
               <Button formAction={login} className="w-full">Log in</Button>
-              <Button formAction={signup} variant="outline" className="w-full">Sign up</Button>
             </form>
 
             <div className="text-center text-sm">
@@ -76,8 +75,8 @@ export function LoginForm({ className, next = "", ...props }: LoginFormProps) {
       </Card>
 
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="/terms">Terms of Service</a>{" "}
+        and <a href="/privacy">Privacy Policy</a>.
       </div>
     </div>
   )
