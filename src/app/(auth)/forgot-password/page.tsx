@@ -1,3 +1,4 @@
+'use client'
 import { requestReset } from './actions'
 import { useFormState } from 'react-dom'
 import Button from "@/app/components/Button"
