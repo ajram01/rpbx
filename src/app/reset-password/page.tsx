@@ -8,4 +8,5 @@ export default async function ResetPasswordPage() {
     if (error || !data?.user) redirect('/login')
     
     return <ResetPasswordForm />
+    
 }
