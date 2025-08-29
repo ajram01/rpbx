@@ -20,7 +20,7 @@ export default async function Investors() {
 
         {/* Content Wrapper */}
         <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
-          <h1 className="text-3xl font-bold mx-auto">Investors</h1>
+          <h1 className="text-center">Investors</h1>
 
         {/* Search + Filter + Sort */}
         <div className="flex flex-col gap-4 mt-4">
@@ -77,7 +77,7 @@ export default async function Investors() {
                   height={100}
                 />
                 <div className="bg-white p-5 rounded-b-lg shadow-lg border-x-2 border-b-2 border-grey-500">
-                  <h4 className="text-lg font-semibold">Chen Lee</h4>
+                  <h4 className="large">Chen Lee</h4>
                   <p className="italic text-md text-gray-600">Tech, Media, Real Estate</p>
                     <Link href="investor-listing/profile" target="_blank">
                         <Button className="mt-4 w-full">View Profile</Button>
