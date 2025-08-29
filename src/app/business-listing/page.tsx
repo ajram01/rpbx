@@ -19,7 +19,7 @@ export default async function Businesses() {
         {/* Content Wrapper */}
         <div className="w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
           {/* Page Title & Description */}
-          <h1 className="text-3xl font-bold text-center pb-15">Business Owners</h1>
+          <h1 className="text-center pb-15">Business Owners</h1>
 
 
           {/* Main Two-Column Layout */}
@@ -112,7 +112,7 @@ export default async function Businesses() {
                       height={200}
                     />
                     <div className="p-5">
-                      <h4>Home Services</h4>
+                      <h4 className="large">Home Services</h4>
 
                       <div className="flex justify-between mt-2">
                         <div>
@@ -129,7 +129,7 @@ export default async function Businesses() {
                         <Image
                           src="/images/icons/location.png"
                           alt="Location"
-                          className="w-4 h-4 mr-2"
+                          className="w-3 h-4 mr-2"
                           width={16}
                           height={16}
                         />
