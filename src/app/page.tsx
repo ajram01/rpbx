@@ -2,9 +2,18 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Button from "./components/Button";
 import Modal from "./components/Modal"; // client modal
+import { createClient } from "@/../utils/supabase/server"
+import { redirect } from "next/navigation"
 
 export default async function Home() {
-
+    const supabase = createClient();
+  
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+  
+    if (user) return redirect("/dashboard");
+    
   return (
     <div>
       {/* Div 1: 2 rows */}
