@@ -90,7 +90,10 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <Button onClick={() => setIsMobileMenuOpen(false)}>Login</Button>
+            <Link href="/pricing" className="block text-lg text-slate-600 hover:text-[var(--color-button)]">Join Now</Link>
+          </li>
+          <li>
+            <Button href="/login" onClick={() => setIsMobileMenuOpen(false)}>Login</Button>
           </li>
         </ul>
       </div>
@@ -148,7 +151,7 @@ export default function Navbar() {
               ))}
               <li>|</li>
               <li className="text-[18px] font-medium hover:text-[var(--color-button)]">
-                Join Now
+                <Link href="/pricing" className="text-[18px] font-medium hover:text-[var(--color-button)]">Join Now</Link>
               </li>
               <li>
                 <Button href="/login">Sign In</Button>
