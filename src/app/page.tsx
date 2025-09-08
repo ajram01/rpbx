@@ -4,6 +4,7 @@ import Button from "./components/Button";
 import Modal from "./components/Modal"; // client modal
 import { createClient } from "@/../utils/supabase/server"
 import { redirect } from "next/navigation"
+import PricingTable from "./components/pricing-table";
 
 export default async function Home() {
     const supabase = createClient();
@@ -57,9 +58,13 @@ export default async function Home() {
         </div>
       </div>
 
+
       {/* Div 2: 1 div containing 3 div columns */}
+      
       <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10">
-        <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-[15px] w-full lg:w-[1140px] px-4 lg:px-0">
+      <PricingTable/>
+      </div>
+        {/* <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-[15px] w-full lg:w-[1140px] px-4 lg:px-0">
           <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl p-5">
             <p className="font-semibold">Business Owner Lite</p>
             <h3>Free</h3>
@@ -113,7 +118,7 @@ export default async function Home() {
             <Button className="mt-5 w-full lg:w-auto" variant="charcoal">Get Started</Button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Div 3: 3 rows */}
       <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top py-[15px]">
