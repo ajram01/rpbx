@@ -37,8 +37,8 @@ export async function GET() {
     const out: Out[] = prices.data.map((p) => {
       const prod = p.product as Stripe.Product;
 
-      const mf: string[] = Array.isArray((prod as any).marketing_features)
-        ?((prod as any).marketing_features as Array<{ name?: string}>)
+      const mf: string[] = Array.isArray(prod.marketing_features)
+        ? prod.marketing_features
             .map(f => (f?.name || "").trim())
             .filter(Boolean)
         : [];
