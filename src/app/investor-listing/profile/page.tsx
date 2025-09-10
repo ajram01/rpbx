@@ -31,7 +31,7 @@ export default async function Businesses() {
                     <p className="font-semibold text-white">Organization/Entity</p>
                     <p className="text-white">RGVision Media</p>
 
-                    <div className="border-t-2 border-grey-500 my-5"></div>
+                    <div className="border-t-1 border-grey-500 my-5"></div>
 
                     <p className="font-semibold text-white">Email</p>
                     <p className="text-white">b.martin@raymondjames.com</p>
@@ -42,7 +42,7 @@ export default async function Businesses() {
                 <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden border p-6 lg:p-8">
                     <h1 className="pb-2">Chen Lee</h1>
                     <p>Marketing | 25+ years of experience</p>
-                    <div className="border-t-2 border-grey-500 my-5"></div>
+                    <div className="border-t-1 border-gray-400 my-5"></div>
                     <p><b>About Me: </b> I am a wealth advisor helping business owners with exit planning and looking to organically build assets through acquisition.</p>
                 </div>
                 <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden border p-6 lg:p-8">
@@ -51,7 +51,7 @@ export default async function Businesses() {
                     <p><b>Investment Interest:</b> Finance</p>
                     <p><b>Additional Investment Interests:</b> Real Estate, Media, Tech</p>
                     <p><b>% Of Ownership Looking For:</b> 100%</p>
-                    <div className="border-t-2 border-grey-500 my-5"></div>
+                    <div className="border-t-1 border-gray-400 my-5"></div>
                     <p><b>Company EBITDA Looking For:</b> 500k</p>
                     <p><b>Business Cash Flow:</b> 800k+</p>
                     <p><b>Annual Net Worth:</b> 3-5 Million</p>

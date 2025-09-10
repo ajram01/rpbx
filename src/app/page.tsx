@@ -148,7 +148,7 @@ export default async function Home() {
 
         {/* Row 2 */}
         <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-y-0 lg:gap-x-[15px] w-full pr-4">
-          <div className="bg-white shadow-md flex-1 flex justify-center lg:justify-end rounded-tr-2xl rounded-br-2xl">
+          <div className="bg-white shadow-lg border-y-2 border-r-2 border-grey-500 flex-1 flex justify-center lg:justify-end rounded-tr-2xl rounded-br-2xl">
             <div className="flex flex-col items-start w-full lg:w-[560px] py-8 lg:py-10 px-6 lg:px-0">
               <h2>Who is RPBX for?</h2>
               <p className="lg:pr-15">
@@ -376,8 +376,8 @@ export default async function Home() {
 
       {/* Div 4: 1 div */}
       <div className="bg-purple-300 flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10">
-        <div className="bg-white flex flex-col items-center w-full lg:w-[900px] min-h-[300px] rounded-2xl py-10 px-6 lg:px-20 mx-4">
-          <h2>Unlock Your Growth with Expert Insights</h2>
+        <div className="bg-white flex flex-col items-center w-full lg:w-[900px] min-h-[300px] rounded-2xl py-10 px-6 lg:px-20 mx-4 shadow-lg border-2 border-grey-500">
+          <h2 className="sm: text-center mb-2">Unlock Your Growth with Expert Insights</h2>
           <p className="text-center">
             Join our monthly RPBX newsletter for exclusive resources, investor opportunities, and expert advice to fuel your business success. It’s free, insightful, and spam-free!
           </p>
