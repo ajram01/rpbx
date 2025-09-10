@@ -1,8 +1,6 @@
 import Navbar from "../components/Navbar";
 import Navbar2 from "../components/Navbar-2";
-import Button from "../components/Button";
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -69,6 +67,7 @@ export default function Events() {
             </div>
           </div>
         {/* End of Blog row 1 */}
+        {/* Possible new blog row 2 */}
 
         </div>
       </div>
