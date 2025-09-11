@@ -2,13 +2,24 @@ import Navbar from "../components/Navbar";
 import Navbar2 from "../components/Navbar-2";
 import Link from 'next/link';
 import type { Metadata } from "next";
+import { type SanityDocument } from "next-sanity";
+
+import { client } from "@/sanity/client";
+
+const POSTS_QUERY = `*[
+  _type == "post"
+  && defined(slug.current)
+]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
+
+const options = { next: { revalidate: 30 } };
 
 export const metadata: Metadata = {
   title: "Blog | RioPlex Business Exchange",
   description: "Connecting Local Business Owners With Investors"
 };
 
-export default function Events() {
+export default async function Events() {
+const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
     const isLoggedIn = false;    
 
   return (
@@ -22,97 +33,33 @@ export default function Events() {
         <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
           <h1 className="text-center">Blog</h1>
 
+
+          
+
         {/* Blog row 1 */}
           <div className="gap-5 flex flex-col lg:flex-row">
-            {/* Blog */}
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500">
+
+          {posts.map((post) => (
+
+            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500" key={post._id}>
                 <div
                 className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
                 style={{ backgroundImage: 'url("/images/blogs/2025/sep-2025-1.png")' }}>
                 </div>
 
                 <div className="flex flex-col p-5 gap-2">
-                    <h4 className="large">Business Opportunity: Why the Rio Grande Valley Is a Hotspot for Emerging Entrepreneurs</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">September 1, 2025</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
-                    <Link href="/blog/business-opportunity-why-the-rio-grande-valley-is-a-hotspot-for-emerging-entrepreneurs" className="green-link">Read More</Link>
+                    <h4 className="large">{post.title}</h4>
+                    <span className="flex flex-row gap-3"><p className="text-grey flex">{new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
+                    <Link href={`blog/${post.slug.current}`} className="green-link">Read More</Link>
                 </div>
             </div>
 
-            {/* Blog */}
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500">
-                <div
-                className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: 'url("/images/blogs/2025/aug-2025-1.jpg")' }}>
-                </div>
 
-                <div className="flex flex-col p-5 gap-2">
-                    <h4 className="large">Why South Texas Is a Hidden Gem for Business Buyers</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">August 4, 2025</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
-                    <Link href="/" className="green-link">Read More</Link>
-                </div>
-            </div>
+                  ))}
 
-            {/* Blog */}
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500">
-                <div
-                className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: 'url("/images/blogs/2025/july-2025-1.jpg")' }}>
-                </div>
 
-                <div className="flex flex-col p-5 gap-2">
-                    <h4 className="large">How to Know If You’re Ready to Sell Your Business: A Mid-Year Owner’s Checklist</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">July 1, 2025</p> <p>•</p> <p className="text-grey flex">4 min read</p></span>
-                    <Link href="/" className="green-link">Read More</Link>
-                </div>
-            </div>
           </div>
         {/* End of Blog row 1 */}
-
-        {/* Blog row 2 */}
-          <div className="gap-5 flex flex-col lg:flex-row">
-            {/* Blog */}
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500">
-                <div
-                className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: 'url("/images/blogs/2025/june-2025-1.jpg")' }}>
-                </div>
-
-                <div className="flex flex-col p-5 gap-2">
-                    <h4 className="large">Why Summer Is a Smart Season to List Your Business for Sale</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">June 2, 2025</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
-                    <Link href="/" className="green-link">Read More</Link>
-                </div>
-            </div>
-
-            {/* Blog */}
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500">
-                <div
-                className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: 'url("/images/blogs/2025/may-2025-1.jpg")' }}>
-                </div>
-
-                <div className="flex flex-col p-5 gap-2">
-                    <h4 className="large">How to Prepare for a Confidential Business Sale</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">May 2, 2025</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
-                    <Link href="/" className="green-link">Read More</Link>
-                </div>
-            </div>
-
-            {/* Blog */}
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500">
-                <div
-                className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: 'url("/images/blogs/2025/april-2025-1.jpg")' }}>
-                </div>
-
-                <div className="flex flex-col p-5 gap-2">
-                    <h4 className="large">Spring Clean Your Business Finances: Steps to Prepare for a Future Sale</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">April 1, 2025</p> <p>•</p> <p className="text-grey flex">4 min read</p></span>
-                    <Link href="/" className="green-link">Read More</Link>
-                </div>
-            </div>
-          </div>
-        {/* End of Blog row 2 */}
 
         </div>
       </div>
