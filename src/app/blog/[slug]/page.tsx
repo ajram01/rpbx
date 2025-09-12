@@ -7,7 +7,7 @@ import Navbar from "../../components/Navbar";
 import Navbar2 from "../../components/Navbar-2";
 
 interface PostPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]{
@@ -33,9 +33,12 @@ const urlFor = (source: SanityImageSource) =>
 const options = { next: { revalidate: 30 } };
 
 export default async function PostPage({ params }: PostPageProps) {
+
+  const { slug } = await params;
+
   const post = await client.fetch<SanityDocument>(
     POST_QUERY,
-    { slug: params.slug },
+    { slug },
     options
   );
 
