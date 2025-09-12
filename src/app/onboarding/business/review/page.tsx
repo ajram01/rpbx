@@ -15,7 +15,7 @@ export default async function ReviewStep() {
     .eq('status', 'draft')
     .maybeSingle()
 
-  if (!draft) redirect('/onboarding/business/basics')
+  if (!draft) redirect('/onboarding/business/set-up')
 
   // ---- SERVER ACTION ----
   async function publish() {

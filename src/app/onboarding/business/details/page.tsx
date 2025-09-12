@@ -14,7 +14,7 @@ export default async function DetailsStep() {
     .eq('status', 'draft')
     .maybeSingle()
 
-  if (!draft) redirect('/onboarding/business/basics')
+  if (!draft) redirect('/onboarding/business/set-up')
 
   async function save(formData: FormData) {
     'use server'

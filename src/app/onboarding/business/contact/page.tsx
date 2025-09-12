@@ -16,30 +16,31 @@ export default async function ContactStep() {
     .maybeSingle()
 
   // If no draft yet, send them back to Basics to start one
-  if (!draft) redirect('/onboarding/business/basics')
+  if (!draft) redirect('/onboarding/business/set-up')
 
-  async function save(formData: FormData) {
-    'use server'
-    const { createClient } = await import('@/../utils/supabase/server')
-    const sb = await createClient()
-    const { data: { user } } = await sb.auth.getUser()
-    if (!user) redirect('/login?next=/onboarding/business/contact')
+async function save(formData: FormData) {
+  'use server'
+  const { createClient } = await import('@/../utils/supabase/server')
+  const sb = await createClient()
+  const { data: { user } } = await sb.auth.getUser()
+  if (!user) redirect('/login?next=/onboarding/business/contact')
 
-    const contact_email = String(formData.get('contact_email') ?? '')
-    const can_provide_financials = formData.get('can_provide_financials') === 'on'
-    const can_provide_tax_returns = formData.get('can_provide_tax_returns') === 'on'
+  const { data: currentDraft } = await sb
+    .from('business_listings').select('id')
+    .eq('owner_id', user.id).eq('status', 'draft')
+    .maybeSingle() // safe if uniqueness is enforced
+  if (!currentDraft) redirect('/onboarding/business/set-up')
 
-    await sb
-      .from('business_listings')
-      .update({
-        contact_email,
-        can_provide_financials,
-        can_provide_tax_returns,
-      })
-      .eq('id', draft!.id)
+  const contact_email = String(formData.get('contact_email') ?? '')
+  const can_provide_financials = formData.get('can_provide_financials') === 'on'
+  const can_provide_tax_returns = formData.get('can_provide_tax_returns') === 'on'
 
-    redirect('/onboarding/business/details') // next step
-  }
+  await sb.from('business_listings').update({
+    contact_email, can_provide_financials, can_provide_tax_returns
+  }).eq('id', currentDraft.id)
+
+  redirect('/onboarding/business/details')
+}
 
   return (
     <form action={save} className="mx-auto max-w-xl p-6 space-y-4">
