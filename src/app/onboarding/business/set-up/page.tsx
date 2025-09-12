@@ -12,7 +12,7 @@ export default async function Basics() {
   // Only select what you need to prefill
   const { data: draft } = await supabase
     .from('business_listings')
-    .select('title, industry, county, location_city, location_state, contact_email')
+    .select('title, industry, county, location_city, contact_email')
     .eq('owner_id', userId)                 // ← updated
     .eq('status', 'draft')
     .maybeSingle()
@@ -28,7 +28,6 @@ export default async function Basics() {
     const industry = String(formData.get('industry') ?? '')
     const county   = String(formData.get('county') ?? '')
     const city     = String(formData.get('city') ?? '')
-    const state    = String(formData.get('state') ?? '')
 
     const payload = {
       owner_id: user.id,                    // ← canonical column
