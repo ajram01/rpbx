@@ -9,7 +9,13 @@ import { client } from "@/sanity/client";
 const POSTS_QUERY = `*[
   _type == "post"
   && defined(slug.current)
-]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
+]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt, mainImage {
+    asset->{
+      _id,
+      url
+    },
+    alt
+  }}`;
 
 const options = { next: { revalidate: 30 } };
 
@@ -18,7 +24,7 @@ export const metadata: Metadata = {
   description: "Connecting Local Business Owners With Investors"
 };
 
-export default async function Events() {
+export default async function Blogs() {
 const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
     const isLoggedIn = false;    
 
@@ -42,10 +48,11 @@ const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
           {posts.map((post) => (
 
             <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500" key={post._id}>
-                <div
-                className="rounded-t-lg w-full h-[250px] bg-cover bg-center"
-                style={{ backgroundImage: 'url("/images/blogs/2025/sep-2025-1.png")' }}>
-                </div>
+              <img
+                src={post.mainImage?.asset?.url}
+                alt={post.mainImage?.alt || post.title}
+                className="rounded-t-lg w-full h-[250px] object-cover"
+              />
 
                 <div className="flex flex-col p-5 gap-2">
                     <h4 className="large">{post.title}</h4>
