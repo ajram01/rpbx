@@ -1,28 +1,40 @@
 'use client'
 
-/**
- * This configuration is used to for the Sanity Studio that’s mounted on the `\src\app\studio\[[...tool]]\page.tsx` route
- */
-
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 
-// Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import {apiVersion, dataset, projectId} from './src/sanity/env'
+import {apiVersion, dataset, projectId, productionDataset} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
+import {schemaProduction} from './src/sanity/schemaTypesProduction'
 import {structure} from './src/sanity/structure'
+import {structureProduction} from './src/sanity/structureProduction'
 
-export default defineConfig({
-  basePath: '/studio',
-  projectId,
-  dataset,
-  // Add and edit the content schema in the './sanity/schemaTypes' folder
-  schema,
-  plugins: [
-    structureTool({structure}),
-    // Vision is for querying with GROQ from inside the Studio
-    // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({defaultApiVersion: apiVersion}),
-  ],
-})
+export default defineConfig([
+  {
+    basePath: '/studio',
+    projectId,
+    dataset,              
+    name: 'default-workspace',
+    title: 'Blog Workspace',
+    subtitle: dataset,
+    schema,                
+    plugins: [
+      structureTool({structure}),        // blog structure
+      visionTool({defaultApiVersion: apiVersion}),
+    ],
+  },
+  {
+    basePath: '/studio-events',
+    projectId,
+    dataset: productionDataset,
+    name: 'production-workspace',
+    title: 'Event Workspace',
+    subtitle: productionDataset,
+    schema: schemaProduction,          
+    plugins: [
+      structureTool({structure: structureProduction}),  // event structure
+      visionTool({defaultApiVersion: apiVersion}),
+    ],
+  },
+])
