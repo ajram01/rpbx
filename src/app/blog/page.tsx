@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type { Metadata } from "next";
 import { type SanityDocument } from "next-sanity";
 
-import { client } from "@/sanity/client";
+import { blogClient } from "@/sanity/client";
 
 const POSTS_QUERY = `*[
   _type == "post"
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Blogs() {
-const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
+const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
     const isLoggedIn = false;    
 
   return (
