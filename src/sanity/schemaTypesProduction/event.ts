@@ -1,5 +1,4 @@
 import {defineField, defineType} from 'sanity'
-import {ImageIcon} from '@sanity/icons'
 
 export const event = defineType({
   name: 'event',           // matches structureProduction
