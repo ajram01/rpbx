@@ -6,16 +6,19 @@ import { type SanityDocument } from "next-sanity";
 
 import { blogClient } from "@/sanity/client";
 
-const POSTS_QUERY = `*[
-  _type == "post"
-  && defined(slug.current)
-]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt, mainImage {
-    asset->{
-      _id,
-      url
-    },
-    alt
-  }}`;
+const POSTS_QUERY = `*[_type == "post" && defined(slug.current) && defined(publishedAt)]
+  | order(publishedAt desc)[0...12]{
+    _id,
+    title,
+    slug,
+    read,
+    publishedAt,
+    mainImage {
+      asset->{ _id, url },
+      alt
+    }
+  }`;
+
 
 const options = { next: { revalidate: 30 } };
 
@@ -43,11 +46,11 @@ const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options)
           
 
         {/* Blog row 1 */}
-          <div className="gap-5 flex flex-col lg:flex-row">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
           {posts.map((post) => (
 
-            <div className="flex flex-col w-full lg:w-1/3 bg-white rounded-lg shadow-lg border-2 border-grey-500" key={post._id}>
+            <div className="flex flex-col w-full bg-white rounded-lg shadow-lg border-2 border-grey-500" key={post._id}>
               <img
                 src={post.mainImage?.asset?.url}
                 alt={post.mainImage?.alt || post.title}
@@ -56,7 +59,7 @@ const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options)
 
                 <div className="flex flex-col p-5 gap-2">
                     <h4 className="large">{post.title}</h4>
-                    <span className="flex flex-row gap-3"><p className="text-grey flex">{new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
+                    <span className="flex flex-row gap-3"><p className="text-grey flex">{new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="text-grey flex">{post.read} min read</p></span>
                     <Link href={`blog/${post.slug.current}`} className="green-link">Read More</Link>
                 </div>
             </div>
