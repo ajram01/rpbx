@@ -15,6 +15,7 @@ const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]{
   title,
   publishedAt,
   body,
+  read,
   mainImage {
     asset->{
       _id,
@@ -60,6 +61,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
       <h1 className="text-4xl font-bold">{post.title}</h1>
 
+      <span className="flex flex-row gap-3"><p className="flex">Published: {new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="flex">{post.read} min read</p></span>
+      <div className="border-t-1 border-gray-400 my-5"></div>
+
       {postImageUrl && (
         <img
           src={postImageUrl}
@@ -69,8 +73,6 @@ export default async function PostPage({ params }: PostPageProps) {
       )}
 
       <div className="prose">
-        <span className="flex flex-row gap-3"><p className="text-grey flex">Published: {new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="text-grey flex">3 min read</p></span>
-        <div className="border-t-1 border-gray-400 my-5"></div>
             {Array.isArray(post.body) && <PortableText value={post.body} />}
       </div>
 

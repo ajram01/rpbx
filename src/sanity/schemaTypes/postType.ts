@@ -47,6 +47,11 @@ export const postType = defineType({
       type: 'datetime',
     }),
     defineField({
+      name: 'read',
+      title: 'Estimated Read Time (in minutes)',
+      type: 'number',
+    }),
+    defineField({
       name: 'body',
       type: 'blockContent',
     }),

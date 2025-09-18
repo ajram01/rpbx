@@ -1,4 +1,5 @@
-import {type SanityDocument } from "next-sanity";
+import { type SanityDocument } from "next-sanity";
+import { PortableText } from "@portabletext/react";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { eventClient } from "@/sanity/client";
@@ -6,7 +7,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
 import Navbar2 from "../../components/Navbar-2";
-
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -30,7 +30,6 @@ const POST_QUERY = `*[
     alt
   }
 }`;
-
 
 const { projectId, dataset } = eventClient.config();
 const urlFor = (source: SanityImageSource) =>
@@ -89,14 +88,6 @@ export default async function PostPage({ params }: PostPageProps) {
 
       <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
         <h1 className="text-4xl font-bold">{post.title}</h1>
-
-        {postImageUrl && (
-          <img
-            src={postImageUrl}
-            alt={post.image?.alt || post.title}
-            className="w-full h-auto rounded-xl"
-          />
-        )}
 
         {/* Event Meta styled like Published section */}
         <span className="flex flex-row gap-3 flex-wrap items-center text-grey mt-3">
@@ -164,11 +155,18 @@ export default async function PostPage({ params }: PostPageProps) {
 
         <div className="border-t border-gray-400 my-5"></div>
 
-<div className="prose">
-  {post.information && <p>{post.information}</p>}
-</div>
+        {postImageUrl && (
+          <img
+            src={postImageUrl}
+            alt={post.image?.alt || post.title}
+            className="w-full h-auto rounded-xl"
+          />
+        )}
 
-
+        {/* Render blockContent for 'information' */}
+        <div className="prose">
+          {post.information && <PortableText value={post.information} />}
+        </div>
 
         <Link href="/events" className="green-link hover:underline">
           ← Back to events
