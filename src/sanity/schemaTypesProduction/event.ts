@@ -34,7 +34,7 @@ export const event = defineType({
     defineField({
       name: 'information',
       title: 'Information (Detailed Description of the Event)',
-      type: 'text',
+      type: 'blockContent',
     }),
     defineField({
       name: 'image',
