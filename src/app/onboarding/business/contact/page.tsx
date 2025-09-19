@@ -1,9 +1,9 @@
 // app/onboarding/business/contact/page.tsx
-import { createClient } from '@/../utils/supabase/server'
+import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
 
 export default async function ContactStep() {
-  const supabase = await createClient()
+  const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?next=/onboarding/business/contact')
 
@@ -20,8 +20,8 @@ export default async function ContactStep() {
 
 async function save(formData: FormData) {
   'use server'
-  const { createClient } = await import('@/../utils/supabase/server')
-  const sb = await createClient()
+  const { createClientRSC } = await import('@/../utils/supabase/server')
+  const sb = await createClientRSC()
   const { data: { user } } = await sb.auth.getUser()
   if (!user) redirect('/login?next=/onboarding/business/contact')
 
