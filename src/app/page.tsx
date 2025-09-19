@@ -5,6 +5,8 @@ import Modal from "./components/Modal"; // client modal
 import { createClientRSC } from "@/../utils/supabase/server"
 import { redirect } from "next/navigation"
 import PricingTable from "./components/pricing-table";
+import NewsletterSignup from "../components/ui/newsletter";
+import Carousel from "../components/ui/carousel";
 
 export default async function Home() {
     const supabase = await createClientRSC();
@@ -160,11 +162,7 @@ export default async function Home() {
 
           <div className="flex-1 flex justify-center lg:justify-start">
             <div className="flex flex-col items-center text-center w-full lg:w-[560px] px-4">
-              <h3 className="giant">2.3M</h3>
-              <h4>Bussineses at stake</h4>
-              <p className="mt-3 w-full lg:w-[500px]">
-                In the United States, baby boomers own approximately 40% of small businesses, translating to around 2.3 million businesses. As this generation approaches retirement, many companies will be sold or closed. This transition could impact millions of jobs and represent a significant shift in business ownership over the next decade
-              </p>
+              <Carousel />
             </div>
           </div>
         </div>
@@ -374,25 +372,8 @@ export default async function Home() {
       </div>
 
       {/* Div 4: 1 div */}
-      <div className="bg-purple-300 flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10">
-        <div className="bg-white flex flex-col items-center w-full lg:w-[900px] min-h-[300px] rounded-2xl py-10 px-6 lg:px-20 mx-4 shadow-lg border-2 border-grey-500">
-          <h2 className="sm: text-center mb-2">Unlock Your Growth with Expert Insights</h2>
-          <p className="text-center">
-            Join our monthly RPBX newsletter for exclusive resources, investor opportunities, and expert advice to fuel your business success. It’s free, insightful, and spam-free!
-          </p>
-          <input
-            type="email"
-            placeholder="Email"
-            className="mt-5 w-full px-6 py-2 rounded-full font-medium bg-[#EDE2E2]"
-          />
-          <button className="mt-5 w-full px-6 py-2 rounded-full font-medium transition bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white">
-            Sign In
-          </button>
-          <p className="mt-5 pt-2 border-t-2 border-[#A1A1A1] text-center">
-            By submitting this form, you are consenting to receive marketing emails from: info@rioplexbizx.com. You can revoke your consent to receive emails at any time by using the SafeUnsubscribe® link, found at the bottom of every email. Emails are serviced by Constant Contact
-          </p>
-        </div>
-      </div>
+      <NewsletterSignup />
+
     </div>
   );
 }
