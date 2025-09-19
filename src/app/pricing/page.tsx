@@ -2,7 +2,7 @@
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe' // server-only Stripe client (no 'use client')
 import Link from 'next/link'
-import { createClient } from '../../../utils/supabase/server'
+import { createClientRSC } from '../../../utils/supabase/server'
 
 
 export const revalidate = 600 // refresh every 10 minutes
@@ -38,7 +38,7 @@ export default async function PricingPage() {
     limit: 100,
   })
 
-  const supabase = await createClient()
+  const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()
 
   // Filter: only show prices whose parent Product is active

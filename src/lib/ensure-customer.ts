@@ -1,9 +1,9 @@
 // lib/ensure-customer.ts (updated)
 import { stripe } from '@/lib/stripe'
-import { createClient } from '../../utils/supabase/server'
+import { createClientRSC } from '../../utils/supabase/server'
 
 export async function ensureCustomer() {
-  const supabase = await createClient()
+  const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Not authenticated')
 

@@ -3,7 +3,7 @@ export const runtime = 'nodejs' // keep Node runtime for Stripe SDK
 
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
-import { createClient } from '@/../utils/supabase/server'
+import { createClientRSC } from '@/../utils/supabase/server'
 import { ensureCustomerFor } from '@/lib/ensure-customer-for' // make sure the path matches your file
 
 
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     }
 
     // 1) Create Supabase user (session may be null if email confirmations are ON)
-    const supabase = await createClient()
+    const supabase = await createClientRSC()
     const { data: signUpRes, error: signUpErr } = await supabase.auth.signUp({
       email,
       password,

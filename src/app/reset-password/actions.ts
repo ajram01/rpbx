@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from "@/../utils/supabase/server"
+import { createClientRSC } from "@/../utils/supabase/server"
 
 export async function updatePassword(_: unknown, formData: FormData){
     const password = String(formData.get('password') || '')
@@ -9,7 +9,7 @@ export async function updatePassword(_: unknown, formData: FormData){
     if (password.length < 8) return { ok: false, message: "Must be at least 8 characters"}
     if (password != confirm) return  { ok: false, message: "Passwords do not match" }
 
-    const supabase = await createClient()
+    const supabase = await createClientRSC()
     const { error } = await supabase.auth.updateUser({ password })
     if (error) return { ok: false, message: error.message }
 

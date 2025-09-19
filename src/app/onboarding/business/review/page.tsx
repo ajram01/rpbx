@@ -13,7 +13,6 @@ export default async function ReviewStep({
 }: {
   searchParams: ReviewSearchParams
 }) {
-  const sp = await searchParams
 
   const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()

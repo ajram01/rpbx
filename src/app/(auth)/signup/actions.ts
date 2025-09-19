@@ -1,5 +1,5 @@
 'use server'
-import { createClient } from '@/../utils/supabase/server'
+import { createClientRSC } from '@/../utils/supabase/server'
 
 export async function signUp(formData: FormData) {
   const email = String(formData.get('email') ?? '')
@@ -7,7 +7,7 @@ export async function signUp(formData: FormData) {
   const full_name = String(formData.get('full_name') ?? '')
   const username = String(formData.get('username') ?? '')
 
-  const supabase = await createClient()
+  const supabase = await createClientRSC()
   const { error } = await supabase.auth.signUp({
     email,
     password,
