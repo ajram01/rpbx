@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from "next";
 
-import { createClient } from "@/../utils/supabase/server"
+import { createClientRSC } from "@/../utils/supabase/server"
 import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
 
-  const supabase = createClient();
+  const supabase = await createClientRSC();
 
   const {
     data: { user }

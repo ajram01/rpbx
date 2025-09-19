@@ -1,9 +1,9 @@
 // lib/ensure-customer-for.ts
 import { stripe } from '@/lib/stripe'
-import { createClient } from '../../utils/supabase/server'
+import { createClientRSC } from '../../utils/supabase/server'
 
 export async function ensureCustomerFor(userId: string, email?: string) {
-  const supabase = await createClient()
+  const supabase = await createClientRSC()
   const { data: row } = await supabase
     .from('customers')
     .select('stripe_customer_id')

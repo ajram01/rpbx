@@ -1,12 +1,12 @@
 'use server'
 
-import { createClient } from '@/../utils/supabase/server'
+import { createClientRSC } from '@/../utils/supabase/server'
 
 export async function requestReset(_: unknown, formData: FormData){
     const email = String(formData.get(`email`) || '').trim()
     if (!email) return { ok: false, message: 'Email is required'}
 
-    const supabase = await createClient()
+    const supabase = await createClientRSC()
 
     const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
 

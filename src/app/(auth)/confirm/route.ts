@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { type EmailOtpType } from '@supabase/supabase-js'
-import { createClient } from '@/../utils/supabase/server'
+import { createClientRSC } from '@/../utils/supabase/server'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const next = searchParams.get('next') ?? '/reset-password'
 
   if (token_hash) {
-    const supabase = await createClient()
+    const supabase = await createClientRSC()
     const { error } = await supabase.auth.verifyOtp({ type, token_hash })
     if (!error) {
       // Redirect to your reset-password page (absolute or relative)

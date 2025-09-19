@@ -2,13 +2,12 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Button from "./components/Button";
 import Modal from "./components/Modal"; // client modal
-import { createClient } from "@/../utils/supabase/server"
+import { createClientRSC } from "@/../utils/supabase/server"
 import { redirect } from "next/navigation"
 import PricingTable from "./components/pricing-table";
 
 export default async function Home() {
-    const supabase = createClient();
-  
+    const supabase = await createClientRSC();
     const {
       data: { user }
     } = await supabase.auth.getUser();
