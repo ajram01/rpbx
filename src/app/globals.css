@@ -193,6 +193,9 @@ h4.large {
   color: #333333;
 }
 
+.swiper-pagination-bullet-active {
+  background-color: #60BC9B !important; /* Tailwind blue-700 */
+}
 
 
 .dark {

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from "next";
 import { type SanityDocument } from "next-sanity";
-
+import NewsletterSignup from "../../components/ui/newsletter";
 import { eventClient } from "@/sanity/client";
 
 const POSTS_QUERY = `*[
@@ -139,6 +139,7 @@ export default async function Events() {
           </div>
         </div>
       </div>
+      <NewsletterSignup />
     </div>
   );
 }

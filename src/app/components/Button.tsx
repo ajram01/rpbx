@@ -32,7 +32,7 @@ export default function Button(props: ButtonProps) {
     primary: "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white",
     secondary: "bg-gray-700 hover:bg-gray-800 text-white",
     charcoal: "bg-[#333333] hover:bg-[#444444] text-white",
-    white: "bg-white hover:bg-[#444444] text-black border border-black w-auto px-[15px]",
+    white: "bg-white hover:bg-[#60BC9B] text-black border border-black w-auto px-[15px]",
   };
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";
   const classes = [baseStyles, variantStyles[variant], disabledStyles, className].filter(Boolean).join(" ");
