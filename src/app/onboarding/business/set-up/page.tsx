@@ -79,7 +79,7 @@ export default async function Setup() {
       const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
       const key = `${user.id}/${listingId}/cover.${ext}` // bucket-relative path
 
-      const { data: upData, error: upErr } = await sb.storage
+      const { error: upErr } = await sb.storage
         .from('listings')                 // <— your bucket name
         .upload(key, file, {
           upsert: true,                   // allow replace

@@ -14,8 +14,6 @@ export default async function ReviewStep({
   searchParams: ReviewSearchParams
 }) {
   const sp = await searchParams
-  const msg = sp?.msg
-  const allowedFromQS = sp?.allowed ? Number(sp.allowed) : undefined
 
   const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()
