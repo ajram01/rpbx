@@ -180,7 +180,7 @@ export default async function Home() {
               <Modal
                 trigger={
                   <Image
-                      src="/images/icons/solution-icon-1.png"
+                      src="/images/gifs/evaluation.gif"
                       alt="solution-icon-1"
                       width={200}
                       height={200}
@@ -231,7 +231,7 @@ export default async function Home() {
               <Modal
                 trigger={
                   <Image
-                      src="/images/icons/solution-icon-2.png"
+                      src="/images/gifs/marketing.gif"
                       alt="solution-icon-2"
                       width={200}
                       height={200}
@@ -278,7 +278,7 @@ export default async function Home() {
               <Modal
                 trigger={
                   <Image
-                      src="/images/icons/solution-icon-3.png"
+                      src="/images/gifs/legal.gif"
                       alt="solution-icon-3"
                       width={200}
                       height={200}
@@ -321,7 +321,7 @@ export default async function Home() {
               <Modal
                 trigger={
                   <Image
-                      src="/images/icons/solution-icon-4.png"
+                      src="/images/gifs/cpa.gif"
                       alt="solution-icon-4"
                       width={200}
                       height={200}
