@@ -3,16 +3,10 @@ import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
-type ReviewSearchParams = Promise<{ msg?: string; allowed?: string }>
-
 // 🚩 Feature flag — turn back to true to re-enable credit checks
 const CHECK_PLAN_LIMITS = false as const
 
-export default async function ReviewStep({
-  searchParams,
-}: {
-  searchParams: ReviewSearchParams
-}) {
+export default async function ReviewStep() {
 
   const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()
