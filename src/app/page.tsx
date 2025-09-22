@@ -11,10 +11,17 @@ import Carousel from "../components/ui/carousel";
 export default async function Home() {
     const supabase = await createClientRSC();
     const {
-      data: { user }
+      data: { user },
+      error
     } = await supabase.auth.getUser();
   
     if (user) return redirect("/dashboard");
+
+    if (error?.status === 400){
+
+    } else if (error){
+      console.error(error)
+    }
     
   return (
     <div>

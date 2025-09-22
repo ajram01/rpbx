@@ -2,37 +2,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 
-export async function middleware(req: NextRequest) {
-  // Start a response we can mutate
-  const res = NextResponse.next({ request: { headers: req.headers } })
+export async function middleware(request: NextRequest) {
+  const response = NextResponse.next({ request: { headers: request.headers } })
 
-  // Build a Supabase client that reads cookies from the request
-  // and writes cookies onto the response
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll: () =>
-          req.cookies.getAll().map(({ name, value }) => ({ name, value })),
-        setAll: (cookiesToSet: { name: string; value: string; options: CookieOptions }[]) => {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            res.cookies.set({ name, value, ...options })
-          })
+        get(name) {
+          return request.cookies.get(name)?.value
+        },
+        set(name, value, options) {
+          response.cookies.set(name, value, options as CookieOptions)
+        },
+        remove(name, options) {
+          response.cookies.set(name, '', { ...(options as CookieOptions), maxAge: 0 })
         },
       },
     }
   )
 
-  // Trigger a session check/refresh; if refresh happens, cookies are added to `res`
-  await supabase.auth.getUser()
+  const { error } = await supabase.auth.getUser()
+  // 400 = no refresh token (anonymous) => ignore
+  if (error && error.status !== 400) console.error('middleware getUser:', error)
 
-  return res
+  return response
 }
 
 export const config = {
-  // Limit scope if you want to reduce overhead
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    // exclude static & optionally '/login' and OAuth callback
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|login|auth/callback).*)',
   ],
 }
