@@ -1,18 +1,31 @@
+// app/login/page.tsx
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 import { LoginForm } from "@/components/login-form"
+import { createClientRSC } from "../../../utils/supabase/server"
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: "Login | RioPlex Business Exchange",
   description: "Connecting Local Business Owners With Investors",
 }
 
-export default async function LoginPage({
-  searchParams,
-}: { searchParams: Promise<{ next?: string }> }) {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams
-
+  const supabase = await createClientRSC()
+  
+  // ✅ Use getSession() instead of getUser() for consistency
+  const { data: { session }, error } = await supabase.auth.getSession()
+  
+  // Only log unexpected errors
+  if (error && error.status !== 400) {
+    console.error('Login page auth error:', error)
+  }
+  
+  // Redirect if already authenticated
+  if (session?.user) redirect('/dashboard')
+  
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
       <div className="flex w-full max-w-sm flex-col gap-6">

@@ -9,12 +9,20 @@ import NewsletterSignup from "../components/ui/newsletter";
 import Carousel from "../components/ui/carousel";
 
 export default async function Home() {
-    const supabase = await createClientRSC();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
+  const supabase = await createClientRSC();
   
-    if (user) return redirect("/dashboard");
+  // Use getSession instead of getUser for better performance
+  const { data: { session }, error } = await supabase.auth.getSession();
+  
+  // Only log non-authentication errors
+  if (error && error.message !== 'Auth session missing!' && error.status !== 400) {
+    console.error('Unexpected auth error:', error);
+  }
+  
+  // Redirect if user is authenticated
+  if (session?.user) {
+    return redirect("/dashboard");
+  }
     
   return (
     <div>
@@ -65,62 +73,6 @@ export default async function Home() {
       <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10">
       <PricingTable/>
       </div>
-        {/* <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-[15px] w-full lg:w-[1140px] px-4 lg:px-0">
-          <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl p-5">
-            <p className="font-semibold">Business Owner Lite</p>
-            <h3>Free</h3>
-            <p className="text-grey">Access</p>
-            <ul className="list-image-[url(/images/icons/circle-mint.png)] pl-6 lg:pl-10 font-light space-y-2">
-              <li>A Unique Opportunity for Local Entrepreneurs</li>
-              <li>Comprehensive & Secure Space to Tell Your Story</li>
-              <li>Connecting You with a Community of Investors</li>
-              <li>Supporting Your Business’s Growth at Every Stage</li>
-              <li>Maximizing Visibility & Achieving Strategic Goals</li>
-            </ul>
-            <ul className="list-image-[url(/images/icons/circle-grey.png)] pl-6 lg:pl-10 font-light space-y-2">
-              <li className="text-grey">View Comprehensive Profiles of Interested Investors</li>
-              <li className="text-grey">Directly Connect with Potential Investors</li>
-            </ul>
-
-            <Button className="mt-5 w-full lg:w-auto" variant="charcoal">Get Started</Button>
-          </div>
-
-          <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl p-5">
-            <p className="font-semibold">Business Owner Legacy</p>
-            <h3>$34</h3>
-            <p className="text-grey">Per Month</p>
-            <ul className="list-image-[url(/images/icons/circle-mint.png)] pl-6 lg:pl-10 font-light space-y-2">
-              <li>A Unique Opportunity for Local Entrepreneurs</li>
-              <li>Comprehensive & Secure Space to Tell Your Story</li>
-              <li>Connecting You with a Community of Investors</li>
-              <li>Supporting Your Business’s Growth at Every Stage</li>
-              <li>Maximizing Visibility & Achieving Strategic Goals</li>
-              <li>View Comprehensive Profiles of Interested Investors</li>
-              <li>Directly Connect with Potential Investors</li>
-            </ul>
-
-            <Button className="mt-5 w-full lg:w-auto" variant="charcoal">Get Started</Button>
-          </div>
-
-          <div className="bg-white flex-1 flex flex-col items-center min-h-[500px] rounded-2xl p-5">
-            <p className="font-semibold">Investor Plan</p>
-            <h3>$76</h3>
-            <p className="text-grey">Per Month</p>
-            <ul className="list-image-[url(/images/icons/circle-mint.png)] pl-6 lg:pl-10 font-light space-y-2">
-              <li>Join a Network of Forward-Thinking Investors</li>
-              <li>Comprehensive Insights at Your Fingertips</li>
-              <li>Align Your Investments with Your Financial Goals</li>
-              <li>Discover Exclusive Opportunities Before They Hit the Market</li>
-              <li>Unlock Full Access to Detailed Business Listings</li>
-              <li>Directly Connect with Verified Business Owners</li>
-              <li>Stay Informed with Tailored Notifications for Your Business Interests</li>
-            </ul>
-
-            <Button className="mt-5 w-full lg:w-auto" variant="charcoal">Get Started</Button>
-          </div>
-        </div>
-      </div> */}
-
       {/* Div 3: 3 rows */}
       <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top py-[15px]">
         {/* Row 1 */}

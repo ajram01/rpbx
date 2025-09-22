@@ -1,34 +1,33 @@
+// Your login actions file
 'use server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { createClientRSC } from '@/../utils/supabase/server'
+import { createClientWritable } from '@/../utils/supabase/server' // ✅ Use writable client
+
 export async function login(formData: FormData) {
-  const supabase = await createClientRSC()
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const supabase = await createClientWritable() // ✅ Changed from createClientRSC
+  const email = String(formData.get('email') || '').trim()
+  const password = String(formData.get('password') || '')
+  const next = String(formData.get('next') || '')
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) {
-    redirect('/error')
+    redirect(`/login?error=${encodeURIComponent(error.message)}${next ? `&next=${encodeURIComponent(next)}` : ''}`)
   }
+
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  redirect(next || '/dashboard')
 }
+
 export async function signup(formData: FormData) {
-  const supabase = await createClientRSC()
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-  const { error } = await supabase.auth.signUp(data)
+  const supabase = await createClientWritable() // ✅ Changed from createClientRSC
+  const email = String(formData.get('email') || '').trim()
+  const password = String(formData.get('password') || '')
+
+  const { error } = await supabase.auth.signUp({ email, password })
   if (error) {
-    redirect('/error')
+    redirect(`/login?error=${encodeURIComponent(error.message)}`)
   }
-  revalidatePath('/', 'layout')
-  redirect('/dashboard')
+
+  redirect('/login?info=check_email')
 }
