@@ -23,16 +23,28 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { error } = await supabase.auth.getUser()
-  // 400 = no refresh token (anonymous) => ignore
-  if (error && error.status !== 400) console.error('middleware getUser:', error)
+  // Only check auth for protected routes
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') ||
+                          request.nextUrl.pathname.startsWith('/business-listing') ||
+                          request.nextUrl.pathname.startsWith('/investor-listing')
+
+  if (isProtectedRoute) {
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    if (!session || error) {
+      // Redirect to login or home page
+      const redirectUrl = new URL('/', request.url)
+      return NextResponse.redirect(redirectUrl)
+    }
+  }
 
   return response
 }
 
 export const config = {
   matcher: [
-    // exclude static & optionally '/login' and OAuth callback
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|login|auth/callback).*)',
+    // Only run middleware on routes that might need protection
+    // Exclude static files, API routes (unless you need auth), and public assets
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|api).*)',
   ],
 }
