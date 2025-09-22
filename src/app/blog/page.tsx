@@ -4,16 +4,14 @@ import Navbar2 from "../components/Navbar-2";
 import NewsletterSignup from "../../components/ui/newsletter";
 import BlogList from "../components/BlogList";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Blog | RioPlex Business Exchange",
   description: "Connecting Local Business Owners With Investors",
 };
 
-export default async function Blogs() {
-const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
-    const isLoggedIn = true;    
+export default function Blogs() {
+  const isLoggedIn = false;
 
   return (
     <div>
@@ -24,9 +22,7 @@ const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options)
           <h1 className="text-center">Blog</h1>
 
           {/* filter/sort/fetch */}
-          <Suspense fallback={<div>Loading blogs...</div>}>
-            <BlogList />
-          </Suspense>
+          <BlogList />
         </div>
       </div>
 
