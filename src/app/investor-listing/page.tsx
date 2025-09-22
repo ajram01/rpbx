@@ -10,6 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Investors() {
+  const currentPage = 1; // hard-coded for now
+  const totalPages = 5;  // hard-coded for now
+
   return (
     <div>
       {/* Background and Navbar */}
@@ -87,12 +90,39 @@ export default async function Investors() {
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="flex items-center justify-center space-x-4 mt-8">
-            <button className="text-gray-600 hover:text-black">&laquo; Previous</button>
-            <p>Page 1 of 4</p>
-            <button className="text-gray-600 hover:text-black">Next &raquo;</button>
-          </div>
+    <div className="flex justify-center items-center gap-4 mt-8">
+      {currentPage > 1 && (
+        <Link
+          href={`?page=${currentPage - 1}`}
+          className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white"
+        >
+          Previous
+        </Link>
+      )}
+
+      {[...Array(totalPages)].map((_, i) => (
+        <Link
+          key={i}
+          href={`?page=${i + 1}`}
+          className={`px-4 py-2 border rounded-xl shadow-lg ${
+            currentPage === i + 1
+              ? "bg-[#60BC9B] text-white"
+              : "hover:bg-[#60BC9B] hover:text-white bg-white"
+          }`}
+        >
+          {i + 1}
+        </Link>
+      ))}
+
+      {currentPage < totalPages && (
+        <Link
+          href={`?page=${currentPage + 1}`}
+          className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white"
+        >
+          Next
+        </Link>
+      )}
+    </div>
 
 
         </div>
