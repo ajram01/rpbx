@@ -1,7 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "./components/Navbar";
 import Button from "./components/Button";
-import Modal from "./components/Modal"; // client modal
+import Modal from "./components/Modal";
+import AuthForm from "@/components/AuthForm";
 import { createClientRSC } from "@/../utils/supabase/server"
 import { redirect } from "next/navigation"
 import PricingTable from "./components/pricing-table";
@@ -38,19 +40,7 @@ export default async function Home() {
             <div className="flex flex-col items-center w-full lg:w-[560px] max-w-lg">
               <h1 className="text-center">Unlock Your Business Potential</h1>
 
-              <input
-                type="email"
-                placeholder="Email"
-                className="mt-5 w-full px-6 py-2 rounded-full font-medium bg-white"
-              />
-              <button className="mt-5 w-full px-6 py-2 rounded-full font-medium transition bg-white hover:bg-[var(--color-primary)] text-black">
-                Sign In
-              </button>
-
-              <p className="mt-5 text-center">
-                By clicking Continue to join or sign in, you agree to RioPlex’s User Agreement, Privacy Policy, and Cookie Policy.
-              </p>
-              <p className="mt-5 text-center">New to RioPlex? Join Now</p>
+              <AuthForm />
             </div>
           </div>
 
@@ -85,15 +75,32 @@ export default async function Home() {
           </div>
           <div className="flex-1 flex justify-center lg:justify-start">
             <div className="flex flex-col items-center w-full lg:w-[660px]">
+              {/* Blog Topic */}
               <div className="flex flex-wrap gap-3 lg:gap-4 justify-center lg:justify-start">
-                <Button variant="white">Selling a Business</Button>
-                <Button variant="white">Business Valuation</Button>
-                <Button variant="white">Confidentiality</Button>
-                <Button variant="white">Strategy</Button>
-                <Button variant="white">Operations</Button>
-                <Button variant="white">Buying a Business</Button>
-                <Button variant="white">RPBX</Button>
-                <Button variant="white">Successful Planning</Button>
+                <Link href="/blog?category=entrepreneurship-and-growth-category">
+                  <Button variant="white">Entrepreneurship & Growth</Button>
+                </Link>
+                <Link href="/blog?category=investor-relations-category">
+                  <Button variant="white">Investor Relations</Button>
+                </Link>
+                <Link href="/blog?category=exit-planning-category">
+                  <Button variant="white">Exit Planning</Button>
+                </Link>
+                <Link href="/blog?category=mergers-and-acquisitions-category">
+                  <Button variant="white">M&amp;A</Button>
+                </Link>
+                <Link href="/blog?category=local-market-insights-category">
+                  <Button variant="white">Local Market Insights</Button>
+                </Link>
+                <Link href="/blog?category=finance-and-valuation-category">
+                  <Button variant="white">Finance & Valuation</Button>
+                </Link>
+                <Link href="/blog?category=business-selling-category">
+                  <Button variant="white">Selling</Button>
+                </Link>
+                <Link href="/blog?category=business-buying-category">
+                  <Button variant="white">Buying</Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -107,8 +114,8 @@ export default async function Home() {
               <p className="lg:pr-15">
                 Connecting small business owners with the right investors to help them grow, succeed, and achieve their goals. Join RioPlex Business Exchange and be part of a platform built for ambitious businesses and forward-thinking investors.
               </p>
-              <Button className="mt-3 lg:mt-2 w-full sm:w-auto" variant="white">Looking for an Investor</Button>
-              <Button className="mt-3 lg:mt-2 w-full sm:w-auto" variant="white">Looking to Invest</Button>
+              <Link href="/business"><Button className="mt-3 lg:mt-3 w-full sm:w-auto" variant="white">Looking for an Investor</Button></Link>
+              <Link href="/investor"><Button className="mt-3 lg:mt-3 w-full sm:w-auto" variant="white">Looking to Invest</Button></Link>
             </div>
           </div>
 
