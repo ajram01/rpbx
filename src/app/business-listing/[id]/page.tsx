@@ -8,13 +8,14 @@ import { createClientRSC } from "@/../utils/supabase/server";
 
 // Optional: dynamic metadata from the listing
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
+  const { id } = await params;
   const supabase = await createClientRSC();
   const { data } = await supabase
     .from("business_listings")
     .select("title, industry, status, is_active")
-    .eq("id", params.id)
+    .eq("id", id)
     .maybeSingle();
 
   const title = data?.title || "Business Listing";
@@ -66,13 +67,14 @@ const fmt = (v: string | null | undefined, m: Record<string, string>) =>
 export default async function ListingPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const supabase = await createClientRSC();
 
   // Require login
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(`/login?next=/business-listings/${params.id}`);
+  if (!user) redirect(`/login?next=/business-listing/${id}`);
 
   // Fetch listing by id
   const { data: listing } = await supabase
@@ -96,7 +98,7 @@ export default async function ListingPage({
       can_provide_financials,
       can_provide_tax_returns
     `)
-    .eq("id", params.id)
+    .eq("id", id)
     .maybeSingle();
 
   if (!listing) notFound();
