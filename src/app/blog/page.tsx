@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default async function Blogs() {
 const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
-    const isLoggedIn = false;    
+    const isLoggedIn = true;    
 
   return (
     <div>
