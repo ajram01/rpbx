@@ -11,14 +11,8 @@ export const metadata: Metadata = {
   description: "Connecting Local Business Owners With Investors",
 };
 
-<<<<<<< HEAD
-export default async function Blogs() {
-const posts = await blogClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
-    const isLoggedIn = true;    
-=======
 export default function Blogs() {
   const isLoggedIn = false;
->>>>>>> b42fadd (added categories to blogs)
 
   return (
     <div>

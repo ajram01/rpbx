@@ -13,7 +13,7 @@ export default async function Preferences() {
   const { data: draft } = await supabase
     .from("investor_profiles")
     .select(
-      "user_id, first_name, last_name, email, city, organization_entity, bio, avatar_path, status"
+      "user_id, ownership_min, ownership_max, primary_industry, additional_industries, target_ebidta, target_cash_flow, status"
     )
     .eq("user_id", user.id)
     .maybeSingle();
@@ -58,7 +58,7 @@ export default async function Preferences() {
       console.error("Profile upsert failed:", upsertErr);
       return;
     }
-    
+
     }
 
 
