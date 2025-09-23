@@ -45,22 +45,22 @@ function PricingTab(props: PricingTabProps) {
     : '#';
 
   return (
-    <div className={`w-full ${props.popular ? 'dark' : ''}`}>
-      <div className="relative flex flex-col h-full p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-900 shadow shadow-slate-950/5">
+    <div className={`w-full`}>
+      <div className="relative flex flex-col h-full p-6 rounded-2xl bg-white border border-slate-200 shadow shadow-slate-950/5">
         {props.popular && (
           <div className="absolute top-0 right-0 mr-6 -mt-4">
-            <div className="inline-flex items-center text-xs font-semibold py-1.5 px-3 bg-emerald-500 text-white rounded-full shadow-sm shadow-slate-950/5">
+            <div className="inline-flex items-center text-xs font-semibold py-1.5 px-3 bg-[#60BC9B] text-white rounded-full shadow-sm shadow-slate-950/5">
               Most Popular
             </div>
           </div>
         )}
 
         <div className="mb-5">
-          <div className="text-slate-900 dark:text-slate-200 font-semibold mb-1">{props.planName}</div>
+          <div className="text-slate-900 font-semibold mb-2"><h4>{props.planName}</h4></div>
 
-          <div className="inline-flex items-baseline mb-2">
-            <span className="text-slate-900 dark:text-slate-200 font-bold text-3xl">$</span>
-            <span className="text-slate-900 dark:text-slate-200 font-bold text-4xl">
+          <div className="inline-flex items-baseline mb-1">
+            <span className="text-slate-900 font-bold text-3xl">$</span>
+            <span className="text-slate-900 font-bold text-4xl">
               {displayCents != null ? (displayCents / 100).toFixed(0) : props.isFree ? '0' : '-'}
             </span>
             <span className="text-slate-500 font-medium">
@@ -74,9 +74,9 @@ function PricingTab(props: PricingTabProps) {
             href={href}
             onClick={(e) => { if (!props.checkoutLookup) e.preventDefault(); }}
             aria-disabled={!props.checkoutLookup}
-            className={`w-full inline-flex justify-center whitespace-nowrap rounded-lg px-3.5 py-2.5 text-sm font-medium text-white transition-colors duration-150 ${
+            className={`w-full inline-flex justify-center whitespace-nowrap rounded-full px-3.5 py-2.5 text-sm font-medium text-white transition-colors duration-150 ${
               props.checkoutLookup
-                ? 'bg-indigo-500 hover:bg-indigo-600 focus-visible:outline-none focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600'
+                ? 'bg-[#60BC9B] hover:bg-[#4ba88a] focus-visible:outline-none focus-visible:ring-[#60BC9B]'
                 : 'bg-slate-400 cursor-not-allowed'
             }`}
           >
@@ -84,14 +84,14 @@ function PricingTab(props: PricingTabProps) {
           </Link>
         </div>
 
-        <div className="text-slate-900 dark:text-slate-200 font-medium mb-3">Includes:</div>
-        <ul className="text-slate-600 dark:text-slate-400 text-sm space-y-3 grow">
+        <div className="text-slate-900 font-medium mb-3"><p className='font-semibold'>Includes:</p></div>
+        <ul className="text-slate-600 text-sm space-y-3 grow">
           {(props.features.length ? props.features : ['Feature A', 'Feature B', 'Feature C']).map((feature, i) => (
             <li key={i} className="flex items-center">
-              <svg className="w-3 h-3 fill-emerald-500 mr-3 shrink-0" viewBox="0 0 12 12">
+              <svg className="w-3 h-3 fill-[#60BC9B] mr-3 shrink-0" viewBox="0 0 12 12">
                 <path d="M10.28 2.28L3.989 8.575 1.695 6.28A1 1 0 00.28 7.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 2.28z" />
               </svg>
-              <span>{feature}</span>
+              <span><p className='text-grey'>{feature}</p></span>
             </li>
           ))}
         </ul>
@@ -209,16 +209,16 @@ export default function PricingTable() {
       ? (p.lookupMonthly ?? p.lookupYearly ?? null)
       : (isAnnual ? p.lookupYearly : p.lookupMonthly);
 
-  if (loading) return <div className="text-sm text-slate-500">Loading pricing…</div>;
+  if (loading) return <div><p className='text-white'>Loading pricing…</p></div>;
 
   return (
     <div>
       {/* Toggle */}
-      <div className="flex justify-center max-w-[14rem] m-auto mb-8 lg:mb-16">
-        <div className="relative flex w-full p-1 bg-white dark:bg-slate-900 rounded-full">
+      <div className="flex justify-center max-w-[18rem] m-auto mb-8 lg:mb-16">
+        <div className="relative flex w-full p-1 bg-white rounded-full">
           <span className="absolute inset-0 m-1 pointer-events-none" aria-hidden="true">
             <span
-              className={`absolute inset-0 w-1/2 bg-indigo-500 rounded-full shadow-sm shadow-indigo-950/10 transition-transform duration-150 ease-in-out ${
+              className={`absolute inset-0 w-1/2 bg-[#60BC9B] rounded-full shadow-sm shadow-[#60BC9B] transition-transform duration-150 ease-in-out ${
                 !isAnnual ? 'translate-x-0' : 'translate-x-full'
               }`}
             />
@@ -226,7 +226,7 @@ export default function PricingTable() {
 
           <button
             className={`relative flex-1 text-sm font-medium h-8 rounded-full ${
-              !isAnnual ? 'text-white' : 'text-slate-500 dark:text-slate-400'
+              !isAnnual ? 'text-white' : 'text-slate-500'
             }`}
             onClick={() => setIsAnnual(false)}
             aria-pressed={!isAnnual}
@@ -236,17 +236,18 @@ export default function PricingTable() {
 
           <button
             className={`relative flex-1 text-sm font-medium h-8 rounded-full ${
-              isAnnual ? 'text-white' : 'text-slate-500 dark:text-slate-400'
+              isAnnual ? 'text-white' : 'text-slate-500'
             }`}
             onClick={() => setIsAnnual(true)}
             aria-pressed={isAnnual}
           >
-            Annual <span className={isAnnual ? 'text-indigo-200' : 'text-slate-400'}>Save 20%</span>
+            Annual <span className={isAnnual ? 'text-[#E5FFF8]' : 'text-slate-400'}>Save 20%</span>
           </button>
         </div>
       </div>
 
       {/* Cards */}
+      <div className="max-w-[1140px] mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {visiblePlans.map((p) => (
           <PricingTab
@@ -261,6 +262,7 @@ export default function PricingTable() {
             isFree={p.isFree}
           />
         ))}
+      </div>
       </div>
     </div>
   );
