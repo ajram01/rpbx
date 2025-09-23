@@ -210,7 +210,7 @@ export default function PricingTable() {
       ? (p.lookupMonthly ?? p.lookupYearly ?? null)
       : (isAnnual ? p.lookupYearly : p.lookupMonthly);
 
-  if (loading) return <div><LogoLoader/></div>;
+  if (loading) return <div><p className='text-white'>Loading pricing…</p></div>;
 
   return (
     <div>
@@ -242,7 +242,7 @@ export default function PricingTable() {
             onClick={() => setIsAnnual(true)}
             aria-pressed={isAnnual}
           >
-            Annual <span className={isAnnual ? 'text-[#E5FFF8]' : 'text-[#60BC9B]'}>Save 20%</span>
+            Annual <span className={isAnnual ? 'text-[#E5FFF8]' : 'text-slate-400'}>Save 20%</span>
           </button>
         </div>
       </div>
