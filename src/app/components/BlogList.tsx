@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from 'next/link';
 import { blogClient } from "@/sanity/client";
 import type { SanityDocument } from "next-sanity";
 
@@ -131,9 +132,10 @@ export default function BlogList() {
               alt={post.mainImage?.alt || post.title}
               className="rounded-t-lg w-full h-[250px] object-cover"
             />
-            <div className="p-5">
+            <div className="p-5 gap-2 flex flex-col">
               <h4>{post.title}</h4>
-              <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
+              <span className="flex flex-row gap-3"><p className="flex">{new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="flex">{post.read} min read</p></span>
+                <Link href={`/blog/${post.slug.current}`} className="green-link">Read More</Link>
             </div>
           </div>
         ))}
