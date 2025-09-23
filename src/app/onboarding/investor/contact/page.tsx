@@ -17,7 +17,7 @@ export default async function Contact() {
   const { data: draft } = await supabase
     .from("investor_profiles")
     .select(
-      "user_id, first_name, last_name, email, city, organization_entity, bio, avatar_path, status"
+      "user_id, first_name, last_name, city, organization_entity, bio, avatar_path, status"
     )
     .eq("user_id", user.id)
     .maybeSingle();
@@ -53,10 +53,9 @@ export default async function Contact() {
 
     // Upsert profile by user_id
     const payload = {
-      user_id: user.id,
+      user_id: user!.id,
       first_name,
       last_name,
-      email: user.email, // trust auth
       city,
       organization_entity: organization_entity || null,
       bio,
@@ -138,7 +137,7 @@ export default async function Contact() {
           type="email"
           name="email"
           disabled
-          defaultValue={draft?.email ?? user.email ?? ""}
+          defaultValue={user.email ?? ""}
           className="mt-1 w-full border rounded px-3 py-2 bg-gray-50 text-gray-600"
         />
       </label>
