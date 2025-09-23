@@ -242,7 +242,7 @@ export default function PricingTable() {
             onClick={() => setIsAnnual(true)}
             aria-pressed={isAnnual}
           >
-            Annual <span className={isAnnual ? 'text-[#E5FFF8]' : 'text-slate-400'}>Save 20%</span>
+            Annual <span className={isAnnual ? 'text-[#E5FFF8]' : 'text-[#60BC9B]'}>Save 20%</span>
           </button>
         </div>
       </div>
