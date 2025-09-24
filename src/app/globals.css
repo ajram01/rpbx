@@ -84,6 +84,12 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@keyframes stepRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 body {
   /* font-family: "Saira Condensed", sans-serif; */
 }
