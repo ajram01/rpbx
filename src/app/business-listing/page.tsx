@@ -100,7 +100,7 @@ export default async function Businesses({
 
   const supabase = await createClientRSC();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?next=/business-listings");
+  if (!user) redirect("/login?next=/business-listing");
 
   // read & validate filters
   const industry = INDUSTRIES.some(i => i.value === sp.industry) ? (sp.industry || "") : "";
@@ -281,15 +281,15 @@ export default async function Businesses({
                   )}
 
                   <div className="p-5">
-                    <h4 className="large">{r.title || r.industry || "Business"}</h4>
+                    <h4 className="large">{r.industry + " Business" || "Business"}</h4>
 
                     <div className="flex justify-between mt-2">
                       <div>
-                        <p>Annual Revenue</p>
+                        <p className="font-semibold">Annual Revenue</p>
                         <p>{(r.annual_revenue_range && LABELS.annual[r.annual_revenue_range]) || "—"}</p>
                       </div>
                       <div>
-                        <p>Company EBITDA</p>
+                        <p className="font-semibold">Company EBITDA</p>
                         <p>{(r.ebitda_range && LABELS.ebitda[r.ebitda_range]) || "—"}</p>
                       </div>
                     </div>
