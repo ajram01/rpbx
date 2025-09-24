@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 
