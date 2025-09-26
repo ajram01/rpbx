@@ -203,6 +203,11 @@ h4.large {
   background-color: #60BC9B !important; /* Tailwind blue-700 */
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+  color: #60BC9B !important;
+}
+
 
 .dark {
   --background: oklch(0.145 0 0);

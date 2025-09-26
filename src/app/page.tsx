@@ -149,10 +149,10 @@ export default async function Home() {
                 }
               >
               <div className="space-y-2">
-                <h2>Business Evaluation</h2><br />
-                  <h4>What is Business Evaluation?</h4>
+                <h2>Business Valuation</h2><br />
+                  <h4>What is Business Valuation?</h4>
                   <p>
-                    Business evaluation is the process of determining what a company is worth. It’s a crucial step for any
+                    Business valuation is the process of determining what a company is worth. It’s a crucial step for any
                     business owner who’s looking to sell, merge, or even plan for future growth.
                   </p><br />
 
@@ -164,7 +164,7 @@ export default async function Home() {
                     <li><strong>Operations &amp; Customers:</strong> How well does the business run? Is the customer base stable? Recurring revenue streams and efficient operations add more value.</li>
                   </ul><br />
 
-                  <h4>How We Evaluate:</h4>
+                  <h4>How We Valuate:</h4>
                   <ul className="list-disc list-outside pl-6">
                     <li><strong>Comparable Company Analysis:</strong> We compare your business to others in your industry that have recently sold or are publicly traded.</li>
                     <li><strong>Discounted Cash Flow (DCF):</strong> We project future cash flow to find today’s value.</li>
@@ -184,7 +184,7 @@ export default async function Home() {
               
               
               </Modal>
-              <h4 className="text-center mt-2">Business Evaluation</h4>
+              <h4 className="text-center mt-2">Business Valuation</h4>
             </div>
 
             {/* 2 */}
