@@ -17,7 +17,7 @@ export default async function Contact() {
   const { data: draft } = await supabase
     .from("investor_profiles")
     .select(
-      "user_id, first_name, last_name, city, organization_entity, bio, avatar_path, status"
+      "user_id, first_name, last_name, city, organization_entity, contact_email, bio, avatar_path, status"
     )
     .eq("user_id", user.id)
     .maybeSingle();
@@ -46,6 +46,7 @@ export default async function Contact() {
 
     const first_name = String(formData.get("first_name") ?? "").trim() || authFirst;
     const last_name = String(formData.get("last_name") ?? "").trim() || authLast;
+    const email = String(formData.get("email") ?? "").trim();
     const city = String(formData.get("city") ?? "").trim();
     const organization_entity = String(formData.get("org") ?? "").trim();
     const bio = String(formData.get("bio") ?? "").trim();
@@ -132,11 +133,10 @@ export default async function Contact() {
       </div>
 
       <label className="block">
-        <span>Email</span>
+        <span>Contact Email</span>
         <input
           type="email"
           name="email"
-          disabled
           defaultValue={user.email ?? ""}
           className="mt-1 w-full border rounded px-3 py-2 bg-gray-50 text-gray-600"
         />

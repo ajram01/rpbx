@@ -83,6 +83,25 @@ export default async function Preferences() {
     "Sports and Recreation","Other"
   ];
 
+  const INDUSTRY_EXPERIENCE_OPTIONS = [
+    { label: "0–2 years",  value: "0-2" },
+    { label: "3–5 years",  value: "3-5" },
+    { label: "6–10 years", value: "6-10" },
+    { label: "11–15 years", value: "11-15" },
+    { label: "16–20 years", value: "16-20" },
+    { label: "20+ years",   value: "20+" },
+  ] as const;
+
+  const NET_WORTH_OPTIONS = [
+    { label: "< $250k",        value: "<250k" },
+    { label: "$250k – $500k",  value: "250k-500k" },
+    { label: "$500k – $1M",    value: "500k-1M" },
+    { label: "$1M – $5M",      value: "1M-5M" },  
+    { label: "$5M – $30M",     value: "5M-30M" },  
+    { label: "$30M+",          value: ">30M" },
+  ] as const;
+
+
   return (
     <form action={save} className="mx-auto max-w-xl p-6 space-y-4">
       <h1 className="text-2xl font-semibold">Investment preferences</h1>
@@ -99,6 +118,21 @@ export default async function Preferences() {
           nameMax="ownership_max"
         />
       </div>
+      {/* Primary industry */}
+      <label className="block">
+        <span>Years of Experience</span>
+        <select
+          name="primary_industry"
+          required
+          defaultValue={draft?.primary_industry ?? ""}
+          className="mt-1 w-full border rounded px-3 py-2"
+        >
+          <option value="" disabled>Choose an industry…</option>
+          {INDUSTRY_OPTIONS.map((opt) => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </label>
 
       {/* Primary industry */}
       <label className="block">
@@ -117,20 +151,38 @@ export default async function Preferences() {
       </label>
 
       {/* Additional industries */}
-      <label className="block">
-        <span>Additional industries (optional)</span>
-        <select
-          name="additional_industries"
-          multiple
-          defaultValue={draft?.additional_industries ?? []}
-          className="mt-1 w-full border rounded px-3 py-2 h-40"
-        >
-          {INDUSTRY_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>{opt}</option>
-          ))}
-        </select>
-        <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple.</p>
-      </label>
+      <fieldset className="block">
+        <legend className="mb-2 block">Additional industries (optional)</legend>
+
+        <div className="mt-1 grid grid-cols-2 md:grid-cols-3 gap-2 border rounded p-3">
+          {INDUSTRY_OPTIONS.map((opt) => {
+            const checked =
+              Array.isArray(draft?.additional_industries) &&
+              draft!.additional_industries.includes(opt);
+
+            return (
+              <label
+                key={opt}
+                className="flex items-center gap-2 text-sm cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  name="additional_industries"
+                  value={opt}
+                  defaultChecked={checked}
+                  className="h-4 w-4"
+                />
+                <span>{opt}</span>
+              </label>
+            );
+          })}
+        </div>
+
+        {/* (Optional) small hint */}
+        <p className="text-xs text-gray-500 mt-1">
+          Pick any that apply. You can change these later.
+        </p>
+      </fieldset>
 
       {/* EBITDA bucket */}
       <label className="block">
