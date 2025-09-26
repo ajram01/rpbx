@@ -182,39 +182,41 @@ export default async function Investors({ searchParams }: PageProps) {
           </div>
         )}
 
-        {/* Pagination */}
-        <div className="flex justify-center items-center gap-2 mt-8">
-          {safePage > 1 && (
-            <Link
-              href={`?page=${safePage - 1}`}
-              className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white"
-            >
-              Previous
-            </Link>
-          )}
+    <div className="flex justify-center items-center gap-4 mt-8">
+      {currentPage > 1 && (
+        <Link
+          href={`?page=${currentPage - 1}`}
+          className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white"
+        >
+          Previous
+        </Link>
+      )}
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <Link
-              key={p}
-              href={`?page=${p}`}
-              className={`px-4 py-2 border rounded-xl shadow-lg ${
-                safePage === p
-                  ? "bg-[#60BC9B] text-white"
-                  : "hover:bg-[#60BC9B] hover:text-white bg-white"
-              }`}
-            >
-              {p}
-            </Link>
-          ))}
+      {[...Array(totalPages)].map((_, i) => (
+        <Link
+          key={i}
+          href={`?page=${i + 1}`}
+          className={`px-4 py-2 border rounded-xl shadow-lg ${
+            currentPage === i + 1
+              ? "bg-[#60BC9B] text-white"
+              : "hover:bg-[#60BC9B] hover:text-white bg-white"
+          }`}
+        >
+          {i + 1}
+        </Link>
+      ))}
 
-          {safePage < totalPages && (
-            <Link
-              href={`?page=${safePage + 1}`}
-              className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white"
-            >
-              Next
-            </Link>
-          )}
+      {currentPage < totalPages && (
+        <Link
+          href={`?page=${currentPage + 1}`}
+          className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white"
+        >
+          Next
+        </Link>
+      )}
+    </div>
+
+
         </div>
       </div>
     </div>

@@ -84,6 +84,12 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@keyframes stepRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 body {
   /* font-family: "Saira Condensed", sans-serif; */
 }
@@ -195,6 +201,11 @@ h4.large {
 
 .swiper-pagination-bullet-active {
   background-color: #60BC9B !important; /* Tailwind blue-700 */
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #60BC9B !important;
 }
 
 

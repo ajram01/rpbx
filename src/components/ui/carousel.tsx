@@ -30,7 +30,7 @@ export default function Carousel() {
       spaceBetween={30}
       slidesPerView={1}
       navigation
-      pagination={{ clickable: true }}
+      pagination={{ clickable: true, dynamicBullets: true, }}
       autoplay={{ delay: 5000 }}
       loop
       className="w-full h-[360px]"
