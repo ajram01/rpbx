@@ -18,11 +18,6 @@ export default async function PricingPage() {
     limit: 100,
   })
 
-  const supabase = await createClientRSC()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
   let prices = list.data.filter((p) => {
     const product = p.product as Stripe.Product
     return product?.active
