@@ -8,6 +8,7 @@ import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import SearchBar from "./components/SearchBar";
 import FiltersBar from "./components/FiltersBar";
+import type { Database } from "@/types/database.types";
 
 export const metadata: Metadata = {
   title: "Investor Listings | RioPlex Business Exchange",
@@ -19,6 +20,24 @@ interface PageProps {
 }
 
 const PAGE_SIZE = 8;
+
+type InvestorProfileRow = Database["public"]["Tables"]["investor_profiles"]["Row"];
+
+type InvestorCard = Pick<
+  InvestorProfileRow,
+  | "id"
+  | "first_name"
+  | "last_name"
+  | "organization_entity"
+  | "primary_industry"
+  | "target_ebitda"
+  | "target_cash_flow"
+  | "avatar_path"
+  | "full_name_lc"
+  | "org_name_lc"
+  | "updated_at"
+>;
+
 
 // small pretty-printer so we don't duplicate constants
 function formatRangeLabel(v?: string | null) {
@@ -102,7 +121,7 @@ export default async function Investors({ searchParams }: PageProps) {
     ? dataQ.order("full_name_lc", { ascending: true })
     : dataQ.order("updated_at", { ascending: false });
 
-  let rows: any[] = [];
+  let rows: InvestorCard[] = []; 
   if (totalRows > 0) {
     const { data, error } = await dataQ.range(from, to);
     if (error) console.error("Listings query failed:", error.message);

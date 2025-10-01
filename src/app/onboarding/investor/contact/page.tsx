@@ -59,6 +59,7 @@ export default async function Contact() {
       last_name,
       city,
       organization_entity: organization_entity || null,
+      email,
       bio,
       status: (draft?.status ?? "incomplete") as
         | "incomplete"

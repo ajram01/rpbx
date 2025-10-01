@@ -3,6 +3,8 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
+import Modal from "@/app/components/Modal";
+import CardCarousel from "../components/Card-carousel";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

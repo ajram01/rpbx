@@ -83,23 +83,23 @@ export default async function Preferences() {
     "Sports and Recreation","Other"
   ];
 
-  const INDUSTRY_EXPERIENCE_OPTIONS = [
-    { label: "0–2 years",  value: "0-2" },
-    { label: "3–5 years",  value: "3-5" },
-    { label: "6–10 years", value: "6-10" },
-    { label: "11–15 years", value: "11-15" },
-    { label: "16–20 years", value: "16-20" },
-    { label: "20+ years",   value: "20+" },
-  ] as const;
+  // const INDUSTRY_EXPERIENCE_OPTIONS = [
+  //   { label: "0–2 years",  value: "0-2" },
+  //   { label: "3–5 years",  value: "3-5" },
+  //   { label: "6–10 years", value: "6-10" },
+  //   { label: "11–15 years", value: "11-15" },
+  //   { label: "16–20 years", value: "16-20" },
+  //   { label: "20+ years",   value: "20+" },
+  // ] as const;
 
-  const NET_WORTH_OPTIONS = [
-    { label: "< $250k",        value: "<250k" },
-    { label: "$250k – $500k",  value: "250k-500k" },
-    { label: "$500k – $1M",    value: "500k-1M" },
-    { label: "$1M – $5M",      value: "1M-5M" },  
-    { label: "$5M – $30M",     value: "5M-30M" },  
-    { label: "$30M+",          value: ">30M" },
-  ] as const;
+  // const NET_WORTH_OPTIONS = [
+  //   { label: "< $250k",        value: "<250k" },
+  //   { label: "$250k – $500k",  value: "250k-500k" },
+  //   { label: "$500k – $1M",    value: "500k-1M" },
+  //   { label: "$1M – $5M",      value: "1M-5M" },  
+  //   { label: "$5M – $30M",     value: "5M-30M" },  
+  //   { label: "$30M+",          value: ">30M" },
+  // ] as const;
 
 
   return (

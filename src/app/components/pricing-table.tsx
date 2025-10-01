@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import LogoLoader from './LogoLoader';
 
 type NormalizedPrice = {
   id: string;
