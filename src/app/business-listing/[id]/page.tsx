@@ -127,7 +127,7 @@ export default async function ListingPage({
       <div className="w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border p-6 lg:p-10">
           <h1 className="text-2xl lg:text-3xl font-bold text-left pb-5">
-            {listing.title || listing.industry || "Business Listing"}
+            { listing.industry + " Business" || "Business Listing"}
           </h1>
 
           <div className="flex flex-col lg:flex-row gap-5">
@@ -137,7 +137,7 @@ export default async function ListingPage({
                 // Use <img> for signed URLs; Next/Image domain config not required
                 <img
                   src={coverUrl}
-                  alt={listing.title ?? "Business"}
+                  alt={listing.industry ?? "Business"}
                   className="w-full h-auto object-cover rounded-lg mb-5"
                 />
               ) : (

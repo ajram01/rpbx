@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
-import Modal from "../components/Modal";
 import AuthForm from "../../components/AuthForm";
+import Modal from "@/app/components/Modal";
 import CardCarousel from "../components/Card-carousel";
 import type { Metadata } from "next";
 

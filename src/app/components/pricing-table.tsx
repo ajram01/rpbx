@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import LogoLoader from './LogoLoader';
 
 type NormalizedPrice = {
   id: string;
@@ -210,7 +209,7 @@ export default function PricingTable() {
       ? (p.lookupMonthly ?? p.lookupYearly ?? null)
       : (isAnnual ? p.lookupYearly : p.lookupMonthly);
 
-  if (loading) return <div><LogoLoader/></div>;
+  if (loading) return <div><p className='text-white'>Loading pricing…</p></div>;
 
   return (
     <div>
