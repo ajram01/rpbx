@@ -1,20 +1,6 @@
-import { stripe } from '@/lib/stripe'
 import PricingTable from "../components/pricing-table"
 
-export const revalidate = 600
-
-const LOOKUPS = (process.env.STRIPE_PUBLIC_LOOKUPS || '')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean)
-
 export default async function PricingPage() {
-  const list = await stripe.prices.list({
-    active: true,
-    type: 'recurring',
-    expand: ['data.product'],
-    limit: 100,
-  })
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
