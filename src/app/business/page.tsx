@@ -8,7 +8,7 @@ import CardCarousel from "../components/Card-carousel";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Bussiness Accounts | RioPlex Business Exchange",
+  title: "About Business Accounts | RioPlex Business Exchange",
   description: "Connecting Local Business Owners With Investors"
 };
 
@@ -28,7 +28,7 @@ export default async function Business() {
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1 flex justify-center lg:justify-end items-center px-4 lg:p-[15px] order-2 lg:order-1">
             <div className="flex flex-col items-center w-full lg:w-[560px] max-w-lg">
-              <h1 className="text-center">Sell A Business</h1>
+              <h1 className="text-center">Secure Your Legacy.<br /> Attract Investors.</h1>
 
               <AuthForm />
             </div>

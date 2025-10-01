@@ -118,12 +118,20 @@ a.green-link {
   color: #60BC9B;
 }
 
+a.green-link:hover {
+  text-decoration: underline;
+}
+
 a.blue-link {
   font-family: var(--font-poppins), sans-serif;
   font-weight: 600;
   font-size: 16px;
   line-height: 1.625;
   color: #60A1BC;
+}
+
+p.small {
+  font-size: 12px;
 }
 
 p.font-semibold {
