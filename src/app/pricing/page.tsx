@@ -1,6 +1,4 @@
-import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
-import { createClientRSC } from '../../../utils/supabase/server'
 import PricingTable from "../components/pricing-table"
 
 export const revalidate = 600
@@ -17,17 +15,6 @@ export default async function PricingPage() {
     expand: ['data.product'],
     limit: 100,
   })
-
-  let prices = list.data.filter((p) => {
-    const product = p.product as Stripe.Product
-    return product?.active
-  })
-
-  if (LOOKUPS.length) {
-    prices = prices.filter(
-      (p) => typeof p.lookup_key === 'string' && LOOKUPS.includes(p.lookup_key!)
-    )
-  }
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
