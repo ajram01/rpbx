@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import LogoLoader from './LogoLoader';
+import LogoLoaderDark from './LogoLoaderDark';
 
 type NormalizedPrice = {
   id: string;
@@ -29,6 +31,11 @@ interface PricingTabProps {
   checkoutLookup?: string | null;
   isFree?: boolean;
 }
+
+interface PricingTableProps {
+  dark?: boolean;
+}
+
 
 function PricingTab(props: PricingTabProps) {
   // Choose a sensible display even if the free plan lacks one of the intervals:
@@ -100,7 +107,7 @@ function PricingTab(props: PricingTabProps) {
   );
 }
 
-export default function PricingTable() {
+export default function PricingTable({ dark }: PricingTableProps) {
   const [isAnnual, setIsAnnual] = useState(false); // Monthly by default
   const [prices, setPrices] = useState<NormalizedPrice[]>([]);
   const [loading, setLoading] = useState(true);
@@ -198,10 +205,15 @@ export default function PricingTable() {
   }, [prices]);
 
   // Filter: show only monthly on Monthly, yearly on Annual — but always include free.
-  const visiblePlans = useMemo(
-    () => plans.filter(p => p.isFree ? true : (isAnnual ? p.yearly != null : p.monthly != null)),
-    [plans, isAnnual]
-  );
+const visiblePlans = useMemo(() => {
+  return plans
+    .filter(p => {
+      // hide Boosted Listing
+      if (!isAnnual && p.planName === "Boosted Listing") return false;
+      return true;
+    })
+    .filter(p => p.isFree ? true : (isAnnual ? p.yearly != null : p.monthly != null));
+}, [plans, isAnnual]);
 
   // For checkout: if free is shown on the "other" tab, fall back to the lookup that exists.
   const getCheckoutLookup = (p: (typeof plans)[number]) =>
@@ -209,7 +221,7 @@ export default function PricingTable() {
       ? (p.lookupMonthly ?? p.lookupYearly ?? null)
       : (isAnnual ? p.lookupYearly : p.lookupMonthly);
 
-  if (loading) return <div><p className='text-white'>Loading pricing…</p></div>;
+  if (loading) return <div>{dark ? <LogoLoaderDark /> : <LogoLoader />}</div>;
 
   return (
     <div>

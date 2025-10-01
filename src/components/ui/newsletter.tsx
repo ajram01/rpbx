@@ -12,10 +12,10 @@ export default function NewsletterSignup() {
           className="mt-5 w-full px-6 py-2 rounded-full font-medium bg-[#EDE2E2]"
         />
         <button className="mt-5 w-full px-6 py-2 rounded-full font-medium transition bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white">
-          Sign In
+          Sign Up
         </button>
-        <p className="mt-5 pt-2 border-t-2 border-[#A1A1A1] text-center">
-          By submitting this form, you are consenting to receive marketing emails from: info@rioplexbizx.com. You can revoke your consent to receive emails at any time by using the SafeUnsubscribe® link, found at the bottom of every email. Emails are serviced by Constant Contact
+        <p className="mt-5 pt-2 border-t-2 border-[#A1A1A1] text-center small text-grey">
+          By submitting this form, you are consenting to receive marketing emails from: info@rioplexbizx.com. You can revoke your consent to receive emails at any time by using the SafeUnsubscribe® link, found at the bottom of every email. Emails are serviced by Constant Contact.
         </p>
       </div>
     </div>

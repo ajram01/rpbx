@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { stripe } from '@/lib/stripe'
 import Stripe from 'stripe'
 import Link from 'next/link'
+import Button from "../../components/Button";
 
 export const revalidate = 300
 
@@ -41,11 +42,15 @@ export default async function SubscribePage({
   if (!product?.active) return notFound()
 
   return (
-    <div className="mx-auto max-w-lg p-6">
-      <Link href="/pricing" className="text-sm underline">&larr; All plans</Link>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-10 rounded-xl border border-neutral-200 shadow">
+      <Link href="/pricing" className="text-sm underline hover:text-[#60BC9B]">&larr; All plans</Link>
       <h1 className="mt-2 text-2xl font-semibold">Create your account</h1>
+      <p className="mt-2 text-neutral-600">
+        You’re subscribing to <strong>{product.name}</strong>
+      </p>
       <p className="text-neutral-600">
-        You’re subscribing to <strong>{product.name}</strong> — {priceLabel(price)}
+        Price: {priceLabel(price)}
       </p>
 
       <form method="post" action="/api/subscribe" className="mt-6 space-y-3">
@@ -76,11 +81,10 @@ export default async function SubscribePage({
     <input name="password" type="password" required className="mt-1 w-full border rounded px-3 py-2" />
   </label>
 
-  <button className="mt-4 w-full rounded-xl border px-4 py-2 font-medium hover:bg-neutral-50">
-    Continue to secure checkout
-  </button>
-</form>
+  <Button className="w-full">Continue to secure checkout</Button>
 
+</form>
+    </div>
     </div>
   )
 }

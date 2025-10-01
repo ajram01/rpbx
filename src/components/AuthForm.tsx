@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function AuthForm() {
   return (
     <>
@@ -11,9 +13,9 @@ export default function AuthForm() {
       </button>
 
       <p className="mt-5 text-center">
-        By clicking Continue to join or sign in, you agree to RioPlex’s User Agreement, Privacy Policy, and Cookie Policy.
+        By clicking Continue to join or sign in, you agree to RioPlex’s <Link href="/terms" className="hover:underline">Terms of Service</Link>, <Link href="/privacy" className="hover:underline">Privacy Policy</Link>, and <Link href="/cookies" className="hover:underline">Cookie Policy</Link>.
       </p>
-      <p className="mt-5 text-center">New to RioPlex? Join Now</p>
+      <p className="mt-5 text-center">New to RioPlex? <Link href="/pricing" className="green-link">Join Now</Link></p>
     </>
   );
 }

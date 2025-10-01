@@ -1,6 +1,7 @@
 import PricingTable from "../components/pricing-table"
 
 export default async function PricingPage() {
+  const dark = true;
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
@@ -10,8 +11,7 @@ export default async function PricingPage() {
           Toggle between monthly and yearly billing. Free plans are always available.
         </p>
 
-        {/* ✅ Now PricingGrid accepts props without TypeScript error */}
-        <PricingTable />
+        <PricingTable dark={dark} />
       </div>
     </div>
   )

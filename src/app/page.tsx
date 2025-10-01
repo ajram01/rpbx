@@ -9,6 +9,7 @@ import { redirect } from "next/navigation"
 import PricingTable from "./components/pricing-table";
 import NewsletterSignup from "../components/ui/newsletter";
 import Carousel from "../components/ui/carousel";
+import HoverGif from '../components/HoverGif'
 
 export default async function Home() {
   const supabase = await createClientRSC();
@@ -25,6 +26,9 @@ export default async function Home() {
   if (session?.user) {
     return redirect("/dashboard");
   }
+
+  const dark = false;
+
     
   return (
     <div>
@@ -61,7 +65,7 @@ export default async function Home() {
       {/* Div 2: 1 div containing 3 div columns */}
       
       <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10 ">
-      <PricingTable/>
+      <PricingTable dark={dark} />
       </div>
 
 
@@ -140,11 +144,12 @@ export default async function Home() {
             <div className="flex flex-col items-center">
               <Modal
                 trigger={
-                  <Image
-                      src="/images/gifs/evaluation.gif"
-                      alt="solution-icon-1"
-                      width={200}
-                      height={200}
+                  <HoverGif
+                    staticSrc="/images/icons/evaluation.png"
+                    gifSrc="/images/gifs/evaluation.gif"
+                    alt="solution-icon-1"
+                    width={200}
+                    height={200}
                   />
                 }
               >
@@ -191,11 +196,12 @@ export default async function Home() {
             <div className="flex flex-col items-center">
               <Modal
                 trigger={
-                  <Image
-                      src="/images/gifs/marketing.gif"
-                      alt="solution-icon-2"
-                      width={200}
-                      height={200}
+                  <HoverGif
+                    staticSrc="/images/icons/marketing.png"
+                    gifSrc="/images/gifs/marketing.gif"
+                    alt="solution-icon-2"
+                    width={200}
+                    height={200}
                   />
                 }
               >
@@ -238,11 +244,12 @@ export default async function Home() {
             <div className="flex flex-col items-center">
               <Modal
                 trigger={
-                  <Image
-                      src="/images/gifs/legal.gif"
-                      alt="solution-icon-3"
-                      width={200}
-                      height={200}
+                  <HoverGif
+                    staticSrc="/images/icons/legal.png"
+                    gifSrc="/images/gifs/legal.gif"
+                    alt="solution-icon-3"
+                    width={200}
+                    height={200}
                   />
                 }
               >
@@ -281,11 +288,12 @@ export default async function Home() {
             <div className="flex flex-col items-center">
               <Modal
                 trigger={
-                  <Image
-                      src="/images/gifs/cpa.gif"
-                      alt="solution-icon-4"
-                      width={200}
-                      height={200}
+                  <HoverGif
+                    staticSrc="/images/icons/cpa.png"
+                    gifSrc="/images/gifs/cpa.gif"
+                    alt="solution-icon-4"
+                    width={200}
+                    height={200}
                   />
                 }
               >
