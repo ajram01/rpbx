@@ -3,6 +3,12 @@ import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
+
 export default async function DetailsStep() {
   const supabase = await createClientRSC()
   const { data: { user } } = await supabase.auth.getUser()
@@ -131,7 +137,13 @@ export default async function DetailsStep() {
       </label>
 
       <label className="block">
-        <span>EBITDA</span>
+        <Tooltip>
+          <span>EBITDA <TooltipTrigger>ⓘ</TooltipTrigger></span>
+          <TooltipContent>EBITDA (Earnings Before Interest, Taxes, Depreciation, and Amortization) shows your business&#39;s profit from operations,<br></br> 
+            before accounting for things like loans, taxes, or depreciation. If you&#39;re not sure of your EBITDA,<br></br> 
+            you can usually find it in your income statement or financial reports, or calculate it by starting with net<br></br> 
+            income and adding back interest, taxes, depreciation, and amortization.</TooltipContent>
+        </Tooltip>
         <select
           name="ebitda_range"
           defaultValue={draft?.ebitda_range ?? ''}
