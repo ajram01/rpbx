@@ -1,5 +1,4 @@
-import Navbar from "../components/Navbar";
-import Navbar2 from "../components/Navbar-2";
+import NavGate from '../components/NavGate';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from "next";
@@ -37,13 +36,12 @@ export const metadata: Metadata = {
 
 export default async function Events() {
   const events = await eventClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
-  const isLoggedIn = false;    
 
   return (
     <div>
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
         <div>
-          {isLoggedIn ? <Navbar /> : <Navbar2 />}
+          <NavGate />
         </div>
 
         <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">

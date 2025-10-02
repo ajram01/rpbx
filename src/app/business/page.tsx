@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
+import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
 import Modal from "@/app/components/Modal";
@@ -21,7 +21,7 @@ export default async function Business() {
       {/* Div 1: 2 rows */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
         <div>
-          <Navbar />
+          <NavGate />
         </div>
 
         {/* Buy A Business */}

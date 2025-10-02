@@ -3,8 +3,7 @@ import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { blogClient } from "@/sanity/client";
 import Link from "next/link";
-import Navbar from "../../components/Navbar";
-import Navbar2 from "../../components/Navbar-2";
+import NavGate from "@/app/components/NavGate";
 import NewsletterSignup from "../../../components/ui/newsletter";
 
 interface PostPageProps {
@@ -46,14 +45,12 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const postImageUrl = post.mainImage
     ? urlFor(post.mainImage)?.width(1200).url()
-    : null;
-
-    const isLoggedIn = false;  
+    : null; 
   return (
 
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
         <div>
-            {isLoggedIn ? <Navbar /> : <Navbar2 />}
+            <NavGate />
         </div>
 
 

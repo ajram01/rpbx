@@ -1,5 +1,4 @@
-import Navbar from "../components/Navbar";
-import Navbar2 from "../components/Navbar-2";
+import NavGate from '../components/NavGate';
 import Accordion from '../../components/ui/accordion';
 import Link from 'next/link';
 import type { Metadata } from "next";
@@ -9,15 +8,14 @@ export const metadata: Metadata = {
   description: "Connecting Local Business Owners With Investors"
 };
 
-export default function Support() {
-    const isLoggedIn = false;    
+export default function Support() { 
 
   return (
     <div>
       {/* Div 1: 2 rows */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
         <div>
-            {isLoggedIn ? <Navbar /> : <Navbar2 />}
+            <NavGate />
         </div>
 
         <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">

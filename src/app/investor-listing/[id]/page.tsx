@@ -1,5 +1,5 @@
 // app/investor-listing/[id]/page.tsx
-import Navbar from "../../components/Navbar-2";
+import NavGate from "@/app/components/NavGate";
 import Button from "../../components/Button";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -115,7 +115,7 @@ export default async function InvestorPage(
     <div>
       {/* Background and Navbar */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top min-h-screen">
-        <Navbar />
+        <NavGate />
 
         {/* Content Wrapper */}
         <div className="w-full lg:w-[1140px] mx-auto py-10 px-5 lg:px-0 flex flex-col lg:flex-row gap-5">

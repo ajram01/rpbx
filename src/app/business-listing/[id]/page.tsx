@@ -1,4 +1,4 @@
-import Navbar from "../../components/Navbar-2";
+import NavGate from "@/app/components/NavGate";
 import Button from "../../components/Button";
 import Image from "next/image";
 import Link from "next/link";
@@ -122,7 +122,7 @@ export default async function ListingPage({
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top min-h-screen">
-      <Navbar />
+      <NavGate />
 
       <div className="w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border p-6 lg:p-10">

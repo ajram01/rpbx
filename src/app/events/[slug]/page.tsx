@@ -5,8 +5,7 @@ import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { eventClient } from "@/sanity/client";
 import Link from "next/link";
 import Image from "next/image";
-import Navbar from "../../components/Navbar";
-import Navbar2 from "../../components/Navbar-2";
+import NavGate from "@/app/components/NavGate";
 import NewsletterSignup from "../../../components/ui/newsletter";
 
 interface PostPageProps {
@@ -64,8 +63,6 @@ export default async function PostPage({ params }: PostPageProps) {
     ? urlFor(post.image)?.width(1200).url()
     : null;
 
-  const isLoggedIn = false;
-
   // Format date/time
   const eventDate = post.date ? new Date(post.date) : null;
   const formattedDate = eventDate
@@ -85,7 +82,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
-      <div>{isLoggedIn ? <Navbar /> : <Navbar2 />}</div>
+      <div><NavGate /></div>
 
       <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
         <h1 className="text-4xl font-bold">{post.title}</h1>
