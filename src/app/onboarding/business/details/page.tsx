@@ -2,6 +2,8 @@
 import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Button from "../../../components/Button";
+import { Progress } from "@/components/ui/progress"
 
 import {
   Tooltip,
@@ -89,10 +91,17 @@ export default async function DetailsStep() {
   }
 
   return (
-    <form action={save} className="mx-auto max-w-xl p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">Details</h1>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  lg:py-10">
+      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+        <p className='mb-2'> Profile 60% Complete</p>
+        <Progress value={60} />
+      </div>
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <Link href="/onboarding/business/contact" className="text-sm underline hover:text-[#60BC9B]">&larr; Contact & Documents</Link>
+    <form action={save}>
+      <h1 className="text-2xl font-semibold mt-2">Details</h1>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Ownership percentage</span>
         <input
           name="ownership_percentage"
@@ -105,12 +114,12 @@ export default async function DetailsStep() {
         />
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Annual revenue</span>
         <select
           name="annual_revenue_range"
           defaultValue={draft?.annual_revenue_range ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">—</option>
           <option value="0_50k">0–50K</option>
@@ -121,12 +130,12 @@ export default async function DetailsStep() {
         </select>
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Book value</span>
         <select
           name="book_value_range"
           defaultValue={draft?.book_value_range ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">—</option>
           <option value="25k_150k">25K–150K</option>
@@ -136,7 +145,7 @@ export default async function DetailsStep() {
         </select>
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <Tooltip>
           <span>EBITDA <TooltipTrigger>ⓘ</TooltipTrigger></span>
           <TooltipContent>EBITDA (Earnings Before Interest, Taxes, Depreciation, and Amortization) shows your business&#39;s profit from operations,<br></br> 
@@ -147,7 +156,7 @@ export default async function DetailsStep() {
         <select
           name="ebitda_range"
           defaultValue={draft?.ebitda_range ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">—</option>
           <option value="lt_50k">Under 50K</option>
@@ -158,12 +167,12 @@ export default async function DetailsStep() {
         </select>
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Years in business</span>
         <select
           name="years_in_business"
           defaultValue={draft?.years_in_business ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">—</option>
           <option value="lt_1">Less than 1</option>
@@ -174,12 +183,12 @@ export default async function DetailsStep() {
         </select>
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Employees</span>
         <select
           name="employee_count_range"
           defaultValue={draft?.employee_count_range ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">—</option>
           <option value="1_4">1–4</option>
@@ -191,7 +200,7 @@ export default async function DetailsStep() {
         </select>
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Description</span>
         <textarea
           name="description"
@@ -202,9 +211,10 @@ export default async function DetailsStep() {
       </label>
 
       <div className="mt-4 flex gap-3">
-        <button className="rounded-xl border px-4 py-2">Save &amp; Continue</button>
-        <Link href="/dashboard" className="text-sm underline">Skip for now</Link>
+        <Button className="w-full">Save & Continue</Button>
       </div>
     </form>
+    </div>
+    </div>
   )
 }

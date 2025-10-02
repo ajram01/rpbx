@@ -1,7 +1,8 @@
 // app/onboarding/business/set-up/page.tsx
 import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import Button from "../../../components/Button";
+import { Progress } from "@/components/ui/progress"
 
 export default async function Setup() {
   const supabase = await createClientRSC()
@@ -109,10 +110,17 @@ export default async function Setup() {
     }
 
   return (
-    <form action={save} className="mx-auto max-w-xl p-6 space-y-3">
-      <h1 className="text-2xl font-semibold">Business basics</h1>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center">
+      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+        <p className='mb-2'> Profile 0% Complete</p>
+        <Progress value={0} />
+      </div>
 
-      <label className="block">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <form action={save} >
+      <h1 className="text-2xl font-semibold">Business Basics</h1>
+
+      <label className="block pt-4 pt-4">
         <span>Business Title</span>
         <input
           name="title"
@@ -122,13 +130,13 @@ export default async function Setup() {
         />
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Industry</span>
         <select
           name="industry"
           required
           defaultValue={draft?.industry ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="" disabled>Choose an industry…</option>
           <option value="Manufacturing">Manufacturing</option>
@@ -144,13 +152,13 @@ export default async function Setup() {
         </select>
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>County</span>
         <select
           name="county"
           required
           defaultValue={draft?.county ?? ''}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="" disabled>Choose a county</option>
           <option value="Hidalgo County">Hidalgo</option>
@@ -161,7 +169,7 @@ export default async function Setup() {
       </label>
 
       <div className="grid grid-cols-2 gap-3">
-        <label className="block">
+        <label className="block pt-4">
           <span>City</span>
           <input
             name="city"
@@ -171,22 +179,23 @@ export default async function Setup() {
         </label>
       </div>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Listing Image</span>
-        <input name="cover" type="file" accept="image/*" className="mt-1 w-full" />
+        <input name="cover" type="file" accept="image/*" className="mt-1 w-full border rounded border-neutral-200 px-3 py-2 hover:cursor-pointer" />
         {coverPreviewUrl && (
           <img
             src={coverPreviewUrl}
             alt="Listing cover"
-            className="mt-2 h-40 w-full object-cover rounded border"
+            className="mt-2 h-40 w-full object-cover rounded hover:cursor-pointer"
           />
         )}
       </label>
-
       <div className="mt-4 flex gap-3">
-        <button className="rounded-xl border px-4 py-2">Save & Continue</button>
-        <Link href="/dashboard" className="text-sm underline">Skip for now</Link>
+        <Button className="w-full">Save & Continue</Button>
       </div>
     </form>
+    </div>
+
+    </div>
   )
 }

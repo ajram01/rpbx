@@ -1,6 +1,9 @@
 // app/onboarding/business/contact/page.tsx
 import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
+import Button from "../../../components/Button";
+import Link from 'next/link'
+import { Progress } from "@/components/ui/progress"
 
 export default async function ContactStep() {
   const supabase = await createClientRSC()
@@ -43,10 +46,17 @@ async function save(formData: FormData) {
 }
 
   return (
-    <form action={save} className="mx-auto max-w-xl p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">Contact & Documents</h1>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center">
+      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+        <p className='mb-2'> Profile 30% Complete</p>
+        <Progress value={30} />
+      </div>
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <Link href="/onboarding/business/set-up" className="text-sm underline hover:text-[#60BC9B]">&larr; Business Basics</Link>
+    <form action={save} >
+      <h1 className="text-2xl font-semibold mt-2">Contact & Documents</h1>
 
-      <label className="block">
+      <label className="block  pt-4">
         <span>Contact email</span>
         <input
           name="contact_email"
@@ -57,20 +67,22 @@ async function save(formData: FormData) {
         />
       </label>
 
-      <label className="flex items-center gap-2">
+      <label className="flex items-center gap-2  pt-4">
         <input type="checkbox" name="can_provide_financials" defaultChecked={!!draft?.can_provide_financials} />
         <span>We can provide financial statements on request</span>
       </label>
 
-      <label className="flex items-center gap-2">
+      <label className="flex items-center gap-2  pt-2">
         <input type="checkbox" name="can_provide_tax_returns" defaultChecked={!!draft?.can_provide_tax_returns} />
         <span>We can provide tax returns on request</span>
       </label>
 
       <div className="mt-4 flex gap-3">
-        <button className="rounded-xl border px-4 py-2">Save & Continue</button>
-        <a href="/dashboard" className="text-sm underline">Skip for now</a>
+        <Button className="w-full">Save & Continue</Button>
       </div>
     </form>
+    </div>
+    
+    </div>
   )
 }

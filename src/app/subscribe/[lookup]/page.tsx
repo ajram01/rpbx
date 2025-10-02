@@ -42,10 +42,10 @@ export default async function SubscribePage({
   if (!product?.active) return notFound()
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
-    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-10 rounded-xl border border-neutral-200 shadow">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
       <Link href="/pricing" className="text-sm underline hover:text-[#60BC9B]">&larr; All plans</Link>
-      <h1 className="mt-2 text-2xl font-semibold">Create your account</h1>
+      <h1 className="mt-2 text-2xl font-semibold">Create Your Account</h1>
       <p className="mt-2 text-neutral-600">
         You’re subscribing to <strong>{product.name}</strong>
       </p>
