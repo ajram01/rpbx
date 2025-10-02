@@ -10,8 +10,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 // Map a role to the page they should land on
 type Role = "business" | "investor" | "admin" | "member" | null;
 function nextPathForRole(role: Role) {
-  if (role === "investor") return "/onboarding/investor";
-  if (role === "business") return "/onboarding/business/basics";
+  if (role === "investor") return "/onboarding/investor/contact";
+  if (role === "business") return "/onboarding/business/set-up";
   if (role === "admin") return "/admin";
   return "/dashboard";
 }
