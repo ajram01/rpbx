@@ -1,5 +1,5 @@
 // app/investor-listing/page.tsx (Server Component)
-import Navbar from "../components/Navbar-2";
+import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import Image from "next/image";
 import Link from "next/link";
@@ -145,7 +145,7 @@ export default async function Investors({ searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
-      <Navbar />
+      <NavGate />
 
       <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
         <h1 className="text-center">Investors</h1>

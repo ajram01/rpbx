@@ -1,5 +1,5 @@
 // app/business-listings/page.tsx
-import Navbar from "../components/Navbar-2";
+import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import Link from "next/link";
 import Image from "next/image";
@@ -171,7 +171,7 @@ export default async function Businesses({
 
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top min-h-screen">
-      <Navbar />
+      <NavGate />
 
       <div className="w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
         <h1 className="text-center pb-15">Business Owners</h1>

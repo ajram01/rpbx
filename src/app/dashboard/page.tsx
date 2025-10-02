@@ -21,13 +21,17 @@ export default async function Dashboard() {
     data: { user }
   } = await supabase.auth.getUser();
 
+  let userType: "business" | "investor" | "admin" | null = null;
+
   if (!user) return redirect("/login");
 
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select("first_name")
+    .select("user_type, first_name")
     .eq("id", user.id)
-    .maybeSingle<{ first_name: string | null}>();
+    .maybeSingle<{ first_name: string | null, user_type: string | null}>();
+
+    userType = (profile?.user_type as "business" | "investor" | "admin") ?? null;
   if (error) {
     console.error("Error fetching profile: ", error.message);
   }
@@ -43,7 +47,7 @@ export default async function Dashboard() {
       {/* Div 1: 2 rows */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
         <div>
-          <Navbar />
+          <Navbar userType={userType} />
         </div>
 
         {/* listing stats */}

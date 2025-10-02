@@ -6,9 +6,17 @@ import Image from "next/image";
 import Button from "./Button";
 import { createPortal } from "react-dom";
 
-export default function Navbar() {
+type UserType = "business" | "investor" | "admin" | null;
+
+
+
+export default function Navbar({ userType }: { userType: UserType }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const isInvestor = userType === "investor";
+  const isBusiness = userType === "business";
+  const isAdmin = userType === "admin";
 
   const toggleMobileMenu = () => setIsMobileMenuOpen((s) => !s);
 
@@ -29,9 +37,14 @@ export default function Navbar() {
   const navItems = [
     { name: "Blog", href: "/blog" },
     { name: "Events", href: "/events" },
-    { name: "Business Listings", href: "/business-listing" },
-    { name: "Browse Investors", href: "/investor-listing" },
-  ];
+    { name: "Business Listings", href: "/business-listing" , show: !isBusiness || isAdmin },
+    { name: "Browse Investors", href: "/investor-listing" , show: !isInvestor || isAdmin }
+  ].filter((i) => i.show !== false);
+
+  const rightActions = {
+    showListings: isBusiness || isAdmin,
+    showViewProfile: isInvestor || isAdmin,
+  };
 
   const mobileMenu = (
     <>
@@ -89,6 +102,29 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          <li>
+            <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="green-nav block">
+              Dashboard
+            </Link>
+          </li>
+
+          {/* Investor / Admin: View Profile */}
+          {rightActions.showViewProfile && (
+            <li>
+              <Link href="/dashboard/profile" onClick={() => setIsMobileMenuOpen(false)} className="green-nav block">
+                View Profile
+              </Link>
+            </li>
+          )}
+
+          {/* Business / Admin: View Your Listings */}
+          {rightActions.showListings && (
+            <li>
+              <Link href="/dashboard/listings" onClick={() => setIsMobileMenuOpen(false)} className="green-nav block">
+                Your Listings
+              </Link>
+            </li>
+          )}
           <li>
             <Button onClick={() => setIsMobileMenuOpen(false)}>Login</Button>
           </li>
@@ -151,14 +187,23 @@ export default function Navbar() {
               <li>
                 <a href="/dashboard" className="green-nav">Dashboard</a>
               </li>
-              <li>
-                <a href="#" className="green-nav">Listings</a>
-              </li>
-              <li>
+              {rightActions.showViewProfile && (
+                <li>
+                  <Link href="/dashboard/profile" onClick={() => setIsMobileMenuOpen(false)} className="green-nav block">
+                    View Profile
+                  </Link>
+                </li>
+              )}
+              {rightActions.showListings && (
+                <li>
+                  <Link href="/dashboard/listings" onClick={() => setIsMobileMenuOpen(false)} className="green-nav block">
+                    Your Listings
+                  </Link>
+                </li>
+              )}
                 <form action="/signout" method="post">
                   <Button type="submit">Log Out</Button>
                 </form>
-              </li>
             </ul>
           </div>
         </div>

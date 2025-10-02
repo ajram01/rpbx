@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Navbar from "../components/Navbar";
+import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
 import type { Metadata } from "next";
@@ -18,7 +18,7 @@ export default async function Investor() {
       {/* Div 1: 2 rows */}
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
         <div>
-          <Navbar />
+          <NavGate />
         </div>
 
         {/* Buy A Business */}
