@@ -8,8 +8,7 @@ export const metadata: Metadata = {
   description: "Connecting Local Business Owners With Investors"
 };
 
-export default function Cookies() {
-    const isLoggedIn = false;    
+export default function Cookies() {  
 
   return (
     <div>

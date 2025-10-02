@@ -63,8 +63,6 @@ export default async function PostPage({ params }: PostPageProps) {
     ? urlFor(post.image)?.width(1200).url()
     : null;
 
-  const isLoggedIn = false;
-
   // Format date/time
   const eventDate = post.date ? new Date(post.date) : null;
   const formattedDate = eventDate

@@ -36,7 +36,6 @@ export const metadata: Metadata = {
 
 export default async function Events() {
   const events = await eventClient.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
-  const isLoggedIn = false;    
 
   return (
     <div>

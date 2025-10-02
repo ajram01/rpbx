@@ -8,8 +8,7 @@ export const metadata: Metadata = {
   description: "Connecting Local Business Owners With Investors"
 };
 
-export default function Languages() {
-    const isLoggedIn = false;    
+export default function Languages() {  
 
   return (
     <div>

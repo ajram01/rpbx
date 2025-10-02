@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function FAQ() {
-    const isLoggedIn = false;    
 
   return (
     <div>
