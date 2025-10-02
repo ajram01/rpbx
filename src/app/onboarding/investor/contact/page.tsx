@@ -46,7 +46,7 @@ export default async function Contact() {
 
     const first_name = String(formData.get("first_name") ?? "").trim() || authFirst;
     const last_name = String(formData.get("last_name") ?? "").trim() || authLast;
-    const email = String(formData.get("email") ?? "").trim();
+    const contact_email = String(formData.get("email") ?? "").trim();
     const city = String(formData.get("city") ?? "").trim();
     const organization_entity = String(formData.get("org") ?? "").trim();
     const bio = String(formData.get("bio") ?? "").trim();
@@ -59,7 +59,7 @@ export default async function Contact() {
       last_name,
       city,
       organization_entity: organization_entity || null,
-      email,
+      contact_email,
       bio,
       status: (draft?.status ?? "incomplete") as
         | "incomplete"
@@ -188,7 +188,9 @@ export default async function Contact() {
       </label>
 
       <div className="mt-4 flex gap-3">
-        <button className="rounded-xl border px-4 py-2">Save & Continue</button>
+          <button type="submit" className="rounded-xl border px-4 py-2">
+            Save & Continue
+          </button>
         <Link href="/dashboard" className="text-sm underline">
           Skip for now
         </Link>
