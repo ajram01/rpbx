@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Saira_Condensed } from "next/font/google";
 import Footer from "./components/Footer";
+import CookieConsentWrapper from "@/components/cookieconsent";
 import "./globals.css";
 
 const sairaCondensed = Saira_Condensed({
@@ -14,7 +15,6 @@ const poppins = Poppins({
   weight: ["400", "600", "700"],
   variable: "--font-poppins",
 });
-
 
 export const metadata: Metadata = {
   title: "RioPlex Business Exchange",
@@ -36,6 +36,7 @@ export default function RootLayout({
       >
         {children}
         <Footer />
+        <CookieConsentWrapper />
       </body>
     </html>
   );
