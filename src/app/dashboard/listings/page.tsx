@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+// import Link from "next/link";
 
 export default async function OwnerListings() {
   const supabase = await createClientRSC();
