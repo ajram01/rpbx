@@ -5,13 +5,6 @@ import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-type BusinessListing = {
-  id: string;
-  title: string | null;
-  industry: string | null;
-  updated_at: string | null;
-};
-
 export default async function OwnerListings() {
   const supabase = await createClientRSC();
   const {
