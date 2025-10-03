@@ -2,6 +2,8 @@
 import { createClientRSC } from '@/../utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Button from "../../../components/Button";
+import { Progress } from "@/components/ui/progress"
 
 // 🚩 Feature flag — turn back to true to re-enable credit checks
 const CHECK_PLAN_LIMITS = false as const
@@ -132,9 +134,16 @@ export default async function ReviewStep() {
   }
 
   return (
-    <form action={publish} className="mx-auto max-w-xl p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">Review &amp; Publish</h1>
-      <p className="text-neutral-600">Take a quick look before publishing.</p>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center lg:py-10">
+      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+        <p className='mb-2'> Profile 90% Complete</p>
+        <Progress value={90} />
+      </div>
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <Link href="/onboarding/business/details" className="text-sm underline hover:text-[#60BC9B]">&larr; Details</Link>
+    <form action={publish}>
+      <h1 className="text-2xl font-semibold  mt-2">Review &amp; Publish</h1>
+      <p className="text-neutral-600  mt-2">Take a quick look before publishing.</p>
 
       {/* Optional limit banner — hidden while CHECK_PLAN_LIMITS === false */}
       {CHECK_PLAN_LIMITS && (publishedCount ?? 0) >= (allowed ?? 0) && (
@@ -144,7 +153,7 @@ export default async function ReviewStep() {
         </div>
       )}
 
-      <div className="rounded border p-4 space-y-3">
+      <div className="space-y-3  pt-4">
         {coverUrl && (
           <img src={coverUrl} alt="Listing cover" className="h-40 w-full object-cover rounded border" />
         )}
@@ -169,9 +178,10 @@ export default async function ReviewStep() {
       </div>
 
       <div className="mt-4 flex gap-3">
-        <button className="rounded-xl border px-4 py-2">Publish listing</button>
-        <Link href="/onboarding/business/details" className="text-sm underline">Back</Link>
+        <Button className="w-full">Publish Listing</Button>
       </div>
     </form>
+    </div>
+    </div>
   )
 }
