@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Stripe from "stripe";
 import { createClientRSC } from "@/../utils/supabase/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 // Map a role to the page they should land on
 type Role = "business" | "investor" | "admin" | "member" | null;
@@ -16,23 +16,28 @@ function nextPathForRole(role: Role) {
   return "/dashboard";
 }
 
+// Narrower helper so we never return an arbitrary string as a Role
+function asRole(v?: string | null): Exclude<Role, null> | null {
+  return v === "investor" || v === "business" || v === "admin" ? v : null;
+}
+
 // Try to read intended role directly from the Checkout Session metadata (race-proof vs webhook)
 async function getIntendedRole(sessionId?: string): Promise<Role> {
   if (!sessionId) return null;
+
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ["subscription.items.data.price"],
   });
+  // session.subscription is string | Stripe.Subscription | null
+  const subscription =
+    typeof session.subscription === "object" && session.subscription !== null
+      ? (session.subscription as Stripe.Subscription)
+      : null;
 
-  // Prefer what you set in subscription_data.metadata during Checkout
-  const intended =
-    (session.subscription as any)?.metadata?.intended_user_type ??
-    (session.metadata as any)?.intended_user_type ??
-    null;
+  const intendedFromSub = asRole(subscription?.metadata?.intended_user_type);
+  const intendedFromSession = asRole(session.metadata?.intended_user_type);
 
-  if (intended === "investor" || intended === "business" || intended === "admin") {
-    return intended;
-  }
-  return null;
+  return intendedFromSub ?? intendedFromSession ?? null;
 }
 
 export default async function Welcome({
@@ -41,7 +46,9 @@ export default async function Welcome({
   searchParams: { session_id?: string };
 }) {
   const supabase = await createClientRSC();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // 1) Figure out intended role from Stripe (if session_id is present)
   const intendedRole = await getIntendedRole(searchParams.session_id);
@@ -49,7 +56,6 @@ export default async function Welcome({
 
   // 2) If logged in, go straight to the right place
   if (user) {
-    // Prefer DB role (webhook), fallback to intended role to avoid timing issues
     const { data: profile } = await supabase
       .from("profiles")
       .select("user_type")
