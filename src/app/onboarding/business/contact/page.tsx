@@ -46,12 +46,12 @@ async function save(formData: FormData) {
 }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center">
-      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  py-5">
+      <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 30% Complete</p>
         <Progress value={30} />
       </div>
-    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <Link href="/onboarding/business/set-up" className="text-sm underline hover:text-[#60BC9B]">&larr; Business Basics</Link>
     <form action={save} >
       <h1 className="text-2xl font-semibold mt-2">Contact & Documents</h1>

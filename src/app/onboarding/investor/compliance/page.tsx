@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
+import Button from "../../../components/Button";
+import { Progress } from "@/components/ui/progress"
 
 export default async function Compliance() {
   const supabase = await createClientRSC();
@@ -47,12 +49,20 @@ export default async function Compliance() {
   }
 
   return (
-    <form action={save} method="post" className="mx-auto max-w-xl p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">Compliance</h1>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+      <div className='mx-auto max-w-lg lg:min-w-[550px]'>
+        <p className='mb-2'> Profile 60% Complete</p>
+        <Progress value={60} />
+      </div>
+
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <Link href="/onboarding/investor/preferences" className="text-sm underline hover:text-[#60BC9B]">&larr; Investment Preferences</Link>
+    <form action={save} method="post">
+      <h1 className="text-2xl font-semibold mt-2">Compliance</h1>
 
       {/* NDA */}
       <fieldset className="space-y-2">
-        <legend className="text-sm text-gray-700">Willing to sign an NDA?</legend>
+        <legend className=" pt-4">Willing to sign an NDA?</legend>
         <div className="flex gap-4">
           <label className="inline-flex items-center gap-2">
             <input
@@ -77,7 +87,7 @@ export default async function Compliance() {
 
       {/* Accredited */}
       <fieldset className="space-y-2">
-        <legend className="text-sm text-gray-700">Are you an accredited investor?</legend>
+        <legend className=" pt-4">Are you an accredited investor?</legend>
         <div className="flex gap-4">
           <label className="inline-flex items-center gap-2">
             <input
@@ -98,20 +108,16 @@ export default async function Compliance() {
             <span>No</span>
           </label>
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-500 mt-4">
           You can complete formal verification later; this just guides matching.
         </p>
       </fieldset>
 
       <div className="mt-4 flex gap-3">
-        <Link href="/onboarding/investor/preferences" className="rounded-xl border px-4 py-2">
-          Back
-        </Link>
-        <button type="submit" className="rounded-xl border px-4 py-2">
-          Save & Continue
-        </button>
-        <Link href="/dashboard" className="text-sm underline">Skip for now</Link>
+        <Button type="submit" className="w-full">Save & Continue</Button>
       </div>
     </form>
+    </div>
+    </div>
   );
 }

@@ -166,7 +166,7 @@ export default async function Investors({ searchParams }: PageProps) {
             {rows.map((r) => {
               const imgSrc = investors[r.id] ?? "/images/test/chen-lee.png";
               return (
-                <div key={r.id} className="flex-1">
+                <div key={r.id} className="flex-1 bg-gray-200 rounded-lg overflow-hidden">
                   <Image
                     src={imgSrc}
                     alt={`${r.first_name ?? ""} ${r.last_name ?? ""}`.trim() || "Investor Avatar"}
