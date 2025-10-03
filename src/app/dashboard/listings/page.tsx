@@ -39,13 +39,13 @@ export default async function OwnerListings() {
               <p className="text-xs text-neutral-500 mt-1">
                 Updated: {l.updated_at ? new Date(l.updated_at).toLocaleString() : "—"}
               </p>
-              <Link
+              {/* <Link
                 href={`/owner/listings/${l.id}`}
                 className="inline-block mt-3 px-4 py-2 rounded-xl text-white"
                 style={{ backgroundColor: "#9ed3c3" }}
               >
                 Edit
-              </Link>
+              </Link> */}
             </div>
           ))}
         </div>
