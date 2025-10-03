@@ -24,7 +24,7 @@ export default async function OwnerListings() {
     .select("id, title, industry, updated_at")
     .eq("owner_id", user.id)
     .order("updated_at", { ascending: false });
-
+    
   if (error) {
     console.error("Fetch listings failed:", error.message);
   }
