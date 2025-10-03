@@ -43,15 +43,18 @@ async function getIntendedRole(sessionId?: string): Promise<Role> {
 export default async function Welcome({
   searchParams,
 }: {
-  searchParams: { session_id?: string };
+  searchParams: Promise<{ session_id?: string | string[] }>;
 }) {
   const supabase = await createClientRSC();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const sp = await searchParams;
+  const session_id = Array.isArray(sp.session_id) ? sp.session_id[0] : sp.session_id;
+
   // 1) Figure out intended role from Stripe (if session_id is present)
-  const intendedRole = await getIntendedRole(searchParams.session_id);
+  const intendedRole = await getIntendedRole(session_id);
   const intendedNext = nextPathForRole(intendedRole);
 
   // 2) If logged in, go straight to the right place
