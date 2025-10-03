@@ -58,7 +58,7 @@ export default async function Dashboard() {
           {/* buttons */}
           <div className="flex flex-col lg:flex-row gap-5">
             <Link
-              href="/"
+              href="/dashboard/listings"
               className="flex-1 flex flex-col items-center p-5 bg-[#60A1BC] rounded-2xl hover:opacity-90 transition"
             >
               <p className="text-white">Update Listing Info</p>
