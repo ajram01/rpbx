@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import { splitName } from "@/lib/name";
