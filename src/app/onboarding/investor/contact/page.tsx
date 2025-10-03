@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import { splitName } from "@/lib/name";
+import Button from "../../../components/Button";
+import { Progress } from "@/components/ui/progress"
 
 export default async function Contact() {  
   const supabase = await createClientRSC();
@@ -109,10 +110,17 @@ export default async function Contact() {
   }
 
   return (
-    <form action={save} className="mx-auto max-w-xl p-6 space-y-3">
-      <h1 className="text-2xl font-semibold">Investor basics</h1>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+      <div className='mx-auto max-w-lg lg:min-w-[550px]'>
+        <p className='mb-2'> Profile 0% Complete</p>
+        <Progress value={0} />
+      </div>
 
-      <div className="grid grid-cols-2 gap-3">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <form action={save}>
+      <h1 className="text-2xl font-semibold">Investor Basics</h1>
+
+      <div className="grid grid-cols-2 gap-3 pt-4">
         <label className="block">
           <span>First name</span>
           <input
@@ -133,7 +141,7 @@ export default async function Contact() {
         </label>
       </div>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Contact Email</span>
         <input
           type="email"
@@ -143,7 +151,7 @@ export default async function Contact() {
         />
       </label>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 pt-4">
         <label className="block col-span-2 sm:col-span-1">
           <span>City</span>
           <input
@@ -164,9 +172,9 @@ export default async function Contact() {
         </label>
       </div>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Profile Photo</span>
-        <input name="avatar" type="file" accept="image/*" className="mt-1 w-full" />
+        <input name="avatar" type="file" accept="image/*" className="mt-1 w-full border rounded border-neutral-200 px-3 py-2 hover:cursor-pointer" />
         {previewUrl && (
           <img
             src={previewUrl}
@@ -176,7 +184,7 @@ export default async function Contact() {
         )}
       </label>
 
-      <label className="block">
+      <label className="block pt-4">
         <span>Short bio (public)</span>
         <textarea
           name="bio"
@@ -188,13 +196,10 @@ export default async function Contact() {
       </label>
 
       <div className="mt-4 flex gap-3">
-          <button type="submit" className="rounded-xl border px-4 py-2">
-            Save & Continue
-          </button>
-        <Link href="/dashboard" className="text-sm underline">
-          Skip for now
-        </Link>
+        <Button type="submit" className="w-full">Save & Continue</Button>
       </div>
     </form>
+    </div>
+    </div>
   );
 }

@@ -110,13 +110,13 @@ export default async function Setup() {
     }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center">
-      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  py-5">
+      <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 0% Complete</p>
         <Progress value={0} />
       </div>
 
-    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <form action={save} >
       <h1 className="text-2xl font-semibold">Business Basics</h1>
 

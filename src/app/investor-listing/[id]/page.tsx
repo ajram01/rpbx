@@ -120,7 +120,7 @@ export default async function InvestorPage(
         {/* Content Wrapper */}
         <div className="w-full lg:w-[1140px] mx-auto py-10 px-5 lg:px-0 flex flex-col lg:flex-row gap-5">
           <div className="w-full lg:w-1/3">
-            <div className="flex flex-col ">
+            <div className="flex flex-col bg-gray-200 rounded-lg overflow-hidden">
               <Image
                 src={avatarUrl ?? "/images/test/chen-lee.png"}
                 alt={fullName}

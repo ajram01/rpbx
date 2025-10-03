@@ -134,12 +134,12 @@ export default async function ReviewStep() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center lg:py-10">
-      <div className='mx-auto max-w-lg lg:min-w-[500px]'>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  py-5">
+      <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 90% Complete</p>
         <Progress value={90} />
       </div>
-    <div className=" bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <Link href="/onboarding/business/details" className="text-sm underline hover:text-[#60BC9B]">&larr; Details</Link>
     <form action={publish}>
       <h1 className="text-2xl font-semibold  mt-2">Review &amp; Publish</h1>

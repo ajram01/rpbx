@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import OwnershipRange from "./OwnershipRange";
+import Button from "../../../components/Button";
+import { Progress } from "@/components/ui/progress"
 
 export default async function Preferences() {
   const supabase = await createClientRSC();
@@ -103,12 +105,20 @@ export default async function Preferences() {
 
 
   return (
-    <form action={save} className="mx-auto max-w-xl p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">Investment preferences</h1>
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+      <div className='mx-auto max-w-lg lg:min-w-[550px]'>
+        <p className='mb-2'> Profile 30% Complete</p>
+        <Progress value={30} />
+      </div>
+
+    <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
+    <Link href="/onboarding/investor/contact" className="text-sm underline hover:text-[#60BC9B]">&larr; Investor Basics</Link>
+    <form action={save}>
+      <h1 className="text-2xl font-semibold  mt-2">Investment Preferences</h1>
 
       {/* Ownership % range */}
       <div>
-        <label className="block mb-2">
+        <label className="block mb-2  pt-4">
           <span>Target ownership %</span>
         </label>
         <OwnershipRange
@@ -119,13 +129,13 @@ export default async function Preferences() {
         />
       </div>
       {/* Primary industry */}
-      <label className="block">
+      <label className="block  pt-4">
         <span>Years of Experience</span>
         <select
           name="primary_industry"
           required
           defaultValue={draft?.primary_industry ?? ""}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="" disabled>Choose an industry…</option>
           {INDUSTRY_OPTIONS.map((opt) => (
@@ -135,13 +145,13 @@ export default async function Preferences() {
       </label>
 
       {/* Primary industry */}
-      <label className="block">
+      <label className="block  py-4">
         <span>Primary industry</span>
         <select
           name="primary_industry"
           required
           defaultValue={draft?.primary_industry ?? ""}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="" disabled>Choose an industry…</option>
           {INDUSTRY_OPTIONS.map((opt) => (
@@ -152,7 +162,7 @@ export default async function Preferences() {
 
       {/* Additional industries */}
       <fieldset className="block">
-        <legend className="mb-2 block">Additional industries (optional)</legend>
+        <legend className="block">Additional industries (optional)</legend>
 
         <div className="mt-1 grid grid-cols-2 md:grid-cols-3 gap-2 border rounded p-3">
           {INDUSTRY_OPTIONS.map((opt) => {
@@ -179,18 +189,18 @@ export default async function Preferences() {
         </div>
 
         {/* (Optional) small hint */}
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-grey small mt-1">
           Pick any that apply. You can change these later.
         </p>
       </fieldset>
 
       {/* EBITDA bucket */}
-      <label className="block">
+      <label className="block  pt-4">
         <span>Company EBITDA target</span>
         <select
           name="ebitda_bucket"
           defaultValue={draft?.target_ebitda ?? ""}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">No preference</option>
           <option value="<250k">Under $250k</option>
@@ -203,12 +213,12 @@ export default async function Preferences() {
       </label>
 
       {/* Cash Flow bucket */}
-      <label className="block">
+      <label className="block  pt-4">
         <span>Cash flow (SDE) target (optional)</span>
         <select
           name="cashflow_bucket"
           defaultValue={draft?.target_cash_flow ?? ""}
-          className="mt-1 w-full border rounded px-3 py-2"
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
           <option value="">No preference</option>
           <option value="<50k">Under $50k</option>
@@ -220,9 +230,10 @@ export default async function Preferences() {
       </label>
 
       <div className="mt-4 flex gap-3">
-        <button type="submit" className="rounded-xl border px-4 py-2">Save & Continue</button>
-        <Link href="/dashboard" className="text-sm underline">Skip for now</Link>
+        <Button type="submit" className="w-full">Save & Continue</Button>
       </div>
     </form>
+    </div>
+    </div>
   );
 }
