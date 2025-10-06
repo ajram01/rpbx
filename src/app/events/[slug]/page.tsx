@@ -84,11 +84,11 @@ export default async function PostPage({ params }: PostPageProps) {
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
       <div><NavGate /></div>
 
-      <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
+      <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-3 px-5 lg:px-0">
         <h1 className="text-4xl font-bold">{post.title}</h1>
 
         {/* Event Meta styled like Published section */}
-        <span className="flex flex-row gap-3 flex-wrap items-center text-grey mt-3">
+        <span className="flex flex-col lg:flex-row gap-3 flex-wrap items-left text-grey mt-3">
           {formattedDate && (
             <span className="flex items-center gap-1">
               <Image
@@ -103,7 +103,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {formattedTime && (
             <>
-              <p>•</p>
+              <span className="hidden lg:block"><p>•</p></span>
               <span className="flex items-center gap-1">
                 <Image
                   src="/images/icons/clock.png"
@@ -118,7 +118,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {post.hosts && (
             <>
-              <p>•</p>
+              <span className="hidden lg:block"><p>•</p></span>
               <span className="flex items-center gap-1">
                 <Image
                   src="/images/icons/user.png"
@@ -137,7 +137,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {post.location && (
             <>
-              <p>•</p>
+              <span className="hidden lg:block"><p>•</p></span>
               <span className="flex items-center gap-1">
                 <Image
                   src="/images/icons/location.png"

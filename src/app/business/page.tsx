@@ -25,7 +25,7 @@ export default async function Business() {
         </div>
 
         {/* Buy A Business */}
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row py-10 lg:py-0">
           <div className="flex-1 flex justify-center lg:justify-end items-center px-4 lg:p-[15px] order-2 lg:order-1">
             <div className="flex flex-col items-center w-full lg:w-[560px] max-w-lg">
               <h1 className="text-center">Secure Your Legacy.<br /> Attract Investors.</h1>
@@ -34,7 +34,7 @@ export default async function Business() {
             </div>
           </div>
 
-          <div className="flex-1 order-1 lg:order-2">
+          <div className="flex-1 lg:order-2 hidden lg:block">
             <Image
               src="/images/header/business-header.png"
               alt="Investors and Business Owners"
@@ -124,7 +124,7 @@ export default async function Business() {
           <div className="bg-white shadow-lg border-y-2 border-r-2 border-grey-500 flex-1 flex justify-center lg:justify-end rounded-tr-2xl rounded-br-2xl">
             <div className="flex flex-col items-start w-full lg:w-[560px] py-8 lg:py-10 px-6 lg:px-2">
               <h2>Get Your Business Valuation</h2>
-              <p className="lg:pr-15">
+              <p className="lg:pr-15  pt-1">
                  Know the true value of your business with a valuation powered by Biz Equity. RPBX members get 50% off their valuations, making it easier than ever to make informed decisions whether you’re planning to sell, grow, or invest.
               </p>
               <Link href="https://rioplexbizx.bizequity.com" target="_blank" ><Button className="mt-3 lg:mt-3 w-full sm:w-auto" variant="white">Get My Valuation</Button></Link>
@@ -175,7 +175,7 @@ export default async function Business() {
           </div>
 
           <div className="flex-1 flex justify-center lg:justify-start">
-            <div className="flex flex-col items-center text-center w-full lg:w-[560px] px-4">
+            <div className="flex flex-col items-center text-center w-full lg:w-[560px] px-4 overflow-hidden">
               <CardCarousel />
             </div>
           </div>
@@ -184,7 +184,7 @@ export default async function Business() {
       </div>
 
       {/* Div 4: video */}
-      <div className="bg-purple-300 flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10">
+      <div className="flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10">
     <div className="w-full  overflow-hidden lg:w-[1140px] lg:min-h-[300px] px-3 lg:px-0">
       <iframe
         className="w-full h-full rounded-2xl aspect-video shadow-lg"

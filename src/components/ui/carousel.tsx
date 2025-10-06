@@ -10,7 +10,7 @@ export default function Carousel() {
     {
       number: "2.3M",
       title: "Businesses at stake",
-      text: "In the United States, baby boomers own approximately 40% of small businesses, translating to around 2.3 million businesses. As this generation approaches retirement, many companies will be sold or closed, impacting millions of jobs and represent a significant shift in business ownership over the next decade.",
+      text: "In the United States, baby boomers own about 40% of small businesses—roughly 2.3 million. As this generation nears retirement, many will be sold or closed, affecting millions of jobs and marking a major shift in business ownership over the next decade.",
     },
     {
       number: "40%",
@@ -33,7 +33,7 @@ export default function Carousel() {
       pagination={{ clickable: true, dynamicBullets: true, }}
       autoplay={{ delay: 5000 }}
       loop
-      className="w-full h-[360px]"
+      className="w-full h-[340px]"
     >
       {slides.map((slide, i) => (
         <SwiperSlide key={i}>

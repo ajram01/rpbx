@@ -61,14 +61,17 @@ export default async function Events() {
               <img
                 src={event.image?.asset?.url}
                 alt={event.image?.alt || event.title}
-                className="rounded-l-lg lg:rounded-l-lg w-full lg:w-[300px] h-[250px] lg:h-auto object-cover"
+                className="rounded-t-lg lg:rounded-l-lg w-full lg:w-[300px] h-auto object-cover"
               />
                   </div>
 
                   <div className="flex flex-col p-5 gap-2">
 
+                    {/* Event Title */}
+                    <h4 className="large">{event.title}</h4>
+
                     {/* Event Meta */}
-                    <div className="flex items-center mt-3 mb-3 flex-wrap gap-4">
+                    <div className="flex flex-col lg:flex-row items-left mt-0 mb-0 lg:mt-3 lg:mb-3 flex-wrap gap-1 lg:gap-4">
                       
                       <div className="flex items-center">
                         <Image
@@ -120,8 +123,7 @@ export default async function Events() {
 
                     </div>
 
-                    {/* Event Title & Summary */}
-                    <h4 className="large">{event.title}</h4>
+                    {/* Event Summary */}
                     <p className="text-grey">{event.summary}</p>
 
                     {/* Link to event details */}

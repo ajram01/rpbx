@@ -27,10 +27,11 @@ export default function Navbar() {
   }, [isMobileMenuOpen]);
 
   const navItems = [
-    { name: "Blog", href: "/blog" },
-    { name: "Events", href: "/events" },
+    { name: "About", href: "/about" },
     { name: "Business", href: "/business" },
     { name: "Investor", href: "/investor" },
+    { name: "Blog", href: "/blog" },
+    { name: "Events", href: "/events" },
   ];
 
   const mobileMenu = (

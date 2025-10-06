@@ -30,12 +30,12 @@ export default function CardCarousel() {
         effect={"cards"}
         grabCursor={true}
         modules={[EffectCards]}
-        className="w-full max-w-[270px] h-[350px]"
+        className="w-full max-w-[280px] h-[380px] lg:max-w-[270px] lg:h-[350px] mt-5 lg:mt-0"
       >
         {images.map((src, index) => (
           <SwiperSlide
             key={index}
-            className="bg-white rounded-3xl shadow-lg relative cursor-pointer"
+            className="bg-white rounded-3xl shadow-md relative cursor-pointer"
             onClick={() => setModalIndex(index)}
           >
             <Image

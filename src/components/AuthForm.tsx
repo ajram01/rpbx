@@ -6,9 +6,9 @@ export default function AuthForm() {
       <input
         type="email"
         placeholder="Email"
-        className="mt-5 w-full px-6 py-2 rounded-full font-medium bg-white"
+        className="mt-5 w-full px-6 py-2 rounded-full font-medium bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
       />
-      <button className="mt-5 w-full px-6 py-2 rounded-full font-medium transition bg-white hover:bg-[var(--color-primary)] text-black hover:text-white">
+      <button className="mt-5 w-full px-6 py-2 rounded-full font-medium transition bg-white hover:bg-[var(--color-primary)] text-black hover:text-white border border-gray-300 hover:border-transparent">
         Sign In
       </button>
 

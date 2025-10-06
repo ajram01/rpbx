@@ -1,109 +1,143 @@
 import Image from "next/image";
+import Link from "next/link";
+import type { Metadata } from "next";
+import NavGate from "../components/NavGate";
+import Button from "../components/Button";
+import AuthForm from "../../components/AuthForm";
 
-export default function Home() {
+const experts = [
+  {
+    name: "John Wilson",
+    title: "John T. Wilson, a seasoned business attorney, is a trusted legal advisor committed to guiding entrepreneurs through smooth, secure, and successful business transactions.",
+    img: "/images/experts/john-wilson.png",
+  },
+  {
+    name: "Abby Young",
+    title: "Abby Young, CPA and founder of AYCPA, is a dedicated accounting professional focused on helping small business owners achieve financial clarity through expert tax strategy, planning, and guidance.",
+    img: "/images/experts/abby-young.png",
+  },
+  {
+    name: "Juan A. Garcia",
+    title: "Juan A. Garcia, Of Counsel at Villeda Law Group, is a seasoned legal and financial advisor dedicated to guiding businesses through mergers, acquisitions, and strategic growth with clarity and confidence.",
+    img: "/images/experts/juan-garcia.png",
+  },
+];
+
+
+export const metadata: Metadata = {
+  title: "About RPBX | RioPlex Business Exchange",
+  description: "Connecting Local Business Owners With Investors"
+};
+
+
+export default function AboutPage() {
+
+
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
-      {/* 
-        HEADER SECTION
-        - This is row 1 of the grid
-        - Use "auto" height so it only takes space it needs
-        - Put navigation, logo, or page title here
-      */}
-      <header className="bg-blue-600 text-white p-4">
-        <Image
-            src="/photos/logos/rio-plex-logo-main-mint-white.png"
-            alt="RPBX Logo"
-            width={200}
-            height={100}
-            priority
-        />
-        {/* Add navigation menu, logo, or other header content here */}
-      </header>
 
-      {/* 
-        MAIN BODY SECTION
-        - This is row 2 of the grid
-        - Uses "1fr" to take up all remaining space
-        - This is where your main page content goes
-      */}
-      <main className="bg-gray-50 p-8">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-6">Welcome to my page</h2>
-          
-          {/* Your main content goes here */}
-          <p className="text-lg mb-4">
-            This is where you&#39;d put your main page content like:
-          </p>
-          
-          <ul className="list-disc list-inside space-y-2 mb-6">
-            <li>Articles or blog posts</li>
-            <li>Product listings</li>
-            <li>Forms</li>
-            <li>Images and galleries</li>
-            <li>Any other content</li>
-          </ul>
-
-          {/* Example of adding a button */}
-          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
-            Click me
-          </button>
+    <div>
+      {/* Div 1: 2 rows */}
+      <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center">
+        <div>
+          <NavGate />
         </div>
-      </main>
 
-      {/* 
-        FOOTER SECTION
-        - This is row 3 of the grid
-        - Uses "auto" height so it only takes space it needs
-        - Put copyright, links, contact info here
-      */}
-      <footer className="bg-gray-800 text-white p-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <p>&copy; 2025 My Website. All rights reserved.</p>
-          
-          {/* Footer links */}
-          <div className="mt-4 space-x-6">
-            <a href="/about" className="hover:text-blue-400 transition-colors">
-              About
-            </a>
-            <a href="/contact" className="hover:text-blue-400 transition-colors">
-              Contact
-            </a>
-            <a href="/privacy" className="hover:text-blue-400 transition-colors">
-              Privacy
-            </a>
+        {/* Buy A Business */}
+        <div className="flex flex-col lg:flex-row py-10 lg:py-0">
+          <div className="flex-1 flex justify-center lg:justify-end items-center px-4 lg:p-[15px] order-2 lg:order-1">
+            <div className="flex flex-col items-center w-full lg:w-[560px] max-w-lg">
+              <h1 className="text-center">Empowering Business Transitions & Growth</h1>
+
+              <AuthForm />
+            </div>
+          </div>
+
+          <div className="flex-1 lg:order-2 hidden lg:block">
+            <Image
+              src="/images/header/about-header.png"
+              alt="Investors and Business Owners"
+              width={2000}
+              height={450}
+              className="w-full h-auto"
+              priority
+            />
           </div>
         </div>
-      </footer>
+      </div>
+
+      {/* Div 2: How It Works */}
+      <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10">
+        <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-10 w-full lg:w-[1140px] px-4 lg:px-0">
+
+          <div className="bg-white flex-1 flex flex-col items-center rounded-2xl p-5">
+  
+          </div>
+
+
+          <div className="flex-1 flex flex-col gap-y-6">
+            <h2 className="text-white">About RPBX</h2>
+
+            <p className="text-white">Welcome to RioPlex Business Exchange, your gateway to connecting businesses and investors across the Rio Grande Valley. We champion local entrepreneurship and regional growth. Whether you’re a business owner seeking visibility and expansion or an investor looking for promising opportunities, RioPlex provides a dynamic, secure platform to make it happen. Explore our services and learn more about which membership fits you best.</p>
+
+            <div className="flex flex-col gap-4">
+              <Link href="/business"><Button>Looking for an Investor</Button></Link>
+              <Link href="/investor"><Button variant="white">Looking to Invest</Button></Link>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Div 3: As An Investor */}
+      <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top py-[15px]">
+
+        <div className="w-full px-4 lg:w-[1140px] lg:px-0 mx-auto flex flex-col gap-y-6 lg:gap-y-0 lg:gap-x-10 py-10">
+          <h2 className="text-center">Meet Our Experts</h2>
+
+          <div className="flex flex-col lg:flex-row justify-center gap-5 mt-10">
+            {experts.map((expert) => (
+              <div
+                key={expert.name}
+                className="flex-1 rounded-2xl shadow-lg overflow-hidden flex flex-col items-center bg-white"
+              >
+                {/* Top gray section */}
+                <div className="bg-[#272727] w-full h-30"></div>
+
+                {/* Bottom white section */}
+                <div className="bg-white w-full flex flex-col items-center p-5">
+                  <div className="w-36 h-36 bg-white rounded-full border-4 border-[#272727] flex justify-center items-center -mt-25">
+                    <Image
+                      src={expert.img}
+                      alt={expert.name}
+                      width={100}
+                      height={100}
+                      className="w-35 h-35 rounded-full object-cover p-1"
+                    />
+                  </div>
+                  <h4 className="mt-4 large">{expert.name}</h4>
+                  <p className="text-center mt-1">{expert.title}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Div 4: video */}
+      <div className="flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10">
+    <div className="w-full  overflow-hidden lg:w-[1140px] lg:min-h-[300px] px-3 lg:px-0">
+      <iframe
+        className="w-full h-full rounded-2xl aspect-video shadow-lg"
+        src="https://www.youtube.com/embed/VZZhns1tcMU"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+
+        </div>
+      </div>
     </div>
   );
 }
-
-/* 
-  KEY CONCEPTS TO REMEMBER:
-
-  1. TYPESCRIPT:
-     - File extension is .tsx (not .ts) because we're using JSX
-     - You can add type definitions for props, state, etc.
-     - Example: function Home(): JSX.Element
-     
-  2. TAILWIND CLASSES EXPLAINED:
-     - grid: Makes the div a CSS Grid container
-     - grid-rows-[auto_1fr_auto]: Creates 3 rows - header (auto height), main (flexible), footer (auto height)
-     - min-h-screen: Minimum height is 100% of viewport
-     - max-w-4xl mx-auto: Max width with center alignment
-     - p-4, p-8: Padding (4 = 1rem, 8 = 2rem)
-     - bg-blue-600: Background color
-     - text-white: White text color
-     - hover:bg-blue-700: Color change on hover
-
-  3. NEXT.JS SPECIFICS:
-     - Always export default your page component
-     - Use <Image> from "next/image" instead of <img> for optimization
-     - Links should use <Link> from "next/link" for client-side navigation
-
-  4. TO CUSTOMIZE:
-     - Replace the content in each section with your own
-     - Change colors by modifying the bg-* and text-* classes
-     - Add your own components and logic
-     - Import other components you create
-*/
