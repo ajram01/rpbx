@@ -39,7 +39,7 @@ export default async function Home() {
         </div>
 
         {/* row becomes column on tablet/mobile */}
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row py-10 lg:py-0">
           <div className="flex-1 flex justify-center lg:justify-end items-center px-4 lg:p-[15px] order-2 lg:order-1">
             <div className="flex flex-col items-center w-full lg:w-[560px] max-w-lg">
               <h1 className="text-center">Unlock Your Business Potential</h1>
@@ -48,7 +48,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="flex-1 order-1 lg:order-2">
+          <div className="flex-1 lg:order-2 hidden lg:block">
             <Image
               src="/images/header/home-header.png"
               alt="Investors and Business Owners"
@@ -64,7 +64,7 @@ export default async function Home() {
 
       {/* Div 2: 1 div containing 3 div columns */}
       
-      <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10 ">
+      <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10 px-4 lg:px-0">
       <PricingTable dark={dark} />
       </div>
 
@@ -76,7 +76,7 @@ export default async function Home() {
           <div className="flex-1 flex justify-center lg:justify-end">
             <div className="flex flex-col items-start w-full lg:w-[430px] max-w-lg">
               <h2>Explore our Blog topics</h2>
-              <p>RPBX is here to offer you valuable knowledge. We will help guide you in making your next steps.</p>
+              <p className="text-center lg:text-left pt-1">RPBX is here to offer you valuable knowledge. We will help guide you in making your next steps.</p>
             </div>
           </div>
           <div className="flex-1 flex justify-center lg:justify-start">
@@ -117,7 +117,7 @@ export default async function Home() {
           <div className="bg-white shadow-lg border-y-2 border-r-2 border-grey-500 flex-1 flex justify-center lg:justify-end rounded-tr-2xl rounded-br-2xl">
             <div className="flex flex-col items-start w-full lg:w-[560px] py-8 lg:py-10 px-6 lg:px-2">
               <h2>Who is RPBX for?</h2>
-              <p className="lg:pr-15">
+              <p className="lg:pr-15  pt-1">
                 Connecting small business owners with the right investors to help them grow, succeed, and achieve their goals. Join RioPlex Business Exchange and be part of a platform built for ambitious businesses and forward-thinking investors.
               </p>
               <Link href="/business"><Button className="mt-3 lg:mt-3 w-full sm:w-auto" variant="white">Looking for an Investor</Button></Link>
@@ -135,7 +135,7 @@ export default async function Home() {
         {/* Row 3 */}
         <div className="w-full lg:w-[1140px] px-4 lg:px-0 flex flex-col items-center py-10">
           <h2>Business Solutions</h2>
-          <p>Connect with Our Trusted Advisors for Tailored Business Solutions</p>
+          <p className="text-center pt-1">Connect with Our Trusted Advisors for Tailored Business Solutions</p>
 
           {/* four cols on desktop, two on tablet/mobile */}
           <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
@@ -333,7 +333,7 @@ export default async function Home() {
               </div>
 
               </Modal>
-              <h4 className="text-center mt-2">Certified Public Accountant &amp; Book Keeping Assistant</h4>
+              <h4 className="text-center mt-2">CPA &amp; Book Keeping Assistant</h4>
             </div>
 
           </div>

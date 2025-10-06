@@ -35,10 +35,10 @@ export default function Navbar({ userType }: { userType: UserType }) {
   }, [isMobileMenuOpen]);
 
   const navItems = [
-    { name: "Blog", href: "/blog" },
-    { name: "Events", href: "/events" },
     { name: "Business Listings", href: "/business-listing" , show: !isBusiness || isAdmin },
-    { name: "Browse Investors", href: "/investor-listing" , show: !isInvestor || isAdmin }
+    { name: "Browse Investors", href: "/investor-listing" , show: !isInvestor || isAdmin },
+    { name: "Blog", href: "/blog" },
+    { name: "Events", href: "/events" }
   ].filter((i) => i.show !== false);
 
   const rightActions = {

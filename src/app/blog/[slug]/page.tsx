@@ -55,9 +55,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
 
     
-    <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-10 px-5 lg:px-0">
+    <div className="flex flex-col w-full lg:w-[1140px] mx-auto py-10 gap-3 px-5 lg:px-0">
 
-      <h1 className="text-4xl font-bold">{post.title}</h1>
+      <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
 
       <span className="flex flex-row gap-3"><p className="flex">Published: {new Date(post.publishedAt).toLocaleDateString()}</p> <p>•</p> <p className="flex">{post.read} min read</p></span>
       <div className="border-t-1 border-gray-400 my-5"></div>

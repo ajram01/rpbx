@@ -73,7 +73,7 @@ export default async function Welcome({
   const loginNext = encodeURIComponent(intendedNext || "/onboarding/business/basics");
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center lg:py-10">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-4 lg:py-10">
       <div className="bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow text-center">
         <Image
           src="/images/logos/Rio-Plex-Logo-Main-Mint-&-Charcoal.png"
