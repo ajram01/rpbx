@@ -4,6 +4,7 @@ import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
 import Modal from "@/app/components/Modal";
+import ContactForm from "@/app/components/ContactForm";
 import CardCarousel from "../components/Card-carousel";
 import type { Metadata } from "next";
 
@@ -140,7 +141,7 @@ export default async function Business() {
                   <h4>What is Business Valuation?</h4>
                   <p>
                     Business valuation is the process of determining what a company is worth. It’s a crucial step for any
-                    business owner who’s looking to sell, merge, or even plan for future growth.
+                    business owner who’s looking to sell, merge, or even plan for future growth. Members save 50% on their valuation when they subscribe to RioPlex Business Exchange.
                   </p><br />
 
                   <h4>Key Components We Look At:</h4>
@@ -166,6 +167,8 @@ export default async function Business() {
                   <p>
                     At RioPlex Business Exchange, we help make the process clear, accurate, and aligned with your goals, so whether you’re buying, selling, or planning for the future, you’ll have the right insights to move forward.
                   </p><br />
+
+                  <ContactForm />
               </div>
 
               

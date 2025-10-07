@@ -27,6 +27,7 @@
     "react": "^19.0.0",
     "react-cookie-consent": "^9.0.0",
     "react-dom": "^19.0.0",
+    "resend": "^6.1.2",
     "sanity": "^4.8.1",
     "shadcn-ui": "^0.9.5",
     "stripe": "^18.4.0",
