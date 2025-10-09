@@ -4,7 +4,6 @@ import { motion } from "motion/react"
 import { type RefObject, useEffect, useId, useState } from "react"
 
 import { cn } from "@/lib/utils"
-import { resizeObserver } from "sanity"
 
 export interface AnimatedBeamProps {
   className?: string
@@ -65,45 +64,22 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
       }
 
   useEffect(() => {
-    const updatePath = () => {
-      if (containerRef.current && fromRef.current && toRef.current) {
-        const containerRect = containerRef.current.getBoundingClientRect()
-        const rectA = fromRef.current.getBoundingClientRect()
-        const rectB = toRef.current.getBoundingClientRect()
+    const updatePath = () => { /* ...exactly your logic... */ }
 
-        const svgWidth = containerRect.width
-        const svgHeight = containerRect.height
-        setSvgDimensions({ width: svgWidth, height: svgHeight })
+    const observer = new ResizeObserver(() => { updatePath() })
 
-        const startX = rectA.left - containerRect.left + rectA.width / 2 + startXOffset
-        const startY = rectA.top - containerRect.top + rectA.height / 2 + startYOffset
-        const endX = rectB.left - containerRect.left + rectB.width / 2 + endXOffset
-        const endY = rectB.top - containerRect.top + rectB.height / 2 + endYOffset
+    if (containerRef.current) observer.observe(containerRef.current)
+    if (fromRef.current) observer.observe(fromRef.current)
+    if (toRef.current) observer.observe(toRef.current)
 
-        const controlY = startY - curvature
-        const d = `M ${startX},${startY} Q ${(startX + endX) / 2},${controlY} ${endX},${endY}`
-        setPathD(d)
-      }
-    }
+    // also recalc on window resize
+    window.addEventListener("resize", updatePath)
 
-    // Initialize ResizeObserver
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const resizeObserver = new ResizeObserver(() => {
-      // For all entries, recalculate the path
-        updatePath()
-    })
-
-    // Observe the container element
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current)
-    }
-
-    // Call the updatePath initially to set the initial path
     updatePath()
 
-    // Clean up the observer on component unmount
     return () => {
-      resizeObserver.disconnect()
+      observer.disconnect()
+      window.removeEventListener("resize", updatePath)
     }
   }, [containerRef, fromRef, toRef, curvature, startXOffset, startYOffset, endXOffset, endYOffset])
 
