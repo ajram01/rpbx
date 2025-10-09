@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
+import VideoSection from "../components/VideoSection";
+import AnimatedBeamDemo from "../components/animated-beam-demo"
 
 const experts = [
   {
@@ -69,15 +71,15 @@ export default function AboutPage() {
       <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10">
         <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-10 w-full lg:w-[1140px] px-4 lg:px-0">
 
-          <div className="bg-white flex-1 flex flex-col items-center rounded-2xl p-5">
-  
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <AnimatedBeamDemo />
           </div>
 
 
-          <div className="flex-1 flex flex-col gap-y-6">
+          <div className="flex-1 flex flex-col gap-y-6 justify-center">
             <h2 className="text-white">About RPBX</h2>
 
-            <p className="text-white">Welcome to RioPlex Business Exchange, your gateway to connecting businesses and investors across the Rio Grande Valley. We champion local entrepreneurship and regional growth. Whether you’re a business owner seeking visibility and expansion or an investor looking for promising opportunities, RioPlex provides a dynamic, secure platform to make it happen. Explore our services and learn more about which membership fits you best.</p>
+            <p className="text-white">Welcome to RioPlex Business Exchange, your gateway to connecting businesses and investors across Texas. We champion local entrepreneurship and regional growth. Whether you’re a business owner seeking visibility and expansion or an investor looking for promising opportunities, RPBX provides a dynamic, secure platform to make it happen. Explore our services and learn more about which membership fits your needs best.</p>
 
             <div className="flex flex-col gap-4">
               <Link href="/business"><Button>Looking for an Investor</Button></Link>
@@ -91,10 +93,10 @@ export default function AboutPage() {
       {/* Div 3: As An Investor */}
       <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top py-[15px]">
 
-        <div className="w-full px-4 lg:w-[1140px] lg:px-0 mx-auto flex flex-col gap-y-6 lg:gap-y-0 lg:gap-x-10 py-10">
-          <h2 className="text-center">Meet Our Experts</h2>
+        <div className="w-full px-4 lg:w-[1140px] lg:px-0 mx-auto flex flex-col gap-y-5 lg:gap-y-0 lg:gap-x-10 py-10">
+          <h2 className="text-center -mt-4">Meet Our Experts</h2>
 
-          <div className="flex flex-col lg:flex-row justify-center gap-5 mt-10">
+          <div className="flex flex-col lg:flex-row justify-center gap-5 mt-8">
             {experts.map((expert) => (
               <div
                 key={expert.name}
@@ -126,18 +128,7 @@ export default function AboutPage() {
       </div>
 
       {/* Div 4: video */}
-      <div className="flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10">
-    <div className="w-full  overflow-hidden lg:w-[1140px] lg:min-h-[300px] px-3 lg:px-0">
-      <iframe
-        className="w-full h-full rounded-2xl aspect-video shadow-lg"
-        src="https://www.youtube.com/embed/VZZhns1tcMU"
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-
-        </div>
-      </div>
+      <VideoSection />
     </div>
   );
 }

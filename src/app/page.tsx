@@ -10,6 +10,7 @@ import PricingTable from "./components/pricing-table";
 import NewsletterSignup from "../components/ui/newsletter";
 import Carousel from "../components/ui/carousel";
 import HoverGif from '../components/HoverGif'
+import ContactForm from "@/app/components/ContactForm";
 
 export default async function Home() {
   const supabase = await createClientRSC();
@@ -158,7 +159,7 @@ export default async function Home() {
                   <h4>What is Business Valuation?</h4>
                   <p>
                     Business valuation is the process of determining what a company is worth. It’s a crucial step for any
-                    business owner who’s looking to sell, merge, or even plan for future growth.
+                    business owner who’s looking to sell, merge, or even plan for future growth. Members save 50% on their valuation when they subscribe to RioPlex Business Exchange.
                   </p><br />
 
                   <h4>Key Components We Look At:</h4>
@@ -184,6 +185,7 @@ export default async function Home() {
                   <p>
                     At RioPlex Business Exchange, we help make the process clear, accurate, and aligned with your goals, so whether you’re buying, selling, or planning for the future, you’ll have the right insights to move forward.
                   </p><br />
+                  <ContactForm />
               </div>
 
               
@@ -234,6 +236,7 @@ export default async function Home() {
                   At RioPlex Business Exchange, we tailor marketing solutions to your business needs, whether you’re just starting out 
                   or looking to expand your reach. Let’s create a strategy that makes your brand shine and brings in the customers you want!
                 </p><br />
+                <ContactForm />
               </div>
 
               </Modal>
@@ -278,6 +281,7 @@ export default async function Home() {
                   <li><strong>Legal Due Diligence:</strong> Identify and address potential legal risks before they become deal-breakers.</li>
                   <li><strong>Entity Structuring & Compliance:</strong> Make sure your business is set up and documented properly for a clean and efficient transaction.</li>
                 </ul><br />
+                <ContactForm />
               </div>
 
               </Modal>
@@ -330,6 +334,7 @@ export default async function Home() {
                   your business’s financial health and growth strategy. Reach out to streamline your financial operations and make your numbers 
                   work for you!
                 </p><br />
+                <ContactForm />
               </div>
 
               </Modal>
