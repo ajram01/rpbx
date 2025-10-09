@@ -1,36 +1,34 @@
-// app/dashboard/_components/MatchedInvestors.tsx
+// app/dashboard/_components/InvestorCards.tsx
+import Image from "next/image";
+
 type InvestorMatch = {
   id: string;
-  created_at: string | null;
   score?: number | null;
-  primary_industry?: string | null;          // optional to display later
-  additional_industries?: string[] | null;   // optional to display later
+  primary_industry?: string | null;
+  additional_industries?: string[] | null;
 };
 
-type Listing = { id: string; title?: string | null };
+export default function MatchedInvestors({ matches }: { matches: InvestorMatch[] }) {
+  if (!matches?.length) return <p>No matches yet — check back soon.</p>;
 
-export default function MatchedInvestors({
-  matches,
-  listings
-}: {
-  matches: InvestorMatch[];
-  listings: Listing[];
-}) {
   return (
-    <section className="mt-8">
-      <h2 className="text-xl font-semibold mb-3">Suggested Investors</h2>
-      {matches.length === 0 ? (
-        <p className="text-neutral-600">No matches yet.</p>
-      ) : (
-        <ul className="grid lg:grid-cols-4 gap-4">
-          {matches.map((m) => (
-            <li key={m.id} className="p-4 border rounded-xl">
-              <div className="font-medium">Investor #{m.id.slice(0, 6)}</div>
-              <div className="text-sm text-neutral-600">Score: {m.score ?? 0}</div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <>
+      {matches.map((m) => (
+        <div key={m.id} className="flex-1 ">
+          <Image
+            src="/images/test/chen-lee.png"
+            alt="Investor Avatar"
+            className="rounded-t-lg w-full shadow-lg border-x-2 border-t-2 border-gray-500"
+            width={200}
+            height={100}
+          />
+          <div className="bg-[#F3F3F3] p-5 rounded-b-lg shadow-lg border-x-2 border-b-2 border-gray-500">
+            <h4>Investor #{m.id.slice(0, 6)}</h4>
+            <p className="italic">{m.primary_industry ?? "—"}</p>
+            <button className="mt-3 w-full rounded-lg bg-black text-white py-2">View Profile</button>
+          </div>
+        </div>
+      ))}
+    </>
   );
 }

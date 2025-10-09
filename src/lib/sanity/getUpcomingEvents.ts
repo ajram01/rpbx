@@ -17,25 +17,15 @@ export type EventItem = {
   location?: string | null;
 };
 
+
 const EVENTS_QUERY = groq`*[
   _type == "event" &&
-  // choose whichever date field exists and is in the future
   dateTime(coalesce(startAt, date, _createdAt)) >= now()
 ] | order(coalesce(startAt, date, _createdAt) asc)[0...3]{
   title,
-  "slug": select(
-    defined(slug.current) => slug.current,
-    defined(slug) && slug match "*": slug,
-    _id
-  ),
-  // normalize date to ISO string (fall back to createdAt if missing)
+  "slug": coalesce(slug.current, slug, _id),
   "date": coalesce(startAt, date, _createdAt),
-  // support either string or object location; if object, pick a common prop
-  "location": select(
-    defined(location) && location match "*": location,
-    defined(location.name) => location.name,
-    defined(venue) && venue match "*": venue,
-  )
+  "location": coalesce(location, location.name, venue)
 }`;
 
 export async function getUpcomingEvents(): Promise<EventItem[]> {

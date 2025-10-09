@@ -1,23 +1,25 @@
-// app/dashboard/_components/UpcomingEvents.tsx
-type Event = { title: string; slug: string; date: string; location?: string | null };
-export default function UpcomingEvents({ events }: { events: Event[] }) {
+// app/dashboard/_components/UpcomingEventsList.tsx
+type EventItem = { _id?: string; title: string; date: string; url?: string };
+
+export default function UpcomingEventsList({ events }: { events: EventItem[] }) {
+  if (!events?.length) {
+    return (
+      <ul className="list-disc list-inside space-y-2">
+        <li>No upcoming events.</li>
+      </ul>
+    );
+  }
+
   return (
-    <section className="mt-8">
-      <h2 className="text-xl font-semibold mb-3">Upcoming Events</h2>
-      {events.length === 0 ? (
-        <p className="text-neutral-600">No upcoming events.</p>
-      ) : (
-        <ul className="grid lg:grid-cols-3 gap-4">
-          {events.map((e) => (
-            <li key={e.slug} className="p-4 border rounded-xl">
-              <div className="font-medium">{e.title}</div>
-              <div className="text-sm text-neutral-600">
-                {new Date(e.date).toLocaleDateString()} {e.location ? `• ${e.location}` : ""}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <ul className="list-disc list-inside space-y-2">
+      {events.map((e) => (
+        <li key={e._id ?? `${e.title}-${e.date}`}>
+          <a className="underline" href={e.url} target="_blank" rel="noreferrer">
+            {e.title}
+          </a>{" "}
+          – {new Date(e.date).toLocaleDateString()}
+        </li>
+      ))}
+    </ul>
   );
 }
