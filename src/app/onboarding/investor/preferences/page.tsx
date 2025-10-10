@@ -105,16 +105,18 @@ export default async function Preferences() {
 
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 30% Complete</p>
         <Progress value={30} />
       </div>
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
-    <Link href="/onboarding/investor/contact" className="text-sm underline hover:text-[#60BC9B]">&larr; Investor Basics</Link>
+    <Link href="/onboarding/investor/contact" className="text-sm underline hover:text-[#60BC9B]">&larr; Let’s Get to Know You</Link>
     <form action={save}>
-      <h1 className="text-2xl font-semibold  mt-2">Investment Preferences</h1>
+      <h1 className="text-2xl font-semibold  mt-2">Define Your Investment Style</h1>
+      <p className="mt-2">Tell us what kind of opportunities you’re looking for. Set your target ownership range, preferred industries, and ideal financial profile so we can connect you with the right businesses.</p>
+      <hr className="mb-1 mt-4" />
 
       {/* Ownership % range */}
       <div>

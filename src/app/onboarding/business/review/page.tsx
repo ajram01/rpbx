@@ -134,17 +134,17 @@ export default async function ReviewStep() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  py-5">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 90% Complete</p>
         <Progress value={90} />
       </div>
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
-    <Link href="/onboarding/business/details" className="text-sm underline hover:text-[#60BC9B]">&larr; Details</Link>
+    <Link href="/onboarding/business/details" className="text-sm underline hover:text-[#60BC9B]">&larr; Your Business at a Glance</Link>
     <form action={publish}>
-      <h1 className="text-2xl font-semibold  mt-2">Review &amp; Publish</h1>
-      <p className="text-neutral-600  mt-2">Take a quick look before publishing.</p>
-
+      <h1 className="text-2xl font-semibold  mt-2">Review & Go Live</h1>
+      <p className="mt-2">Take a moment to review your details and make sure everything looks just right. Once you publish, your business will be visible to local investors ready to connect and explore new opportunities.</p>
+      <hr className="mb-1 mt-4" />
       {/* Optional limit banner — hidden while CHECK_PLAN_LIMITS === false */}
       {CHECK_PLAN_LIMITS && (publishedCount ?? 0) >= (allowed ?? 0) && (
         <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-amber-900">
@@ -162,7 +162,7 @@ export default async function ReviewStep() {
         <div><b>County:</b> {draft.county ?? '—'}</div>
         <div><b>City:</b> {draft.location_city ?? '—'}</div>
         <div><b>Contact:</b> {draft.contact_email ?? '—'}</div>
-        <hr className="my-2" />
+        <hr className="mb-3 mt-4" />
         <div><b>Ownership %:</b> {draft.ownership_percentage ?? '—'}</div>
         <div><b>Annual revenue:</b> {fmt(draft.annual_revenue_range, LABELS.annual)}</div>
         <div><b>Book value:</b> {fmt(draft.book_value_range, LABELS.book)}</div>

@@ -49,16 +49,18 @@ export default async function Compliance() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 60% Complete</p>
         <Progress value={60} />
       </div>
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
-    <Link href="/onboarding/investor/preferences" className="text-sm underline hover:text-[#60BC9B]">&larr; Investment Preferences</Link>
+    <Link href="/onboarding/investor/preferences" className="text-sm underline hover:text-[#60BC9B]">&larr; Define Your Investment Style</Link>
     <form action={save} method="post">
-      <h1 className="text-2xl font-semibold mt-2">Compliance</h1>
+      <h1 className="text-2xl font-semibold mt-2">Compliance & Confidentiality</h1>
+      <p className="mt-2">A few quick questions to keep everything secure and transparent. Confirm your confidentiality preferences and investor status to help us tailor your matches responsibly.</p>
+      <hr className="mb-1 mt-4" />
 
       {/* NDA */}
       <fieldset className="space-y-2">

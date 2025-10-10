@@ -52,6 +52,7 @@ export default async function SubscribePage({
       <p className="text-neutral-600">
         Price: {priceLabel(price)}
       </p>
+      <hr className="mb-1 mt-4" />
 
       <form method="post" action="/api/subscribe" className="mt-6 space-y-3">
   <input name="lookup" type="hidden" value={lookup} />

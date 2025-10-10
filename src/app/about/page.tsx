@@ -128,7 +128,7 @@ export default function AboutPage() {
       </div>
 
       {/* Div 4: video */}
-      <VideoSection />
+      <VideoSection videoUrl="https://www.youtube.com/embed/VZZhns1tcMU"/>
     </div>
   );
 }

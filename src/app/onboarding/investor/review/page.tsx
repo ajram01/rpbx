@@ -85,8 +85,10 @@ export default async function Review() {
       </div>
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
-    <Link href="/onboarding/investor/preferences" className="text-sm underline hover:text-[#60BC9B]">&larr; Compliance</Link>
-      <h1 className="text-2xl font-semibold mt-2">Review Your Profile</h1>
+    <Link href="/onboarding/investor/preferences" className="text-sm underline hover:text-[#60BC9B]">&larr; Compliance & Confidentiality</Link>
+      <h1 className="text-2xl font-semibold mt-2">Review & Go Live</h1>
+      <p className="mt-2">Take a moment to look over your profile and make sure everything reflects your investment goals. Once confirmed, you’ll be ready to discover and connect with local businesses that fit your vision.</p>
+      <hr className="mb-1 mt-4" />
 
       <div className="flex items-center gap-4 mt-2">
         {avatarUrl ? (
