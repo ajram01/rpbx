@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Saira_Condensed } from "next/font/google";
 import Footer from "./components/Footer";
 import CookieConsentWrapper from "@/components/cookieconsent";
+import Script from "next/script";
 import "./globals.css";
 
 const sairaCondensed = Saira_Condensed({
@@ -31,6 +32,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+      </head>
       <body
         className={`${poppins.variable} ${sairaCondensed.variable} antialiased`}
       >
