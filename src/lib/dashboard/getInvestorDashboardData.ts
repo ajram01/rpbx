@@ -5,8 +5,20 @@ import { matchListingsToInvestor } from "@/lib/matching/matchListings";
 import { getRecentActivity } from "@/lib/analytics/getRecentActivity";
 import { getUpcomingEvents } from "@/lib/sanity/getUpcomingEvents";
 
+import { Activity } from "@/lib/analytics/getRecentActivity"
+import { EventItem } from "@/lib/sanity/getUpcomingEvents"
+
 type Listing = Database["public"]["Tables"]["business_listings"]["Row"];
 // type InvestorProfile = Database["public"]["Tables"]["investor_profiles"]["Row"];
+
+export type BusinessMatch = { id: string; title: string|null; industry?: string|null; _source?: "matched"|"newest" };
+
+export type InvestorDashboardData = {
+  kind: "investor";
+  matches: BusinessMatch[];     // what MatchedBusinesses expects
+  activities: Activity[];
+  events: EventItem[];
+};
 
 export async function getInvestorDashboardData(
   supabase: SupabaseClient<Database>,
@@ -39,10 +51,6 @@ export async function getInvestorDashboardData(
   ]);
 
   return {
-    preferences: invProfile ?? null,
-    matches,
-    activities,
-    events,
-    kind: "investor" as const,
+    kind: "investor", matches, activities, events
   };
 }
