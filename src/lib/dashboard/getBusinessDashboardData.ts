@@ -52,5 +52,5 @@ export async function getBusinessDashboardData(
     getUpcomingEvents(),
   ]);
 
-  return { kind: "business", matches, activities, events };
+  return { kind: "business" as const, matches, activities, events };
 }
