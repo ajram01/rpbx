@@ -4,7 +4,6 @@ import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
 import Modal from "@/app/components/Modal";
-import ContactForm from "@/app/components/ContactForm";
 import CardCarousel from "../components/Card-carousel";
 import VideoSection from "../components/VideoSection";
 import type { Metadata } from "next";
