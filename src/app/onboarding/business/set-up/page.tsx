@@ -110,7 +110,7 @@ export default async function Setup() {
     }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  py-5">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 0% Complete</p>
         <Progress value={0} />
@@ -118,7 +118,9 @@ export default async function Setup() {
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <form action={save} >
-      <h1 className="text-2xl font-semibold">Business Basics</h1>
+      <h1 className="text-2xl font-semibold">Let’s Get to Know Your Business</h1>
+      <p className="mt-2">Tell us what makes your business unique! Start by adding the essentials — your name, industry, and where you’re based — so local investors can easily discover and connect with you.</p>
+      <hr className="mb-1 mt-4" />
 
       <label className="block pt-4 pt-4">
         <span>Business Title</span>

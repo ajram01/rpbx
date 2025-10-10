@@ -169,7 +169,7 @@ export default async function Business() {
                     At RioPlex Business Exchange, we help make the process clear, accurate, and aligned with your goals, so whether you’re buying, selling, or planning for the future, you’ll have the right insights to move forward.
                   </p><br />
 
-                  <ContactForm />
+                  <Link href="/business"><Button className="mb-10 w-full max-w-[1000px]">Get My Valuation</Button></Link>
               </div>
 
               
@@ -188,7 +188,7 @@ export default async function Business() {
       </div>
 
       {/* Div 4: video */}
-      <VideoSection />
+      <VideoSection videoUrl="https://www.youtube.com/embed/ZRSDJQO8ggA" />
     </div>
   );
 }

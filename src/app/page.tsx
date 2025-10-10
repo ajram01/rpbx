@@ -139,7 +139,7 @@ export default async function Home() {
           <p className="text-center pt-1">Connect with Our Trusted Advisors for Tailored Business Solutions</p>
 
           {/* four cols on desktop, two on tablet/mobile */}
-          <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+          <div className="mt-4 lg:px-10 grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-0 w-full">
 
             {/* 1 */}
             <div className="flex flex-col items-center">
@@ -149,8 +149,8 @@ export default async function Home() {
                     staticSrc="/images/icons/evaluation.png"
                     gifSrc="/images/gifs/evaluation.gif"
                     alt="solution-icon-1"
-                    width={200}
-                    height={200}
+                    width={250}
+                    height={250}
                   />
                 }
               >
@@ -185,7 +185,7 @@ export default async function Home() {
                   <p>
                     At RioPlex Business Exchange, we help make the process clear, accurate, and aligned with your goals, so whether you’re buying, selling, or planning for the future, you’ll have the right insights to move forward.
                   </p><br />
-                  <ContactForm />
+                  <Link href="/business"><Button className="mb-10 w-full max-w-[1000px]">Get My Valuation</Button></Link>
               </div>
 
               
@@ -194,56 +194,8 @@ export default async function Home() {
               <h4 className="text-center mt-2">Business Valuation</h4>
             </div>
 
+
             {/* 2 */}
-            <div className="flex flex-col items-center">
-              <Modal
-                trigger={
-                  <HoverGif
-                    staticSrc="/images/icons/marketing.png"
-                    gifSrc="/images/gifs/marketing.gif"
-                    alt="solution-icon-2"
-                    width={200}
-                    height={200}
-                  />
-                }
-              >
-              <div className="space-y-2">
-                <h2>Marketing</h2><br />
-
-                <h4>What is Marketing?</h4>
-                <p>
-                  Marketing is about getting your brand and message in front of the right people at the right time. 
-                  It’s not just about advertising; it’s about understanding your audience, building relationships, 
-                  and communicating the value of your business effectively.
-                </p><br />
-
-                <h4>Key Components of Effective Marketing:</h4>
-                <ul className="list-disc list-outside pl-6">
-                  <li><strong>Understanding Your Audience:</strong> Knowing who your customers are, what they need, and where they spend their time is crucial.</li>
-                  <li><strong>Brand Identity & Messaging:</strong> Your brand should tell a story. Everything from your logo to your messaging should reflect your values and what makes your business unique.</li>
-                  <li><strong>Multi-Channel Strategies:</strong> Using a mix of digital (social media, email, website) and traditional (print, events) channels helps you reach your audience wherever they are.</li>
-                  <li><strong>Content Creation:</strong> Creating content that informs, entertains, or solves a problem is key to engaging potential customers.</li>
-                  <li><strong>Analytics & Tracking:</strong> It’s important to measure results. Whether it’s tracking website visits or social media interactions, analyzing data helps improve future campaigns.</li>
-                </ul><br />
-
-                <h4>Why Marketing Matters:</h4>
-                <p>
-                  Marketing helps you stand out in a crowded marketplace, builds trust with your audience, and ultimately drives sales. 
-                  The right marketing strategy not only attracts new customers but also nurtures existing relationships to keep your business growing.
-                </p><br />
-
-                <p>
-                  At RioPlex Business Exchange, we tailor marketing solutions to your business needs, whether you’re just starting out 
-                  or looking to expand your reach. Let’s create a strategy that makes your brand shine and brings in the customers you want!
-                </p><br />
-                <ContactForm />
-              </div>
-
-              </Modal>
-              <h4 className="text-center mt-2">Marketing</h4>
-            </div>
-
-            {/* 3 */}
             <div className="flex flex-col items-center">
               <Modal
                 trigger={
@@ -251,8 +203,8 @@ export default async function Home() {
                     staticSrc="/images/icons/legal.png"
                     gifSrc="/images/gifs/legal.gif"
                     alt="solution-icon-3"
-                    width={200}
-                    height={200}
+                    width={250}
+                    height={250}
                   />
                 }
               >
@@ -261,26 +213,43 @@ export default async function Home() {
 
                 <h4>Protecting Your Interests in Every Transaction</h4>
                 <p>
-                  Navigating the sale of a business involves more than finding the right buyer — it requires a clear legal strategy 
-                  to protect your interests, reduce risk, and ensure the transaction runs smoothly. From due diligence to contract 
-                  negotiations, having a trusted legal advisor is essential.
+                  Every business decision carries legal implications — from structuring your company and managing assets to navigating transactions or disputes. 
+                  Having a trusted legal partner ensures your business is protected, compliant, and prepared for growth.
                 </p><br />
 
                 <p>
-                  At RPBX, we partner with experienced legal professionals to support sellers through every stage of the sale. 
-                  That’s why we proudly feature John T. Wilson, a Texas-based attorney with a strong background in business 
-                  and commercial law. His firm provides personalized legal support to entrepreneurs, ensuring each deal is 
-                  legally sound and tailored to your goals.
+                  That’s why the RioPlex Business Exchange has partnered with <strong>Juan Garcia</strong> and the <strong>Villeda Law Group</strong>, a respected firm with more than 40 years
+                   of experience serving businesses and individuals throughout the Rio Grande Valley. Backed by a team led by Antonio Villeda, 
+                   “The Valley’s Business Lawyer,” the firm combines legal expertise with practical business insight to help clients resolve challenges with confidence.
                 </p><br />
 
-                <h4>Key Legal Services for Sellers:</h4>
+                <h4>Comprehensive Legal Services Available Through Villeda Law Group</h4>
                 <ul className="list-disc list-outside pl-6">
-                  <li><strong>Contract Drafting & Review:</strong> Ensure that all agreements are clearly written, legally enforceable, and aligned with your interests.</li>
-                  <li><strong>Seller-Side Legal Representation:</strong> Receive guidance and protection throughout negotiations and at closing.</li>
-                  <li><strong>Negotiation Support:</strong> Get expert help structuring fair and favorable terms.</li>
-                  <li><strong>Legal Due Diligence:</strong> Identify and address potential legal risks before they become deal-breakers.</li>
-                  <li><strong>Entity Structuring & Compliance:</strong> Make sure your business is set up and documented properly for a clean and efficient transaction.</li>
+                  <li><strong>Estate Planning, Probate & Asset Protection</strong> – Safeguard your legacy and protect assets for future generations.</li>
+                  <li><strong>Business & Probate Litigation</strong> – Skilled representation to defend your interests in complex disputes.</li>
+                  <li><strong>IRS Representation</strong> – Guidance and advocacy for audits, disputes, and tax resolution.</li>
+                  <li><strong>Business Transactions</strong>– From contract drafting to deal negotiations, ensure every transaction is legally sound.</li>
+                  <li><strong>Business Immigration</strong> – Support for companies navigating employment-based immigration matters.</li>
+                  <li><strong>Property Tax Representation</strong> – Reduce risk and resolve issues involving property tax challenges.</li>
+                  <li><strong>Federal & State Forfeitures</strong> – Defense against government seizure actions.</li>
+                  <li><strong>Cross-Border Representation</strong> – Legal support for clients with matters in Mexico.</li>
                 </ul><br />
+
+                <h4>Why Partner with Villeda Law Group?</h4>
+                <p>
+                  With deep roots in McAllen and fluent Spanish support, Villeda Law Group offers personalized legal strategies that align with your goals. 
+                  Whether you are planning for the future, protecting assets, or managing the complexities of a business transaction, 
+                  Juan Garcia and his team provide clarity, confidence, and results.
+                </p><br />
+
+                <hr className="mb-6" />
+
+                <h2>Contact Form</h2><br />
+                <h4>Request Legal Services Available Through Villeda Law Group</h4>
+                <p>
+                  Interested in learning how legal representation can strengthen your business? Fill out the form below, and your inquiry will go directly to Juan Garcia at the Villeda Law Group.
+                </p><br />
+
                 <ContactForm />
               </div>
 
@@ -288,7 +257,7 @@ export default async function Home() {
               <h4 className="text-center mt-2">Legal Representation</h4>
             </div>
 
-            {/* 4 */}
+            {/* 3 */}
             <div className="flex flex-col items-center">
               <Modal
                 trigger={
@@ -296,8 +265,8 @@ export default async function Home() {
                     staticSrc="/images/icons/cpa.png"
                     gifSrc="/images/gifs/cpa.gif"
                     alt="solution-icon-4"
-                    width={200}
-                    height={200}
+                    width={250}
+                    height={250}
                   />
                 }
               >
@@ -334,6 +303,16 @@ export default async function Home() {
                   your business’s financial health and growth strategy. Reach out to streamline your financial operations and make your numbers 
                   work for you!
                 </p><br />
+
+                <hr className="mb-6" />
+
+                <h2>Contact Form</h2><br />
+                <h4>Strengthen Your Financial Foundation</h4>
+                <p>
+                  Let your finances drive your business forward with the support of expert CPAs and BKAs from RioPlex Business Exchange. From accurate record-keeping to strategic financial planning, we help manage your finances so you can focus on growing your business.
+                </p><br />
+
+
                 <ContactForm />
               </div>
 
