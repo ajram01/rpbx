@@ -3,8 +3,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/database.types";
 
 type Listing = Database["public"]["Tables"]["business_listings"]["Row"];
-type BusinessMembership = Database["public"]["Tables"]["business_memberships"]["Row"];
-type InvestorProfile = Database["public"]["Tables"]["investor_profiles"]["Row"];
+// type BusinessMembership = Database["public"]["Tables"]["business_memberships"]["Row"];
+// type InvestorProfile = Database["public"]["Tables"]["investor_profiles"]["Row"];
 
 export type Activity =
   | {

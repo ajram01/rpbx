@@ -6,7 +6,7 @@ import { getRecentActivity } from "@/lib/analytics/getRecentActivity";
 import { getUpcomingEvents } from "@/lib/sanity/getUpcomingEvents";
 
 type Listing = Database["public"]["Tables"]["business_listings"]["Row"];
-type InvestorProfile = Database["public"]["Tables"]["investor_profiles"]["Row"];
+// type InvestorProfile = Database["public"]["Tables"]["investor_profiles"]["Row"];
 
 export async function getInvestorDashboardData(
   supabase: SupabaseClient<Database>,
@@ -15,9 +15,7 @@ export async function getInvestorDashboardData(
   // find investor profile for this user (if the user is an investor)
   const { data: invProfile, error: invErr } = await supabase
     .from("investor_profiles")
-    .select(
-      "id, user_id, primary_industry, additional_industries, target_ebitda, target_cash_flow, status, created_at"
-    )
+    .select("*")
     .eq("user_id", userId)
     .maybeSingle(); // allows null if no row
 
