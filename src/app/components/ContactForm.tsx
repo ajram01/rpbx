@@ -68,7 +68,6 @@ export default function ContactForm() {
 
       {/* === Contact Form === */}
       <div className="w-full mb-10">
-        <h2 className="text-xl font-bold text-left mb-7">Contact A Trusted Advisor</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
@@ -94,7 +93,7 @@ export default function ContactForm() {
             className={`rounded-full p-2 text-white transition ${
               status === 'sending'
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-black hover:bg-[#60BC9B]'
+                : 'bg-[#60BC9B] hover:bg-[#4ba88a]'
             }`}
           >
             {status === 'sending' ? 'Sending...' : 'Send Message'}

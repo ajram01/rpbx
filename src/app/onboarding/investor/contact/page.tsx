@@ -110,7 +110,7 @@ export default async function Contact() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 0% Complete</p>
         <Progress value={0} />
@@ -118,7 +118,9 @@ export default async function Contact() {
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <form action={save}>
-      <h1 className="text-2xl font-semibold">Investor Basics</h1>
+      <h1 className="text-2xl font-semibold">Let’s Get to Know You</h1>
+      <p className="mt-2">Introduce yourself to the community! Share a few basics so business owners can see who’s behind the investment. A great profile helps you make authentic local connections from the start.</p>
+      <hr className="mb-1 mt-4" />
 
       <div className="grid grid-cols-2 gap-3 pt-4">
         <label className="block">

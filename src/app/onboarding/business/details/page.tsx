@@ -91,15 +91,17 @@ export default async function DetailsStep() {
   }
 
   return (
-    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center  py-5">
+    <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 60% Complete</p>
         <Progress value={60} />
       </div>
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
-    <Link href="/onboarding/business/contact" className="text-sm underline hover:text-[#60BC9B]">&larr; Contact & Documents</Link>
+    <Link href="/onboarding/business/contact" className="text-sm underline hover:text-[#60BC9B]">&larr; Stay Connected & Build Trust</Link>
     <form action={save}>
-      <h1 className="text-2xl font-semibold mt-2">Details</h1>
+      <h1 className="text-2xl font-semibold mt-2">Your Business at a Glance</h1>
+      <p className="mt-2">Give investors a quick snapshot of your business’s scale and performance. These details help showcase your growth, stability, and potential for future success.</p>
+      <hr className="mb-1 mt-4" />
 
       <label className="block pt-4">
         <span>Ownership percentage</span>
