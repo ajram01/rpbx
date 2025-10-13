@@ -78,7 +78,7 @@ export default async function Review() {
   }
 
   return (
-        <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center py-5">
+        <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-5">
       <div className='mx-auto max-w-lg lg:min-w-[550px]'>
         <p className='mb-2'> Profile 90% Complete</p>
         <Progress value={90} />

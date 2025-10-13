@@ -28,12 +28,14 @@
     "react": "^19.0.0",
     "react-cookie-consent": "^9.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^2.15.4",
     "resend": "^6.1.2",
     "sanity": "^4.8.1",
     "shadcn-ui": "^0.9.5",
     "stripe": "^18.4.0",
     "styled-components": "^6.1.19",
     "swiper": "^12.0.2",
+    "swr": "^2.3.6",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
@@ -49,5 +51,8 @@
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5"
+  },
+  "overrides": {
+    "react-is": "^19.0.0-rc-69d4b800-20241021"
   }
 }
