@@ -22,6 +22,7 @@ import {
   getInvestorDashboardData,
   type InvestorDashboardData,
 } from "@/lib/dashboard/getInvestorDashboardData";
+import ListingTrafficChart from "./_components/ListingTrafficChart";
 
 export const metadata: Metadata = {
   title: "User Dashboard | RioPlex Business Exchange",
@@ -46,6 +47,50 @@ export default async function Dashboard() {
     .maybeSingle<{ first_name: string | null; user_type: "business" | "investor" | "admin" | null }>();
 
   const userType = profile?.user_type ?? "business";
+
+  // Build chart props from DB + your routing
+let chartTitle = "";
+let chartDescription = "";
+let pagePaths: string[] = [];
+let labels: Record<string, string> = {};
+
+if (userType === "business") {
+  // One line per listing the owner has (public page route you shared)
+  const { data: owned } = await supabase
+    .from("business_listings")
+    .select("id, title, is_active")
+    .eq("owner_id", user.id)
+    .eq("is_active", true)
+    .order("updated_at", { ascending: false })
+    .limit(50);
+
+  pagePaths = (owned ?? []).map((l) => `/business-listing/${l.id}`);
+  labels = Object.fromEntries(
+    (owned ?? []).map((l) => [`/business-listing/${l.id}`, l.title ?? l.id])
+  );
+
+  chartTitle = "Listing Page Views";
+  chartDescription = "GA4 page views for your listings (last 6 months)";
+} else {
+  // Investors have a single profile page
+  const { data: inv } = await supabase
+    .from("investor_profiles")
+    .select("id, first_name, last_name")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (inv) {
+    const path = `/investor-listing/${inv.id}`;
+    pagePaths = [path];
+    const display =
+      `${inv.first_name ?? ""} ${inv.last_name ?? ""}`.trim() || "Your Profile";
+    labels = { [path]: display };
+  }
+
+  chartTitle = "Profile Views";
+  chartDescription =
+    "GA4 page views for your investor profile (last 6 months)";
+}
 
   const displayName =
     profile?.first_name ??
@@ -108,6 +153,20 @@ export default async function Dashboard() {
               <UpcomingEventsList events={dashboardData.events} />
             </div>
           </div>
+          <div className="w-full lg:w-[1140px] mx-auto px-5 lg:px-0 mt-4">
+          <ListingTrafficChart
+            title={chartTitle}
+            description={chartDescription}
+            pagePaths={pagePaths}
+            seriesLabels={labels}
+            months={6}
+            emptyNote={
+              userType === "business"
+                ? "No listing traffic yet — once your listings get views, lines will appear here."
+                : "No profile views yet — share your profile and check back soon."
+            }
+          />
+        </div>
         </div>
       </div>
 
