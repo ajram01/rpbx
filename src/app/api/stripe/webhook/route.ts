@@ -6,13 +6,31 @@ import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-// ⬇For local dev, this must be the current `whsec_...` from `stripe listen`
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
+
+async function getSubStrict(id: string): Promise<Stripe.Subscription> {
+  const resp = await stripe.subscriptions.retrieve(id, {
+    expand: ['items.data.price', 'customer'],
+  });
+  // Some stripe type versions expose Response<T>; force it to Subscription.
+  return resp as unknown as Stripe.Subscription;
+}
 
 function getSupabaseAdmin() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY! // correct name
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
   return createClient(url, serviceKey, { auth: { persistSession: false } })
+}
+
+function toIsoOrNull(sec?: number | null): string | null {
+  return Number.isFinite(sec) ? new Date((sec as number) * 1000).toISOString() : null;
+}
+
+// NEW: promo detector
+function isPromo(price: Stripe.Price) {
+  const lk = (price.lookup_key ?? '').toLowerCase()
+  const purpose = (price.metadata?.purpose ?? '').toLowerCase()
+  return lk.startsWith('business_promo') || purpose === 'listing_promo'
 }
 
 function resolveUserType(price: Stripe.Price): 'investor' | 'business' | null {
@@ -46,76 +64,81 @@ export async function POST(req: NextRequest) {
       event.type === 'customer.subscription.deleted'
     ) {
       const sub = event.data.object as Stripe.Subscription
-      const full = await stripe.subscriptions.retrieve(sub.id, {
-        expand: ['items.data.price', 'customer'],
-      })
+      
+      const full = await getSubStrict(sub.id);
+
+      // Now this is typed and works:
+
 
       const item = full.items?.data?.[0]
       if (!item?.price) {
         console.warn('Subscription has no item/price', { subId: full.id })
         return new Response('ok', { status: 200 })
       }
-
+      
       const price = item.price as Stripe.Price
-      const userType = resolveUserType(price)
-      if (!userType) {
-        console.warn('Could not resolve user_type from price', {
-          priceId: price.id,
-          lookup_key: price.lookup_key,
-          metadata: price.metadata,
-        })
-        return new Response('ok', { status: 200 })
-      }
-
       const admin = getSupabaseAdmin()
 
-      // Prefer metadata set during Checkout Session: subscription_data.metadata.supabase_user_id
+      // Resolve userId
       let userId: string | null = full.metadata?.['supabase_user_id'] ?? null
       if (!userId) {
         const stripeCustomerId =
           typeof full.customer === 'string' ? full.customer : full.customer?.id
-        if (!stripeCustomerId) {
-          console.warn('Missing stripe customer on subscription', full.id)
-          return new Response('ok', { status: 200 })
-        }
+        if (!stripeCustomerId) return new Response('ok', { status: 200 })
 
+        // FIX: your schema shows customers(id, stripe_customer_id), not user_id
         const { data: mapRow, error: mapErr } = await admin
           .from('customers')
-          .select('user_id')
+          .select('id')          // <— was 'user_id'
           .eq('stripe_customer_id', stripeCustomerId)
           .maybeSingle()
-
-        if (mapErr) {
-          console.error('customers lookup error:', mapErr)
-          return new Response('DB map error', { status: 500 })
-        }
-
-        userId = mapRow?.user_id ?? null
+        if (mapErr) return new Response('DB map error', { status: 500 })
+        userId = mapRow?.id ?? null
       }
 
-      if (!userId) {
-        console.warn('Could not resolve userId for sub', { subId: full.id })
+      // ==== A) Boosted listing (guarded) ====
+      if (isPromo(price)) {
+        const listingId = full.metadata?.['listing_id'] ?? null
+        const status = full.status
+        const periodEnd = toIsoOrNull(item?.current_period_end);
+
+        if (listingId) {
+          // Upsert a link row (create table listing_promotions as shown earlier)
+          await admin.from('listing_promotions').upsert({
+            listing_id: listingId,
+            stripe_subscription_id: full.id,
+            status,
+            current_period_end: periodEnd,
+            cancel_at_period_end: !!full.cancel_at_period_end,
+          })
+
+          // Optional cache on the listing for badge
+          const promoted =
+            status === 'active' ||
+            status === 'trialing' ||
+            (status === 'past_due' && !full.cancel_at_period_end)
+          await admin
+            .from('business_listings')
+            .update({ is_promoted: promoted })
+            .eq('id', listingId)
+        }
+
         return new Response('ok', { status: 200 })
       }
 
-      const status = full.status // active | trialing | past_due | canceled | ...
+      // ==== B) Your existing base-plan logic unchanged ====
+      const userType = resolveUserType(price)
+      if (!userType || !userId) return new Response('ok', { status: 200 })
+
+      const status = full.status
       const nextType =
-        (status === 'active' || status === 'trialing') ? userType : 'member'
+        status === 'active' || status === 'trialing' ? userType : 'member'
 
       const { error: updErr } = await admin
         .from('profiles')
         .update({ user_type: nextType })
         .eq('id', userId)
-
-      if (updErr) {
-        console.error('profiles update error:', {
-          code: updErr.code,
-          message: updErr.message,
-          details: updErr.details,
-          hint: updErr.hint,
-        })
-        return new Response('DB update error', { status: 500 })
-      }
+      if (updErr) return new Response('DB update error', { status: 500 })
 
       console.log(`Set profiles.user_type=${nextType} for user ${userId}`)
     }

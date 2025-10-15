@@ -116,11 +116,11 @@ if (userType === "business") {
           {/* Action buttons */}
           <div className="flex flex-col lg:flex-row gap-5">
             <Link
-              href={userType === "business" ? "/owner/listings" : "/listings"}
+              href={userType === "business" ? "/dashboard/listings" : "/listings"}
               className="flex-1 flex flex-col items-center p-5 bg-[#60A1BC] rounded-2xl hover:opacity-90 transition"
             >
               <p className="text-white">
-                {userType === "business" ? "Update Listing Info" : "Browse Listings"}
+                {userType === "business" ? "View Listing Info" : "Update Profile Info"}
               </p>
             </Link>
             <Link
