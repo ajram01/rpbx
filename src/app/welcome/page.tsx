@@ -1,11 +1,10 @@
-// app/welcome/page.tsx
 import Image from "next/image";
-import Button from "../components/Button";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 import { createClientRSC } from "@/../utils/supabase/server";
+import EmailVerifiedCTA from "@/components/EmailVerifiedCTA";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // Map a role to the page they should land on
 type Role = "business" | "investor" | "admin" | "member" | null;
@@ -16,19 +15,17 @@ function nextPathForRole(role: Role) {
   return "/dashboard";
 }
 
-// Narrower helper so we never return an arbitrary string as a Role
 function asRole(v?: string | null): Exclude<Role, null> | null {
   return v === "investor" || v === "business" || v === "admin" ? v : null;
 }
 
-// Try to read intended role directly from the Checkout Session metadata (race-proof vs webhook)
 async function getIntendedRole(sessionId?: string): Promise<Role> {
   if (!sessionId) return null;
 
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ["subscription.items.data.price"],
   });
-  // session.subscription is string | Stripe.Subscription | null
+
   const subscription =
     typeof session.subscription === "object" && session.subscription !== null
       ? (session.subscription as Stripe.Subscription)
@@ -53,11 +50,9 @@ export default async function Welcome({
   const sp = await searchParams;
   const session_id = Array.isArray(sp.session_id) ? sp.session_id[0] : sp.session_id;
 
-  // 1) Figure out intended role from Stripe (if session_id is present)
   const intendedRole = await getIntendedRole(session_id);
   const intendedNext = nextPathForRole(intendedRole);
 
-  // 2) If logged in, go straight to the right place
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -69,7 +64,6 @@ export default async function Welcome({
     redirect(nextPathForRole(role));
   }
 
-  // 3) Not logged in: show your CTA (no redirect), but aim the next= param smartly
   const loginNext = encodeURIComponent(intendedNext || "/onboarding/business/basics");
 
   return (
@@ -86,14 +80,18 @@ export default async function Welcome({
 
         <h1 className="text-2xl font-semibold pt-10">Welcome to RPBX!</h1>
         <p className="mt-2 text-neutral-600">
-          We’ve saved your purchase. Sign in to complete setup.
+          We’ve saved your purchase. To keep your account secure, please verify your email.
+          We’ve sent a link to the email used to create your account.
         </p>
 
-        <div className="mt-6 flex flex-col gap-3">
-          <Button className="w-full" href={`/login?next=${loginNext}`}>
-            Sign in to Continue
-          </Button>
-        </div>
+        {/* ✅ Checkbox + Button */}
+        <EmailVerifiedCTA loginNext={loginNext} />
+      </div>
+
+      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+        If you come across any issues, contact us at{" "}
+        <a href="tel:9563225942">956-322-5942</a> or{" "}
+        <a href="mailto:info@rioplexbizx.com">info@rioplexbizx.com</a>.
       </div>
     </div>
   );

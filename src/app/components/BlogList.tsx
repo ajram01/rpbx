@@ -141,7 +141,7 @@ export default function BlogList() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
           {posts.map((post) => (
-            <div key={post._id} className="bg-white rounded-lg shadow-lg border">
+            <div key={post._id} className="bg-white rounded-lg shadow-lg border transition-all duration-300 hover:scale-101 hover:shadow-xl">
               <img
                 src={post.mainImage?.asset?.url}
                 alt={post.mainImage?.alt || post.title}
@@ -173,7 +173,7 @@ export default function BlogList() {
         {page > 1 && (
           <button
             onClick={() => setPage(page - 1)}
-            disabled={loading} // disable while loading
+            disabled={loading} // disable while loading 
             className="px-4 py-2 border rounded-xl bg-white shadow-lg hover:bg-[#60BC9B] hover:text-white disabled:opacity-50"
           >
             Previous
