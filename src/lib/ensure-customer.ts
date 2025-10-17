@@ -1,29 +1,34 @@
-// lib/ensure-customer.ts (updated)
-import { stripe } from '@/lib/stripe'
-import { createClientRSC } from '../../utils/supabase/server'
+// lib/ensure-customer.ts
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
-export async function ensureCustomer() {
-  const supabase = await createClientRSC()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Not authenticated')
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  const { data: mapping } = await supabase
+export async function ensureCustomer(user: { id: string; email?: string | null }) {
+  const admin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!, // service role – server only
+    { auth: { persistSession: false } }
+  );
+
+  const { data: row, error } = await admin
     .from('customers')
     .select('stripe_customer_id')
-    .eq('user_id', user.id)
-    .maybeSingle()
+    .eq('id', user.id)
+    .maybeSingle();
+  if (error) throw error;
 
-  if (mapping?.stripe_customer_id) return mapping.stripe_customer_id
+  if (row?.stripe_customer_id) return row.stripe_customer_id;
 
   const customer = await stripe.customers.create({
     email: user.email ?? undefined,
-    metadata: { user_id: user.id },
-  })
+    metadata: { supabase_user_id: user.id },
+  });
 
-  await supabase.from('customers').insert({
-    user_id: user.id,
-    stripe_customer_id: customer.id,
-  })
+  const { error: upsertErr } = await admin
+    .from('customers')
+    .upsert({ id: user.id, stripe_customer_id: customer.id });
+  if (upsertErr) throw upsertErr;
 
-  return customer.id
+  return customer.id;
 }

@@ -5,6 +5,7 @@ import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ConfirmOnSubmit } from "./_client/ListingActions";
+import { cookies } from "next/headers"
 
 type Listing = {
   id: string;
@@ -24,7 +25,7 @@ type Promotion = {
 export default async function OwnerListings() {
   const supabase = await createClientRSC();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?next=/owner/listings");
+  if (!user) redirect("/login?next=/dashboard/listings");
 
   // Fetch listings
   const { data: listings } = await supabase
@@ -45,35 +46,75 @@ export default async function OwnerListings() {
   }
 
   // ---- SERVER ACTIONS ----
-  async function startBoost(listingId: string) {
-    "use server";
-    const { createClientRSC } = await import("@/../utils/supabase/server");
-    const sb = await createClientRSC();
-    const { data: { user } } = await sb.auth.getUser();
-    if (!user) redirect("/login?next=/owner/listings");
+// app/owner/listings/page.tsx  (only the server action changed)
+async function startBoost(listingId: string) {
+  "use server";
 
-    const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-    const resp = await fetch(`${origin}/api/checkout`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PROMO ?? "", // e.g. "price_1S5BQi..."
-        quantity: 1,
-        metadata: { listing_id: listingId, purpose: "listing_promo" },
-        successUrl: `${origin}/owner/listings?promoted=${listingId}`,
-        cancelUrl: `${origin}/owner/listings`,
-      }),
-    });
-    if (!resp.ok) redirect("/owner/listings?err=promo");
-    const { url } = await resp.json();
-    redirect(url);
+  const { createClientRSC } = await import("@/../utils/supabase/server");
+  const supabase = await createClientRSC();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/dashboard/listings");
+
+  // Verify listing ownership
+  const { data: listing, error: listErr } = await supabase
+    .from("business_listings")
+    .select("id, owner_id")
+    .eq("id", listingId)
+    .maybeSingle();
+
+  if (listErr) redirect("/dashboard/listings?err=promo_db");
+  if (!listing || listing.owner_id !== user.id) redirect("/dashboard/listings?err=forbidden");
+
+  // Whitelist promo price
+  const promoPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_PROMO;
+  if (!promoPriceId) redirect("/dashboard/listings?err=missing_price");
+
+  const { ensureCustomer } = await import("@/lib/ensure-customer");
+  const customerId = await ensureCustomer(user);
+
+  const { stripe } = await import("@/lib/stripe");
+
+  // (Optional) ensure the price is recurring
+  const price = await stripe.prices.retrieve(promoPriceId);
+  if (price.type !== "recurring") redirect("/dashboard/listings?err=not_recurring");
+
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "subscription",
+    customer: customerId,
+    line_items: [{ price: promoPriceId, quantity: 1 }],
+    success_url: `${origin}/dashboard/listings?promoted=${listingId}`,
+    cancel_url:  `${origin}/dashboard/listings`,
+    subscription_data: {
+      metadata: {
+        supabase_user_id: user.id,
+        purpose: "listing_promo",
+        listing_id: listingId,
+      },
+    },
+    metadata: {
+      supabase_user_id: user.id,
+      purpose: "listing_promo",
+      listing_id: listingId,
+    },
+    allow_promotion_codes: true,
+  });
+
+  // ✅ Type-narrowing guard so redirect gets a definite string
+  if (!session.url) {
+    console.error("Stripe returned no session.url", { sessionId: session.id });
+    redirect("/dashboard/listings?err=no_session_url");
   }
+
+  redirect(session.url); // session.url is now string, TS happy
+}
 
   async function openPortal() {
     "use server";
     const { openBillingPortal } = await import("@/app/server/billing");
     const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-    const url = await openBillingPortal(`${origin}/owner/listings`);
+    const url = await openBillingPortal(`${origin}/dashboard/listings`);
     redirect(url);
   }
 
@@ -82,7 +123,7 @@ export default async function OwnerListings() {
     const { createClientRSC } = await import("@/../utils/supabase/server");
     const sb = await createClientRSC();
     const { data: { user } } = await sb.auth.getUser();
-    if (!user) redirect("/login?next=/owner/listings");
+    if (!user) redirect("/login?next=/dashboard/listings");
 
     // Hard delete (only if you really want to allow this without Stripe portal)
     const { error } = await sb
@@ -91,7 +132,7 @@ export default async function OwnerListings() {
       .eq("id", listingId)
       .eq("owner_id", user.id);
     if (error) console.error(error);
-    redirect("/owner/listings");
+    redirect("/dashboard/listings");
   }
 
   const promoByListing = new Map<string, Promotion[]>();
