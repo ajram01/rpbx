@@ -53,7 +53,7 @@ function PricingTab(props: PricingTabProps) {
 
   return (
     <div className={`w-full`}>
-      <div className="relative flex flex-col h-full p-6 rounded-2xl bg-white border border-slate-200 shadow shadow-slate-950/5">
+      <div className="relative flex flex-col h-full p-6 rounded-2xl bg-white border border-slate-200 shadow shadow-slate-950/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
         {props.popular && (
           <div className="absolute top-0 right-0 mr-6 -mt-4">
             <div className="inline-flex items-center text-xs font-semibold py-1.5 px-3 bg-[#60BC9B] text-white rounded-full shadow-sm shadow-slate-950/5">

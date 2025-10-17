@@ -54,15 +54,15 @@ export default async function Events() {
               const formattedTime = eventDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 
               return (
-                <div key={event._id} className="bg-white rounded-lg shadow-lg border-2 border-grey-500 flex flex-col lg:flex-row gap-5">
+                <div key={event._id} className="bg-white rounded-lg shadow-lg border-2 border-grey-500 flex flex-col lg:flex-row gap-5 transition-all duration-300 hover:scale-101 hover:shadow-xl">
                   
                   {/* Event Image */}
                   <div className="flex min-w-1/4">
-              <img
-                src={event.image?.asset?.url}
-                alt={event.image?.alt || event.title}
-                className="rounded-t-lg lg:rounded-l-lg w-full lg:w-[300px] h-auto object-cover"
-              />
+                    <img
+                      src={event.image?.asset?.url}
+                      alt={event.image?.alt || event.title}
+                      className="rounded-t-lg lg:rounded-none lg:rounded-l-lg w-full lg:w-[300px] h-auto object-cover"
+                    />
                   </div>
 
                   <div className="flex flex-col p-5 gap-2">

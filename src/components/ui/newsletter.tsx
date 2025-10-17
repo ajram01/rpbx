@@ -17,9 +17,9 @@ export default function NewsletterSignup() {
 
   return (
     <div className="flex flex-col items-center bg-[url('/images/backgrounds/black-mint-bg.png')] bg-cover bg-center bg-fixed py-10 px-4 lg:px-0">
-      <div className="bg-white flex flex-col items-center w-full lg:w-[900px] min-h-[300px] rounded-2xl py-10 px-6 lg:px-20 mx-4 shadow-lg border-2 border-grey-500">
+      <div className="bg-white flex flex-col items-center w-full lg:w-[900px] min-h-[300px] rounded-2xl py-10 px-6 lg:px-20 mx-4 shadow-lg border-2 border-grey-500 transition-transform duration-300 hover:scale-101 hover:shadow-xl">
         <h2 className="text-center mb-2">Unlock Your Growth with Expert Insights</h2>
-        <p className="text-center">
+        <p className="text-center ">
           Join our monthly RPBX newsletter for exclusive resources, investor opportunities, and expert advice to fuel your business success. It’s free, insightful, and spam-free!
         </p>
 

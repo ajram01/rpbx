@@ -53,7 +53,7 @@ export default async function Investor() {
             <h2 className="text-white">How It Works</h2>
 
             <div className="flex flex-col gap-6 mt-10">
-              <div className="flex flex-row">
+              <div className="flex flex-row transition-transform duration-300 lg:hover:translate-x-2">
                 <div className="flex items-center justify-center min-w-12 max-h-12 bg-[#61BD9C] rounded-full mr-4">
                   <h4 className="text-white">1</h4>
                 </div>
@@ -63,7 +63,7 @@ export default async function Investor() {
                 </div>
               </div>
 
-              <div className="flex flex-row">
+              <div className="flex flex-row transition-transform duration-300 lg:hover:translate-x-2">
                 <div className="flex items-center justify-center min-w-12 max-h-12 bg-[#61BD9C] rounded-full mr-4">
                   <h4 className="text-white">2</h4>
                 </div>
@@ -73,7 +73,7 @@ export default async function Investor() {
                 </div>
               </div>
 
-              <div className="flex flex-row">
+              <div className="flex flex-row transition-transform duration-300 lg:hover:translate-x-2">
                 <div className="flex items-center justify-center min-w-12 max-h-12 bg-[#61BD9C] rounded-full mr-4">
                   <h4 className="text-white">3</h4>
                 </div>
@@ -104,7 +104,7 @@ export default async function Investor() {
               alt="Investors Feed"
               width={2000}
               height={450}
-              className="w-full h-auto"
+              className="w-full h-auto transition-transform duration-300 lg:hover:-translate-y-2"
               priority
             />
           </div>

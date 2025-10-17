@@ -8,7 +8,7 @@ export default function Footer() {
     <div>
     <div className="bg-[url('/images/backgrounds/footer-bg.png')] bg-cover bg-center flex justify-center py-10  px-4 lg:px-0">
       <div className="w-[1140px]">
-        <p className="text-white">Follow us on</p>
+        <p className="text-white">Follow us on:</p>
         <div className="flex justify-left gap-4 mt-2">
           <Link href="https://www.facebook.com/profile.php?id=61567482254380" target="_blank">
             <Image src="/images/icons/facebook.png" alt="Facebook" width={24} height={24} />
@@ -31,21 +31,20 @@ export default function Footer() {
         </div>
 
 
-        <div className="mt-10 flex items-center justify-between">
-        <div>
-            <p className="text-white">(956) 322-5942</p>
-            <p className="text-white">info@rioplexbizx.com</p>
-            <p className="text-white">100 E Nolana Ave Suite #130, McAllen, TX 78504</p>
+      <div className="mt-10 flex items-end justify-between">
+        <div className="flex flex-col justify-end">
+          <p className="text-white">(956) 322-5942</p>
+          <p className="text-white">info@rioplexbizx.com</p>
         </div>
 
         <Image
-            src="/images/logos/Rio-Plex-Logo-Main-White.png"
-            alt="Footer Logo"
-            width={150}
-            height={50}
-            className="object-contain"
+          src="/images/logos/Rio-Plex-Logo-Main-White.png"
+          alt="Footer Logo"
+          width={150}
+          height={50}
+          className="object-contain"
         />
-        </div>
+      </div>
 
       </div>
       </div>
