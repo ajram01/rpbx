@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
