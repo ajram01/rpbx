@@ -11,7 +11,7 @@ export default function Accordion({ title, children }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg border-x-2 border-t-2 border-grey-500">
+    <div className="bg-white rounded-3xl shadow-lg border-x-2 border-t-2 border-grey-500 transition-all duration-300 hover:translate-x-2 hover:shadow-xl">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center p-5 text-left"

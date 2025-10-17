@@ -3,10 +3,10 @@ import Link from "next/link";
 import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
-import Modal from "@/app/components/Modal";
 import CardCarousel from "../components/Card-carousel";
 import VideoSection from "../components/VideoSection";
 import type { Metadata } from "next";
+import BusinessSlider from "@/components/sliders/businessslider";
 
 export const metadata: Metadata = {
   title: "About Business Accounts | RioPlex Business Exchange",
@@ -56,7 +56,7 @@ export default async function Business() {
             <h2 className="text-white">How It Works</h2>
 
             <div className="flex flex-col gap-6 mt-10">
-              <div className="flex flex-row">
+              <div className="flex flex-row transition-transform duration-300 lg:hover:translate-x-2">
                 <div className="flex items-center justify-center min-w-12 max-h-12 bg-[#61BD9C] rounded-full mr-4">
                   <h4 className="text-white">1</h4>
                 </div>
@@ -66,7 +66,7 @@ export default async function Business() {
                 </div>
               </div>
 
-              <div className="flex flex-row">
+              <div className="flex flex-row transition-transform duration-300 lg:hover:translate-x-2">
                 <div className="flex items-center justify-center min-w-12 max-h-12 bg-[#61BD9C] rounded-full mr-4">
                   <h4 className="text-white">2</h4>
                 </div>
@@ -76,7 +76,7 @@ export default async function Business() {
                 </div>
               </div>
 
-              <div className="flex flex-row">
+              <div className="flex flex-row transition-transform duration-300 lg:hover:translate-x-2">
                 <div className="flex items-center justify-center min-w-12 max-h-12 bg-[#61BD9C] rounded-full mr-4">
                   <h4 className="text-white">3</h4>
                 </div>
@@ -107,7 +107,7 @@ export default async function Business() {
               alt="Investors Feed"
               width={2000}
               height={450}
-              className="w-full h-auto"
+              className="w-full h-auto transition-transform duration-300 lg:hover:-translate-y-2"
               priority
             />
           </div>
@@ -122,60 +122,7 @@ export default async function Business() {
 
         {/* Row 2 */}
         <div className="flex flex-col lg:flex-row gap-y-6 lg:gap-y-0 lg:gap-x-[15px] w-full pr-4 lg:pb-10">
-          <div className="bg-white shadow-lg border-y-2 border-r-2 border-grey-500 flex-1 flex justify-center lg:justify-end rounded-tr-2xl rounded-br-2xl">
-            <div className="flex flex-col items-start w-full lg:w-[560px] py-8 lg:py-10 px-6 lg:px-2">
-              <h2>Get Your Business Valuation</h2>
-              <p className="lg:pr-15  pt-1">
-                 Know the true value of your business with a valuation powered by Biz Equity. RPBX members get 50% off their valuations, making it easier than ever to make informed decisions whether you’re planning to sell, grow, or invest.
-              </p>
-              <Link href="https://rioplexbizx.bizequity.com" target="_blank" ><Button className="mt-3 lg:mt-3 w-full sm:w-auto" variant="white">Get My Valuation</Button></Link>
-
-              {/* Learn More button */}
-              <Modal
-                trigger={
-                  <Button className="mt-3 lg:mt-3 w-full sm:w-auto" variant="white">Learn More</Button>
-                }
-              >
-              <div className="space-y-2">
-                <h2>Business Valuation</h2><br />
-                  <h4>What is Business Valuation?</h4>
-                  <p>
-                    Business valuation is the process of determining what a company is worth. It’s a crucial step for any
-                    business owner who’s looking to sell, merge, or even plan for future growth. Members save 50% on their valuation when they subscribe to RioPlex Business Exchange.
-                  </p><br />
-
-                  <h4>Key Components We Look At:</h4>
-                  <ul className="list-disc list-outside pl-6">
-                    <li><strong>Financials:</strong> We analyze the business’s revenue, profits, debts, and cash flow.</li>
-                    <li><strong>Industry &amp; Market Trends:</strong> We look at how the market and competitors are performing. This helps gauge how well your business stands in the current landscape.</li>
-                    <li><strong>Assets &amp; Liabilities:</strong> This includes tangible assets (like equipment) and intangible ones (like patents or brand reputation), as well as debts and other obligations.</li>
-                    <li><strong>Operations &amp; Customers:</strong> How well does the business run? Is the customer base stable? Recurring revenue streams and efficient operations add more value.</li>
-                  </ul><br />
-
-                  <h4>How We Valuate:</h4>
-                  <ul className="list-disc list-outside pl-6">
-                    <li><strong>Comparable Company Analysis:</strong> We compare your business to others in your industry that have recently sold or are publicly traded.</li>
-                    <li><strong>Discounted Cash Flow (DCF):</strong> We project future cash flow to find today’s value.</li>
-                    <li><strong>Asset-Based Valuation:</strong> Sometimes it’s as simple as the assets minus liabilities.</li>
-                  </ul><br />
-
-                  <h4>Why It Matters:</h4>
-                  <p>
-                    A fair valuation helps sellers get the best price and buyers make smart investments. It’s all about knowing what your business is truly worth.
-                  </p>
-
-                  <p>
-                    At RioPlex Business Exchange, we help make the process clear, accurate, and aligned with your goals, so whether you’re buying, selling, or planning for the future, you’ll have the right insights to move forward.
-                  </p><br />
-
-                  <Link href="/business"><Button className="mb-10 w-full max-w-[1000px]">Get My Valuation</Button></Link>
-              </div>
-
-              
-              </Modal>
-
-            </div>
-          </div>
+          <BusinessSlider />
 
           <div className="flex-1 flex justify-center lg:justify-start">
             <div className="flex flex-col items-center text-center w-full lg:w-[560px] px-4 overflow-hidden">
