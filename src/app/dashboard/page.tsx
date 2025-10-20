@@ -145,7 +145,7 @@ export default async function Dashboard() {
     <div className="relative">
       {/* If not entitled, show the overlay + blur everything underneath */}
       {!entitled && (
-        <PaywallOverlay intendedRole={userType} priceId={basePriceId} />
+        <PaywallOverlay priceId={basePriceId} />
       )}
 
       {/* Blur the dashboard when not entitled (no data leaks) */}

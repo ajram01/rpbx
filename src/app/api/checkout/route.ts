@@ -6,11 +6,11 @@ import { ensureCustomer } from "@/lib/ensure-customer";
 
 /**
  * Supports base plans (business monthly/yearly/trial, investor monthly/yearly)
- * and (optionally) listing promo. Enforces:
- *  - Only whitelisted prices can be used.
- *  - Role intent is derived from the Price metadata (or passed intent) and saved in metadata.
- *  - Optional trial days applied for a specific "trial" price variant or via price metadata.
- *  - Duplicate base subscription prevention: sends to Billing Portal if one already exists.
+ * and (optionally) listing promo. Enforces via Stripe Price metadata:
+ *  - Base membership prices must have metadata.user_type = 'business' | 'investor'
+ *  - Listing promo prices must have metadata.purpose = 'listing_promo' and a listingId
+ *  - Optional trial days via price.metadata.trial_days (numeric)
+ *  - Duplicate base subscription prevention -> Billing Portal
  */
 export async function POST(req: Request) {
   try {
@@ -33,7 +33,6 @@ export async function POST(req: Request) {
     let cancelUrl: string | undefined;
     let listingId: string | undefined;
     let purpose: "listing_promo" | "listing_plan" | "base_membership" | undefined;
-    let userTypeIntended: "business" | "investor" | undefined; // optional hint from UI
 
     if (ct.includes("application/json")) {
       const body = await req.json();
@@ -46,7 +45,6 @@ export async function POST(req: Request) {
       successUrl = body.successUrl;
       cancelUrl = body.cancelUrl;
       listingId = body.listingId;
-      userTypeIntended = body.userTypeIntended;
       purpose = body.purpose;
     } else {
       const form = await req.formData();
@@ -57,8 +55,6 @@ export async function POST(req: Request) {
       const p = form.get("purpose")?.toString();
       if (p === "listing_promo" || p === "listing_plan" || p === "base_membership")
         purpose = p;
-      const ut = form.get("userTypeIntended")?.toString();
-      if (ut === "business" || ut === "investor") userTypeIntended = ut;
     }
 
     if (!priceId) return new Response("Missing priceId", { status: 400 });
@@ -83,31 +79,7 @@ export async function POST(req: Request) {
     // Decide purpose: default promo when listingId present, else base
     const finalPurpose = purpose ?? (listingId ? "listing_promo" : "base_membership");
 
-    // ---- Whitelist prices per purpose (security)
-    // Fill these envs with your Stripe price IDs.
-    const BASE_BUSINESS = [
-      process.env.NEXT_PUBLIC_STRIPE_PRICE_BUSINESS_MONTHLY!,
-      process.env.NEXT_PUBLIC_STRIPE_PRICE_BUSINESS_YEARLY!,
-      process.env.NEXT_PUBLIC_STRIPE_PRICE_BUSINESS_TRIAL!, // trial that rolls to monthly
-    ].filter(Boolean);
-
-    const BASE_INVESTOR = [
-      process.env.NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_MONTHLY!,
-      process.env.NEXT_PUBLIC_STRIPE_PRICE_INVESTOR_YEARLY!,
-    ].filter(Boolean);
-
-    const allowedPricesByPurpose: Record<string, string[]> = {
-      listing_promo: [process.env.NEXT_PUBLIC_STRIPE_PRICE_PROMO!].filter(Boolean),
-      listing_plan: [process.env.NEXT_PUBLIC_STRIPE_PRICE_LISTING_PLAN!].filter(Boolean),
-      base_membership: [...BASE_BUSINESS, ...BASE_INVESTOR],
-    };
-
-    const allowed = allowedPricesByPurpose[finalPurpose] ?? [];
-    if (!allowed.length || !allowed.includes(priceId)) {
-      return new Response("Invalid price for purpose", { status: 400 });
-    }
-
-    // Fetch and validate price
+    // Fetch and validate price (metadata-driven; no env whitelist)
     const fetchedPrice = await stripe.prices.retrieve(priceId, { expand: ["product"] });
     if (!fetchedPrice.active) {
       return new Response("Inactive price", { status: 400 });
@@ -116,31 +88,41 @@ export async function POST(req: Request) {
       return new Response("Price must be recurring for subscriptions", { status: 400 });
     }
 
-    // Determine intended role from Price metadata (authoritative), fallback to lookups/UI
-    const priceRole = (fetchedPrice.metadata?.user_type ?? "").toLowerCase();
-    let resolvedRole: "business" | "investor" | null = null;
-    if (priceRole === "business" || priceRole === "investor") {
-      resolvedRole = priceRole;
-    } else if (userTypeIntended === "business" || userTypeIntended === "investor") {
-      resolvedRole = userTypeIntended;
+    const priceUserType = String(fetchedPrice.metadata?.user_type || "").toLowerCase(); // 'business' | 'investor' | ''
+    const pricePurpose = String(fetchedPrice.metadata?.purpose || "").toLowerCase();     // e.g., 'listing_promo' | ''
+
+    // ---- Purpose/eligibility checks:
+    if (finalPurpose === "base_membership") {
+      // Must be one of our two base roles; do not allow listing promo prices here
+      const isBaseUserType = priceUserType === "business" || priceUserType === "investor";
+      if (!isBaseUserType) {
+        return new Response("Invalid price for purpose", { status: 400 });
+      }
+      if (pricePurpose === "listing_promo") {
+        return new Response("Invalid price for purpose", { status: 400 });
+      }
     }
 
-    // For base membership, enforce that business prices map to business, etc.
-    if (finalPurpose === "base_membership") {
-      const isBusinessPrice = BASE_BUSINESS.includes(priceId);
-      const isInvestorPrice = BASE_INVESTOR.includes(priceId);
-      if (isBusinessPrice && resolvedRole !== "business") resolvedRole = "business";
-      if (isInvestorPrice && resolvedRole !== "investor") resolvedRole = "investor";
+    if (finalPurpose === "listing_promo") {
+      // Require listing-specific promo price AND a listingId
+      if (pricePurpose !== "listing_promo" || !listingId) {
+        return new Response("Invalid price for purpose", { status: 400 });
+      }
     }
+
+    // Determine role from price metadata (authoritative)
+    const resolvedRole: "business" | "investor" | null =
+      priceUserType === "business" || priceUserType === "investor"
+        ? priceUserType
+        : null;
 
     // Optional trial handling (prefer configuring on the Price in Stripe)
     let trialDays: number | undefined;
     const mdTrial = fetchedPrice.metadata?.trial_days;
     if (mdTrial && /^\d+$/.test(String(mdTrial))) {
       trialDays = parseInt(String(mdTrial), 10);
-    } else if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_BUSINESS_TRIAL) {
-      trialDays = 30; // your MVP trial length, if not set on the price
     }
+    // (Optional fallback) If you still need a hard fallback, you can add it here.
 
     // Ensure Stripe customer (robust mapping; reuses if exists)
     const customerId = await ensureCustomer(user);
@@ -189,7 +171,7 @@ export async function POST(req: Request) {
       supabase_user_id: user.id,
       purpose: finalPurpose,
       ...(listingId ? { listing_id: listingId } : {}),
-      ...(resolvedRole ? { user_type_intended: resolvedRole } : {}),
+      ...(resolvedRole ? { user_type_intended: resolvedRole } : {}), // harmless hint; webhook uses price again
       ...safeMeta,
     };
 

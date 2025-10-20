@@ -1,7 +1,7 @@
 // app/pricing/page.tsx
 import PricingTable from "../components/pricing-table";
 import Accordion from "../../components/ui/accordion";
-import Navbar from "../components/Navbar";
+import NavGate from "../components/NavGate";
 import Link from "next/link";
 import { createClientRSC } from "@/../utils/supabase/server";
 
@@ -17,7 +17,7 @@ export default async function PricingPage() {
     <div>
       <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-[850px]">
         <div>
-          <Navbar />
+          <NavGate />
         </div>
         <div className="mx-auto lg:w-[1140px] py-10 px-4 lg:px-0">
           <h1 className="text-3xl font-semibold text-center">Choose Your Plan</h1>
