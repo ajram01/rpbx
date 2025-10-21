@@ -42,28 +42,13 @@ export default function PaywallOverlay({
       }
       const { url } = await res.json();
       window.location.href = url;
-    } catch (e: any) {
-      setErr(e?.message ?? "Something went wrong");
-      setLoading(false);
-    }
-  }
-
-  async function handleLogout() {
-    try {
-      // If you have a route that signs out server-side:
-      // await fetch("/auth/signout", { method: "POST" });
-      // router.push("/login");
-
-      // Or sign out via Supabase client (uncomment if you prefer this approach):
-      // const { createClient } = await import("@/../utils/supabase/client");
-      // const supabase = createClient();
-      // await supabase.auth.signOut();
-      // router.push("/login");
-
-      await fetch("/auth/signout", { method: "POST" });
-      router.push("/login");
-    } catch (e) {
-      console.error(e);
+    } catch (e: unknown) {
+        if (e instanceof Error){
+            setErr(e?.message);
+        } else {
+            setErr("Something went wrong")
+        }
+        setLoading(false)
     }
   }
 

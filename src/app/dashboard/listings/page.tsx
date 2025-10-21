@@ -5,15 +5,6 @@ import { createClientRSC } from "@/../utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ConfirmOnSubmit } from "./_client/ListingActions";
-import { cookies } from "next/headers"
-
-type Listing = {
-  id: string;
-  title: string | null;
-  industry: string | null;
-  updated_at: string | null;
-  is_promoted: boolean | null;
-};
 
 type Promotion = {
   listing_id: string;
