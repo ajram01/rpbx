@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, TablesInsert } from "@/types/database.types";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!); // use your pinned apiVersion if desired
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!); // (optionally pin apiVersion)
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 function getAdmin(): SupabaseClient<Database> {
@@ -20,67 +20,126 @@ function getAdmin(): SupabaseClient<Database> {
 
 // Normalize Stripe event types so we handle both new underscore and classic dot styles.
 function norm(evtType: string) {
-  // e.g. "invoice_payment.paid" -> "invoice.payment_succeeded"
   if (evtType === "invoice_payment.paid") return "invoice.payment_succeeded";
   if (evtType === "invoice_payment.failed") return "invoice.payment_failed";
-
   return evtType;
 }
+
+type BaseRole = "business" | "investor" | null;
 
 function resolveBaseRole(
   price: Stripe.Price | undefined,
   subMeta: Record<string, unknown> | null | undefined
-): "business" | "investor" | null {
+): BaseRole {
   if (!price) return null;
+
   const byMeta = String(price.metadata?.user_type ?? "").toLowerCase();
-  if (byMeta === "business" || byMeta === "investor") return byMeta as any;
+  if (byMeta === "business") return "business";
+  if (byMeta === "investor") return "investor";
 
   const hinted = String(subMeta?.["user_type_intended"] ?? "").toLowerCase();
-  if (hinted === "business" || hinted === "investor") return hinted as any;
+  if (hinted === "business") return "business";
+  if (hinted === "investor") return "investor";
 
   const lk = String(price.lookup_key ?? "").toLowerCase();
   if (lk.startsWith("business_")) return "business";
   if (lk.startsWith("investor_")) return "investor";
+
   return null;
 }
 
-// If we can't find a customers mapping row, try to create it from the Stripe customer email.
-async function ensureCustomerMapping(
-  admin: SupabaseClient<Database>,
-  stripeCustomerId: string
-): Promise<string | null> {
-  // Already mapped?
-  const { data: mapRow } = await admin
-    .from("customers")
-    .select("id")
-    .eq("stripe_customer_id", stripeCustomerId)
-    .maybeSingle();
-  if (mapRow?.id) return mapRow.id;
-
-  // Fetch Stripe customer → try to match Supabase user by email
-  const cust = await stripe.customers.retrieve(stripeCustomerId);
-  const email = (cust as Stripe.Customer).email?.toLowerCase();
-  if (!email) return null;
-
-  // Look for a user with that email in auth.users (service role can call RPCs or read from your mirror)
-  // You have public.profiles with id = user id; but not email. We’ll use auth schema via RPCs if you expose one.
-  // Simpler: check your public.customers table for any row with same email (not present).
-  // Fallback: try Supabase Admin API is not available here, so we skip direct auth.users query.
-  // Alternative: if you carried supabase_user_id in customer.metadata, use that:
-  const supaId = (cust as Stripe.Customer).metadata?.supabase_user_id;
-  if (supaId) {
-    // persist mapping
-    await admin.from("customers").upsert({ id: supaId, stripe_customer_id: stripeCustomerId });
-    return supaId;
-  }
-
-  // No way to infer user_id → give up gracefully
-  return null;
-}
+// -----------------------------
+// Helpers to avoid `any` usage
+// -----------------------------
 
 const toISO = (unix: number | null | undefined) =>
   typeof unix === "number" ? new Date(unix * 1000).toISOString() : null;
 
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function getString(obj: unknown, key: string): string | null {
+  if (!isObject(obj)) return null;
+  const v = obj[key];
+  return typeof v === "string" ? v : null;
+}
+
+function getNumber(obj: unknown, key: string): number | null {
+  if (!isObject(obj)) return null;
+  const v = obj[key];
+  return typeof v === "number" ? v : null;
+}
+
+/** Probe different shapes for period fields without relying on TS types exposing them */
+function extractPeriodISO(
+  sub: Stripe.Subscription,
+  item?: Stripe.SubscriptionItem
+): { startISO: string; endISO: string } {
+  // Try subscription item first
+  if (item && isObject(item)) {
+    const s = getNumber(item, "current_period_start");
+    const e = getNumber(item, "current_period_end");
+    if (s !== null || e !== null) {
+      return {
+        startISO: toISO(s) ?? new Date().toISOString(),
+        endISO: toISO(e) ?? new Date().toISOString(),
+      };
+    }
+  }
+
+  // Then try subscription object (for accounts/types that expose these)
+  const subUnknown = sub as unknown;
+  const s2 = getNumber(subUnknown, "current_period_start");
+  const e2 = getNumber(subUnknown, "current_period_end");
+  if (s2 !== null || e2 !== null) {
+    return {
+      startISO: toISO(s2) ?? new Date().toISOString(),
+      endISO: toISO(e2) ?? new Date().toISOString(),
+    };
+  }
+
+  // Fallback (unknown billing period shape)
+  const now = new Date().toISOString();
+  return { startISO: now, endISO: now };
+}
+
+/** Derive subscription id from an invoice even if local TS types don’t expose it */
+function extractSubscriptionIdFromInvoice(inv: Stripe.Invoice): string | null {
+  const obj = inv as unknown as Record<string, unknown>;
+
+  // 1) Common: inv.subscription (may be string or object with id)
+  if ("subscription" in obj) {
+    const raw = obj["subscription"];
+    if (typeof raw === "string") return raw;
+    if (isObject(raw)) {
+      const id = getString(raw, "id");
+      if (id) return id;
+    }
+  }
+
+  // 2) Nested experimental/alt shapes: parent.subscription_details.subscription
+  const parent = isObject(obj["parent"]) ? (obj["parent"] as Record<string, unknown>) : null;
+  if (parent) {
+    const details = isObject(parent["subscription_details"])
+      ? (parent["subscription_details"] as Record<string, unknown>)
+      : null;
+    if (details && "subscription" in details) {
+      const raw = (details as Record<string, unknown>)["subscription"];
+      if (typeof raw === "string") return raw;
+      if (isObject(raw)) {
+        const id = getString(raw, "id");
+        if (id) return id;
+      }
+    }
+  }
+
+  return null;
+}
+
+// -----------------------------------
+// Upsert subscription (no `any` used)
+// -----------------------------------
 async function upsertSubscription(
   admin: SupabaseClient<Database>,
   sub: Stripe.Subscription
@@ -98,15 +157,17 @@ async function upsertSubscription(
 
   let userId = mapRow?.id ?? null;
 
-  // Fallback to metadata if mapping not present yet
+  // Fallback to Stripe customer metadata if mapping not present yet
   if (!userId) {
     const cust =
       typeof sub.customer === "string"
         ? await stripe.customers.retrieve(sub.customer)
         : (sub.customer as Stripe.Customer);
-    const metaUserId = (cust as Stripe.Customer)?.metadata?.supabase_user_id;
+    const metaUserId = (cust as Stripe.Customer).metadata?.supabase_user_id;
     if (metaUserId) {
-      await admin.from("customers").upsert({ id: metaUserId, stripe_customer_id: stripeCustomerId });
+      await admin
+        .from("customers")
+        .upsert({ id: metaUserId, stripe_customer_id: stripeCustomerId });
       userId = metaUserId;
     }
   }
@@ -115,25 +176,21 @@ async function upsertSubscription(
     return;
   }
 
-  // First (main) item
+  // Main item + price snapshot
   const item = sub.items?.data?.[0];
-  const price = item?.price as Stripe.Price | undefined;
+  const price = item?.price ?? undefined;
 
-  // Periods (newer Stripe models put these on the item)
-  const currentPeriodStart =
-    toISO((item as any)?.current_period_start) ??
-    toISO((sub as any)?.current_period_start) ?? // fallback if your account still has them
-    new Date().toISOString();
-  const currentPeriodEnd =
-    toISO((item as any)?.current_period_end) ??
-    toISO((sub as any)?.current_period_end) ??
-    new Date().toISOString();
+  // Periods from item or subscription, probed safely
+  const { startISO: currentPeriodStart, endISO: currentPeriodEnd } = extractPeriodISO(sub, item);
 
-  // Snapshots to avoid needing products/prices tables
+  // Avoid extra API call if product is id; snapshot if expanded
   const product =
-    typeof price?.product === "string"
-      ? null // we avoid an extra API call; snapshots are optional
-      : (price?.product as Stripe.Product | null);
+    typeof price?.product === "string" ? null : (price?.product as Stripe.Product | null);
+
+  // Stripe metadata are Record<string, string>
+  const subMetadata: Record<string, string> = sub.metadata ?? {};
+  const priceMetadata: Record<string, string> = price?.metadata ?? {};
+  const productMetadata: Record<string, string> = product?.metadata ?? {};
 
   const row: TablesInsert<"subscriptions"> = {
     id: sub.id,
@@ -141,7 +198,7 @@ async function upsertSubscription(
     status: sub.status as Database["public"]["Enums"]["subscription_status"],
     price_id: price?.id ?? null,
     quantity: item?.quantity ?? null,
-    metadata: (sub.metadata ?? {}) as any,
+    metadata: subMetadata as unknown as TablesInsert<"subscriptions">["metadata"],
     cancel_at: toISO(sub.cancel_at ?? null),
     cancel_at_period_end: sub.cancel_at_period_end ?? null,
     canceled_at: toISO(sub.canceled_at ?? null),
@@ -152,7 +209,7 @@ async function upsertSubscription(
     trial_start: toISO(sub.trial_start ?? null),
     trial_end: toISO(sub.trial_end ?? null),
 
-    // snapshots (new columns)
+    // Snapshots (optional, but handy)
     product_id: typeof price?.product === "string" ? price?.product : product?.id ?? null,
     product_name: product?.name ?? null,
     price_currency: price?.currency ?? null,
@@ -160,9 +217,9 @@ async function upsertSubscription(
     price_interval: price?.recurring?.interval ?? null,
     price_interval_count: price?.recurring?.interval_count ?? null,
     price_nickname: price?.nickname ?? null,
-    price_lookup_key: (price?.lookup_key as string) ?? null,
-    price_metadata: (price?.metadata ?? {}) as any,
-    product_metadata: (product?.metadata ?? {}) as any,
+    price_lookup_key: price?.lookup_key ?? null,
+    price_metadata: priceMetadata as unknown as TablesInsert<"subscriptions">["price_metadata"],
+    product_metadata: productMetadata as unknown as TablesInsert<"subscriptions">["product_metadata"],
   };
 
   const { error } = await admin.from("subscriptions").upsert(row);
@@ -170,6 +227,9 @@ async function upsertSubscription(
   else console.log(`✅ upserted subscription ${sub.id} for user ${userId}`);
 }
 
+// ------------------
+// Webhook handler
+// ------------------
 export async function POST(req: NextRequest) {
   const sig = req.headers.get("stripe-signature");
   if (!sig) return new Response("Missing signature", { status: 400 });
@@ -235,7 +295,7 @@ export async function POST(req: NextRequest) {
       await upsertSubscription(admin, sub);
 
       // Optional: keep profiles.user_type aligned
-      const price = sub.items?.data?.[0]?.price as Stripe.Price | undefined;
+      const price = sub.items?.data?.[0]?.price;
       const role = resolveBaseRole(price, sub.metadata);
       if (role) {
         const nextType =
@@ -249,14 +309,14 @@ export async function POST(req: NextRequest) {
             .select("id")
             .eq("stripe_customer_id", stripeCustomerId)
             .maybeSingle();
-          const userId = mapRow?.id;
-          if (userId) {
+          const uid = mapRow?.id;
+          if (uid) {
             const { error: updErr } = await admin
               .from("profiles")
               .update({ user_type: nextType })
-              .eq("id", userId);
+              .eq("id", uid);
             if (updErr) console.error("profiles update error:", updErr);
-            else console.log(`✅ profiles.user_type=${nextType} for user ${userId}`);
+            else console.log(`✅ profiles.user_type=${nextType} for user ${uid}`);
           }
         }
       }
@@ -272,21 +332,8 @@ export async function POST(req: NextRequest) {
     ) {
       const inv = event.data.object as Stripe.Invoice;
 
-      // 2025+ structure (parent.subscription_details.subscription)
-      let subId: string | null = null;
-      const parent = (inv as any).parent;
-      if (parent?.subscription_details?.subscription) {
-        subId =
-          typeof parent.subscription_details.subscription === "string"
-            ? parent.subscription_details.subscription
-            : parent.subscription_details.subscription.id;
-      }
-
-      // Older API: invoice.subscription
-      if (!subId) {
-        const maybe = (inv as any).subscription;
-        if (maybe) subId = typeof maybe === "string" ? maybe : maybe.id;
-      }
+      // Derive subscription id from whatever your account exposes
+      const subId = extractSubscriptionIdFromInvoice(inv);
 
       if (subId) {
         const sub = await stripe.subscriptions.retrieve(subId, {
