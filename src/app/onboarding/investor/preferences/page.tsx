@@ -16,10 +16,12 @@ export default async function Preferences() {
       user_id,
       ownership_min,
       ownership_max,
+      industry_experience,
       primary_industry,
       additional_industries,
       target_ebitda,
       target_cash_flow,
+      net_worth,
       status
     `)
     .eq("user_id", user.id)
@@ -39,6 +41,8 @@ export default async function Preferences() {
     const oMax = Math.max(0, Math.min(100, Number(formData.get("ownership_max") ?? 100)));
     const ownership_min = Math.min(oMin, oMax);
     const ownership_max = Math.max(oMin, oMax);
+    const industry_experience = String(formData.get("industry_experience") ?? "").trim() || null;
+    const net_worth = String(formData.get("net_worth") ?? "").trim() || null;
 
     // Industries
     const primary_industry = String(formData.get("primary_industry") ?? "").trim() || null;
@@ -54,10 +58,12 @@ export default async function Preferences() {
       user_id: user.id,
       ownership_min,
       ownership_max,
+      industry_experience,
       primary_industry,
       additional_industries: additional_industries.length ? additional_industries : null,
       target_ebitda,
       target_cash_flow,
+      net_worth,
       status: (draft?.status ?? "incomplete") as
         | "incomplete"
         | "pending_review"
@@ -85,23 +91,23 @@ export default async function Preferences() {
     "Sports and Recreation","Other"
   ];
 
-  // const INDUSTRY_EXPERIENCE_OPTIONS = [
-  //   { label: "0–2 years",  value: "0-2" },
-  //   { label: "3–5 years",  value: "3-5" },
-  //   { label: "6–10 years", value: "6-10" },
-  //   { label: "11–15 years", value: "11-15" },
-  //   { label: "16–20 years", value: "16-20" },
-  //   { label: "20+ years",   value: "20+" },
-  // ] as const;
+  const INDUSTRY_EXPERIENCE_OPTIONS = [
+    { label: "0–2 years",  value: "0-2" },
+    { label: "3–5 years",  value: "3-5" },
+    { label: "6–10 years", value: "6-10" },
+    { label: "11–15 years", value: "11-15" },
+    { label: "16–20 years", value: "16-20" },
+    { label: "20+ years",   value: "20+" },
+  ] as const;
 
-  // const NET_WORTH_OPTIONS = [
-  //   { label: "< $250k",        value: "<250k" },
-  //   { label: "$250k – $500k",  value: "250k-500k" },
-  //   { label: "$500k – $1M",    value: "500k-1M" },
-  //   { label: "$1M – $5M",      value: "1M-5M" },  
-  //   { label: "$5M – $30M",     value: "5M-30M" },  
-  //   { label: "$30M+",          value: ">30M" },
-  // ] as const;
+  const NET_WORTH_OPTIONS = [
+    { label: "< $250k",        value: "<250k" },
+    { label: "$250k – $500k",  value: "250k-500k" },
+    { label: "$500k – $1M",    value: "500k-1M" },
+    { label: "$1M – $5M",      value: "1M-5M" },  
+    { label: "$5M – $30M",     value: "5M-30M" },  
+    { label: "$30M+",          value: ">30M" },
+  ] as const;
 
 
   return (
@@ -130,18 +136,41 @@ export default async function Preferences() {
           nameMax="ownership_max"
         />
       </div>
-      {/* Primary industry */}
+
+      {/* Net Worth */}
+      <div>
+        <label className="block mb-2 pt-4">
+          <span>Current Net Worth</span>
+        </label>
+        <select
+          name="net_worth"
+          required
+          defaultValue={draft?.net_worth ?? ""}
+          className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
+        >
+          <option value="" disabled>Choose one…</option>
+          {NET_WORTH_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Years of Experience */}
       <label className="block  pt-4">
         <span>Years of Experience</span>
         <select
-          name="primary_industry"
+          name="industry_experience"
           required
-          defaultValue={draft?.primary_industry ?? ""}
+          defaultValue={draft?.industry_experience ?? ""}
           className="mt-1 w-full border rounded px-3 py-2 hover:cursor-pointer"
         >
-          <option value="" disabled>Choose an industry…</option>
-          {INDUSTRY_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>{opt}</option>
+          <option value="" disabled>Choose one…</option>
+          {INDUSTRY_EXPERIENCE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </select>
       </label>

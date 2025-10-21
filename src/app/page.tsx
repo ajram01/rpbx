@@ -67,7 +67,7 @@ export default async function Home() {
       {/* Div 2: 1 div containing 3 div columns */}
       
       <div className="bg-[url('/images/backgrounds/black-bg.png')] bg-cover bg-center bg-fixed lg:bg-fixed flex justify-center py-10 px-4 lg:px-0">
-      <PricingTable dark={dark} />
+      <PricingTable dark={dark} loggedIn={false} />
       </div>
 
 

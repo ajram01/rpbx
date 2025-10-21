@@ -6,10 +6,9 @@ import Link from "next/link";
 export default async function EditListing({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string}>
 }) {
-  
-  const { id } = await params
+    const { id } = await params
   const supabase = await createClientRSC();
   const {
     data: { user },

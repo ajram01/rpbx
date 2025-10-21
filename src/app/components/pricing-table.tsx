@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import LogoLoader from './LogoLoader';
 import LogoLoaderDark from './LogoLoaderDark';
@@ -8,8 +8,8 @@ import LogoLoaderDark from './LogoLoaderDark';
 type NormalizedPrice = {
   id: string;
   lookup_key: string | null;
-  currency: string;                    // e.g., "USD"
-  unit_amount: number | null;          // cents
+  currency: string;
+  unit_amount: number | null;
   interval: 'day' | 'week' | 'month' | 'year' | null;
   interval_count: number | null;
   productId: string;
@@ -17,8 +17,8 @@ type NormalizedPrice = {
   productDescription: string | null;
   features: string[];
   metadata: Record<string, string>;
-  popular?: boolean;                   // server can set, or derive from metadata
-  sortOrder?: number;                  // server can set, or derive from metadata
+  popular?: boolean;
+  sortOrder?: number;
 };
 
 interface PricingTabProps {
@@ -28,17 +28,22 @@ interface PricingTabProps {
   price: { monthly: number | null; yearly: number | null };
   planDescription: string;
   features: string[];
+  // unauth deep-link
   checkoutLookup?: string | null;
+  // auth direct checkout
+  priceIdMonthly?: string | null;
+  priceIdYearly?: string | null;
   isFree?: boolean;
+  loggedIn: boolean;
+  onCheckout: (priceId: string) => Promise<void>;
 }
 
 interface PricingTableProps {
   dark?: boolean;
+  loggedIn: boolean;
 }
 
-
 function PricingTab(props: PricingTabProps) {
-  // Choose a sensible display even if the free plan lacks one of the intervals:
   const displayCents = props.yearly
     ? (props.price.yearly ?? props.price.monthly)
     : (props.price.monthly ?? props.price.yearly);
@@ -47,9 +52,27 @@ function PricingTab(props: PricingTabProps) {
     ? (props.price.yearly != null ? '/yr' : props.price.monthly != null ? '/mo' : '')
     : (props.price.monthly != null ? '/mo' : props.price.yearly != null ? '/yr' : '');
 
-  const href = props.checkoutLookup
-    ? `/subscribe/${encodeURIComponent(props.checkoutLookup)}`
-    : '#';
+  // --- FIX: For logged-in users, fallback to whichever priceId exists (so free plans work on either tab)
+  const chosenPriceId = props.loggedIn
+    ? (props.yearly
+        ? (props.priceIdYearly ?? props.priceIdMonthly ?? null)
+        : (props.priceIdMonthly ?? props.priceIdYearly ?? null))
+    : null;
+
+  // For unauth users, href is provided by parent; we keep it as-is
+  const href = props.checkoutLookup ? `/subscribe/${encodeURIComponent(props.checkoutLookup)}` : '#';
+
+  const canCheckout = props.loggedIn ? !!chosenPriceId : !!props.checkoutLookup;
+
+  const handleClick = async (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+    if (!props.loggedIn) {
+      if (!props.checkoutLookup) e.preventDefault();
+      return;
+    }
+    e.preventDefault();
+    if (!chosenPriceId) return;
+    await props.onCheckout(chosenPriceId);
+  };
 
   return (
     <div className={`w-full`}>
@@ -79,15 +102,15 @@ function PricingTab(props: PricingTabProps) {
 
           <Link
             href={href}
-            onClick={(e) => { if (!props.checkoutLookup) e.preventDefault(); }}
-            aria-disabled={!props.checkoutLookup}
+            onClick={handleClick}
+            aria-disabled={!canCheckout}
             className={`w-full inline-flex justify-center whitespace-nowrap rounded-full px-3.5 py-2.5 text-sm font-medium text-white transition-colors duration-150 ${
-              props.checkoutLookup
+              canCheckout
                 ? 'bg-[#60BC9B] hover:bg-[#4ba88a] focus-visible:outline-none focus-visible:ring-[#60BC9B]'
                 : 'bg-slate-400 cursor-not-allowed'
             }`}
           >
-            {props.isFree ? 'Join Free' : 'Purchase Plan'}
+            {props.isFree ? 'Join Free' : (props.loggedIn ? 'Continue to Checkout' : 'Purchase Plan')}
           </Link>
         </div>
 
@@ -107,7 +130,7 @@ function PricingTab(props: PricingTabProps) {
   );
 }
 
-export default function PricingTable({ dark }: PricingTableProps) {
+export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
   const [isAnnual, setIsAnnual] = useState(false); // Monthly by default
   const [prices, setPrices] = useState<NormalizedPrice[]>([]);
   const [loading, setLoading] = useState(true);
@@ -124,21 +147,22 @@ export default function PricingTable({ dark }: PricingTableProps) {
     })();
   }, []);
 
-  // Group prices by product (or lookup stem), capture monthly/yearly, popular, free, sort order.
-  const plans = useMemo(() => {
-    type Group = {
-      planName: string;
-      planDescription: string;
-      monthly: number | null;
-      yearly: number | null;
-      lookupMonthly: string | null;
-      lookupYearly: string | null;
-      features: string[];
-      popular: boolean;
-      isFree: boolean;
-      sortOrder: number; // lower = earlier
-    };
+  type Group = {
+    planName: string;
+    planDescription: string;
+    monthly: number | null;
+    yearly: number | null;
+    lookupMonthly: string | null;
+    lookupYearly: string | null;
+    priceIdMonthly: string | null;
+    priceIdYearly: string | null;
+    features: string[];
+    popular: boolean;
+    isFree: boolean;
+    sortOrder: number;
+  };
 
+  const plans = useMemo(() => {
     const map = new Map<string, Group>();
 
     for (const p of prices) {
@@ -148,15 +172,12 @@ export default function PricingTable({ dark }: PricingTableProps) {
 
       const existing = map.get(stem);
 
-      // Popular from server or metadata
       const isPopular =
         (typeof p.popular === 'boolean' && p.popular) ||
         ((p.metadata?.popular || '').toLowerCase() === 'true');
 
-      // Free if zero amount (recurring $0 is fine)
       const isFree = (p.unit_amount ?? 0) === 0;
 
-      // Sort order: prefer server-provided p.sortOrder; else metadata.sort_order/order; else 999
       const rawOrder = (p.sortOrder as number | undefined) ?? parseInt(
         (p.metadata?.sort_order ?? p.metadata?.order ?? ''), 10
       );
@@ -170,6 +191,8 @@ export default function PricingTable({ dark }: PricingTableProps) {
           yearly: null,
           lookupMonthly: null,
           lookupYearly: null,
+          priceIdMonthly: null,
+          priceIdYearly: null,
           features: p.features ?? [],
           popular: false,
           isFree,
@@ -179,18 +202,18 @@ export default function PricingTable({ dark }: PricingTableProps) {
       if (p.interval === 'month') {
         g.monthly = p.unit_amount;
         g.lookupMonthly = p.lookup_key ?? null;
+        g.priceIdMonthly = p.id;
       }
       if (p.interval === 'year') {
         g.yearly = p.unit_amount;
         g.lookupYearly = p.lookup_key ?? null;
+        g.priceIdYearly = p.id;
       }
 
-      // Carry forward flags; keep the smallest order seen for the group
       g.popular = g.popular || isPopular;
       g.isFree = g.isFree || isFree;
       g.sortOrder = Math.min(g.sortOrder, order);
 
-      // Optional: features from metadata (pipe-separated)
       if (!g.features.length && p.metadata?.features) {
         g.features = p.metadata.features.split('|').map(s => s.trim()).filter(Boolean);
       }
@@ -198,28 +221,44 @@ export default function PricingTable({ dark }: PricingTableProps) {
       map.set(stem, g);
     }
 
-    // Sort groups: by sortOrder then by name (stable, predictable)
     return Array.from(map.values()).sort(
       (a, b) => (a.sortOrder - b.sortOrder) || a.planName.localeCompare(b.planName)
     );
   }, [prices]);
 
-  // Filter: show only monthly on Monthly, yearly on Annual — but always include free.
-const visiblePlans = useMemo(() => {
-  return plans
-    .filter(p => {
-      // hide Boosted Listing
-      if (!isAnnual && p.planName === "Boosted Listing") return false;
-      return true;
-    })
-    .filter(p => p.isFree ? true : (isAnnual ? p.yearly != null : p.monthly != null));
-}, [plans, isAnnual]);
+  // Show free always; otherwise require interval for selected tab
+  const visiblePlans = useMemo(() => {
+    return plans
+      .filter(p => {
+        if (p.planName === "Boosted Listing") return false; // keep addons off the main picker
+        return true;
+      })
+      .filter(p => p.isFree ? true : (isAnnual ? p.yearly != null : p.monthly != null));
+  }, [plans, isAnnual]);
 
-  // For checkout: if free is shown on the "other" tab, fall back to the lookup that exists.
-  const getCheckoutLookup = (p: (typeof plans)[number]) =>
-    p.isFree
-      ? (p.lookupMonthly ?? p.lookupYearly ?? null)
-      : (isAnnual ? p.lookupYearly : p.lookupMonthly);
+  // POST to /api/checkout for logged-in users
+  const onCheckout = useCallback(async (priceId: string) => {
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          priceId,
+          purpose: 'base_membership',
+        }),
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        alert(txt || 'Checkout error');
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch (e) {
+      console.error(e);
+      alert('Checkout error');
+    }
+  }, []);
 
   if (loading) return <div>{dark ? <LogoLoaderDark /> : <LogoLoader />}</div>;
 
@@ -260,21 +299,31 @@ const visiblePlans = useMemo(() => {
 
       {/* Cards */}
       <div className="max-w-[1140px] mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {visiblePlans.map((p) => (
-          <PricingTab
-            key={`${p.planName}-${isAnnual ? 'year' : 'month'}`}
-            yearly={isAnnual}
-            popular={p.popular}
-            planName={p.planName}
-            planDescription={p.planDescription}
-            price={{ monthly: p.monthly, yearly: p.yearly }}
-            features={p.features}
-            checkoutLookup={getCheckoutLookup(p)}
-            isFree={p.isFree}
-          />
-        ))}
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {visiblePlans.map((p) => (
+            <PricingTab
+              key={`${p.planName}-${isAnnual ? 'year' : 'month'}`}
+              yearly={isAnnual}
+              popular={p.popular}
+              planName={p.planName}
+              planDescription={p.planDescription}
+              price={{ monthly: p.monthly, yearly: p.yearly }}
+              features={p.features}
+              // --- FIX: For unauth users, free plan falls back to whichever lookup exists
+              checkoutLookup={
+                p.isFree
+                  ? (p.lookupMonthly ?? p.lookupYearly ?? null)
+                  : (isAnnual ? p.lookupYearly : p.lookupMonthly)
+              }
+              // pass priceIds for auth flow (with free fallback handled in the child)
+              priceIdMonthly={p.priceIdMonthly}
+              priceIdYearly={p.priceIdYearly}
+              isFree={p.isFree}
+              loggedIn={loggedIn}
+              onCheckout={onCheckout}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

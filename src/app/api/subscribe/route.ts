@@ -4,7 +4,7 @@ export const runtime = 'nodejs' // keep Node runtime for Stripe SDK
 import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import { createClientRSC } from '@/../utils/supabase/server'
-import { ensureCustomerFor } from '@/lib/ensure-customer-for' // make sure the path matches your file
+import { ensureCustomer } from '@/lib/ensure-customer' // make sure the path matches your file
 
 
 function deriveUserTypeFromPrice(price: Stripe.Price): 'investor' | 'business' | 'member' {
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     const intendedUserType = deriveUserTypeFromPrice(price)
 
     // 3) Ensure Stripe Customer mapped to this user
-    const customerId = await ensureCustomerFor(userId, email)
+    const customerId = await ensureCustomer({id: userId, email: signUpRes.user?.email ?? email})
 
     // 4) Create Checkout Session (subscription) with helpful metadata
     const origin =

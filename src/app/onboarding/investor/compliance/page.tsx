@@ -57,7 +57,7 @@ export default async function Compliance() {
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <Link href="/onboarding/investor/preferences" className="text-sm underline hover:text-[#60BC9B]">&larr; Define Your Investment Style</Link>
-    <form action={save} method="post">
+    <form action={save}>
       <h1 className="text-2xl font-semibold mt-2">Compliance & Confidentiality</h1>
       <p className="mt-2">A few quick questions to keep everything secure and transparent. Confirm your confidentiality preferences and investor status to help us tailor your matches responsibly.</p>
       <hr className="mb-1 mt-4" />
