@@ -6,19 +6,20 @@ import Link from "next/link";
 export default async function EditListing({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string}>
 }) {
+    const { id } = await params
   const supabase = await createClientRSC();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect(`/login?next=/owner/listings/${params.id}/edit`);
+  if (!user) redirect(`/login?next=/owner/listings/${id}/edit`);
 
   // Ensure this listing belongs to the user
   const { data: listing, error } = await supabase
     .from("business_listings")
     .select("id, owner_id, title, industry, status, updated_at")
-    .eq("id", params.id)
+    .eq("id", id)
     .maybeSingle();
 
   if (error || !listing || listing.owner_id !== user.id) {
