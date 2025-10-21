@@ -90,17 +90,17 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Div 3: As An Investor */}
+      {/* Div 3: Experts Section */}
       <div className="flex flex-col items-center bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top py-[15px]">
 
         <div className="w-full px-4 lg:w-[1140px] lg:px-0 mx-auto flex flex-col gap-y-5 lg:gap-y-0 lg:gap-x-10 py-10">
           <h2 className="text-center -mt-4">Meet Our Experts</h2>
 
-          <div className="flex flex-col lg:flex-row justify-center gap-5 mt-8">
+          <div className="flex flex-col lg:flex-row justify-center gap-5 mt-8 ">
             {experts.map((expert) => (
               <div
                 key={expert.name}
-                className="flex-1 rounded-2xl shadow-lg overflow-hidden flex flex-col items-center bg-white"
+                className="flex-1 rounded-2xl shadow-lg overflow-hidden flex flex-col items-center bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
               >
                 {/* Top gray section */}
                 <div className="bg-[#272727] w-full h-30"></div>

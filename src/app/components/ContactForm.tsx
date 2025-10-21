@@ -93,7 +93,7 @@ export default function ContactForm() {
             className={`rounded-full p-2 text-white transition ${
               status === 'sending'
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-[#60BC9B] hover:bg-[#4ba88a]'
+                : 'bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)]'
             }`}
           >
             {status === 'sending' ? 'Sending...' : 'Send Message'}

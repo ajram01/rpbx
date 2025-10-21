@@ -29,10 +29,10 @@ export default function Button(props: ButtonProps) {
 
   const baseStyles = "px-6 py-2 rounded-full font-medium transition inline-flex items-center justify-center";
   const variantStyles: Record<Variant, string> = {
-    primary: "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white",
-    secondary: "bg-gray-700 hover:bg-gray-800 text-white",
-    charcoal: "bg-[#333333] hover:bg-[#444444] text-white",
-    white: "bg-white hover:bg-[#60BC9B] text-black hover:text-white border border-black hover:border-[#60BC9B] w-auto px-[15px]",
+    primary: "bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)] text-white",
+    secondary: "bg-gray-700 hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)] text-white",
+    charcoal: "bg-[#333333] hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)] text-white",
+    white: "bg-white hover:bg-[var(--color-primary-hover)] text-black hover:text-white border border-black hover:border-[var(--color-primary-hover)] w-auto px-[15px]",
   };
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";
   const classes = [baseStyles, variantStyles[variant], disabledStyles, className].filter(Boolean).join(" ");
