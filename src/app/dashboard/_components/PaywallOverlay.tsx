@@ -95,12 +95,9 @@ export default function PaywallOverlay({
           {/* tiny "log out" text link */}
           <p className="text-xs text-neutral-500 mt-3">
             or{" "}
-            <button
-              onClick={handleLogout}
-              className="underline underline-offset-2 text-neutral-600 hover:text-neutral-800"
-            >
-              log out
-            </button>
+                <form action="/signout" method="post">
+                  <Button type="submit">Log Out</Button>
+                </form>
           </p>
         </div>
       </div>

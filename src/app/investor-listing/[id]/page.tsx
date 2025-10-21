@@ -59,6 +59,7 @@ export default async function InvestorPage(
       first_name,
       last_name,
       organization_entity,
+      industry_experience,
       city,
       primary_industry,
       additional_industries,
@@ -66,6 +67,7 @@ export default async function InvestorPage(
       ownership_max,
       target_ebitda,
       target_cash_flow,
+      net_worth,
       avatar_path,
       bio,
       contact_email,
@@ -106,6 +108,8 @@ export default async function InvestorPage(
   const ebitda = formatRangeLabel(inv.target_ebitda);
   const cash = formatRangeLabel(inv.target_cash_flow);
   const about = inv.bio ?? "—";
+  const net_worth = inv.net_worth ?? "-";
+  const industry_experience = formatRangeLabel(inv.industry_experience);
   const exp =
     typeof inv.industry_experience === "number" && inv.industry_experience > 0
       ? `${inv.industry_experience}+ years of experience`
@@ -167,10 +171,11 @@ export default async function InvestorPage(
               <p><b>Investment Interest:</b> {primary}</p>
               <p><b>Additional Investment Interests:</b> {additional}</p>
               <p><b>% Of Ownership Looking For:</b> {ownership}</p>
+              <p><b>Years of Experience:</b> {industry_experience}</p>
               <div className="border-t-1 border-gray-400 my-5"></div>
               <p><b>Company EBITDA Looking For:</b> {ebitda}</p>
               <p><b>Business Cash Flow:</b> {cash}</p>
-              <p><b>Annual Net Worth:</b> {"—"}</p>
+              <p><b>Annual Net Worth:</b> {net_worth}</p>
             </div>
           </div>
         </div>
