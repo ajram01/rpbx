@@ -7,12 +7,10 @@ import { NextRequest } from "next/server";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, TablesInsert } from "@/types/database.types";
 
-// If you've upgraded your Stripe account/webhooks, pin to the new version:
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!); // use your pinned apiVersion if desired
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-function getSupabaseAdmin(): SupabaseClient<Database> {
+function getAdmin(): SupabaseClient<Database> {
   return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -22,6 +20,15 @@ function getSupabaseAdmin(): SupabaseClient<Database> {
 
 const toISO = (unix: number | null | undefined) =>
   typeof unix === "number" ? new Date(unix * 1000).toISOString() : null;
+
+// Normalize Stripe event types so we handle both new underscore and classic dot styles.
+function norm(evtType: string) {
+  // e.g. "invoice_payment.paid" -> "invoice.payment_succeeded"
+  if (evtType === "invoice_payment.paid") return "invoice.payment_succeeded";
+  if (evtType === "invoice_payment.failed") return "invoice.payment_failed";
+
+  return evtType;
+}
 
 function resolveBaseRole(
   price: Stripe.Price | undefined,
@@ -40,34 +47,73 @@ function resolveBaseRole(
   return null;
 }
 
-async function upsertSubscription(
+// If we can't find a customers mapping row, try to create it from the Stripe customer email.
+async function ensureCustomerMapping(
   admin: SupabaseClient<Database>,
-  sub: Stripe.Subscription
-) {
-  // First item is your single base price in this app
-  const item = sub.items?.data?.[0];
-  const price = item?.price as Stripe.Price | undefined;
-  const quantity = item?.quantity ?? null;
-
-  const stripeCustomerId =
-    typeof sub.customer === "string" ? sub.customer : sub.customer?.id;
-  if (!stripeCustomerId) return;
-
-  // Map Stripe customer -> Supabase user_id
-  const { data: mapRow, error: mapErr } = await admin
+  stripeCustomerId: string
+): Promise<string | null> {
+  // Already mapped?
+  const { data: mapRow } = await admin
     .from("customers")
     .select("id")
     .eq("stripe_customer_id", stripeCustomerId)
     .maybeSingle();
-  if (mapErr) {
-    console.error("customer map error:", mapErr);
-  }
-  const userId = mapRow?.id;
-  if (!userId) return;
+  if (mapRow?.id) return mapRow.id;
 
-  // ✅ Pull period from subscription item (Stripe 2025 change)
-  const currentPeriodStart = toISO((item as any)?.current_period_start);
-  const currentPeriodEnd = toISO((item as any)?.current_period_end);
+  // Fetch Stripe customer → try to match Supabase user by email
+  const cust = await stripe.customers.retrieve(stripeCustomerId);
+  const email = (cust as Stripe.Customer).email?.toLowerCase();
+  if (!email) return null;
+
+  // Look for a user with that email in auth.users (service role can call RPCs or read from your mirror)
+  // You have public.profiles with id = user id; but not email. We’ll use auth schema via RPCs if you expose one.
+  // Simpler: check your public.customers table for any row with same email (not present).
+  // Fallback: try Supabase Admin API is not available here, so we skip direct auth.users query.
+  // Alternative: if you carried supabase_user_id in customer.metadata, use that:
+  const supaId = (cust as Stripe.Customer).metadata?.supabase_user_id;
+  if (supaId) {
+    // persist mapping
+    await admin.from("customers").upsert({ id: supaId, stripe_customer_id: stripeCustomerId });
+    return supaId;
+  }
+
+  // No way to infer user_id → give up gracefully
+  return null;
+}
+
+async function upsertSubscription(
+  admin: SupabaseClient<Database>,
+  sub: Stripe.Subscription
+) {
+  const stripeCustomerId =
+    typeof sub.customer === "string" ? sub.customer : sub.customer?.id;
+  if (!stripeCustomerId) return;
+
+  // Map customer → user_id (and auto-create mapping if possible)
+  let userId: string | null = null;
+  const { data: mapRow } = await admin
+    .from("customers")
+    .select("id")
+    .eq("stripe_customer_id", stripeCustomerId)
+    .maybeSingle();
+
+  userId = mapRow?.id ?? null;
+  if (!userId) {
+    userId = await ensureCustomerMapping(admin, stripeCustomerId);
+  }
+  if (!userId) {
+    console.warn("No user mapping for stripe_customer_id:", stripeCustomerId);
+    return;
+  }
+
+  // First item is your single base price
+  const item = sub.items?.data?.[0];
+  const price = item?.price as Stripe.Price | undefined;
+  const quantity = item?.quantity ?? null;
+
+  // Period dates: Stripe (new models) place these on the Subscription Item
+  const currentPeriodStart = toISO((item as any)?.current_period_start) ?? new Date().toISOString();
+  const currentPeriodEnd = toISO((item as any)?.current_period_end) ?? new Date().toISOString();
 
   const row: TablesInsert<"subscriptions"> = {
     id: sub.id,
@@ -80,8 +126,8 @@ async function upsertSubscription(
     cancel_at_period_end: sub.cancel_at_period_end ?? null,
     canceled_at: toISO(sub.canceled_at ?? null),
     created: toISO(sub.created) ?? new Date().toISOString(),
-    current_period_start: currentPeriodStart ?? new Date().toISOString(),
-    current_period_end: currentPeriodEnd ?? new Date().toISOString(),
+    current_period_start: currentPeriodStart,
+    current_period_end: currentPeriodEnd,
     ended_at: toISO(sub.ended_at ?? null),
     trial_start: toISO(sub.trial_start ?? null),
     trial_end: toISO(sub.trial_end ?? null),
@@ -89,6 +135,7 @@ async function upsertSubscription(
 
   const { error } = await admin.from("subscriptions").upsert(row);
   if (error) console.error("subscriptions upsert error:", error);
+  else console.log(`✅ upserted subscription ${sub.id} for user ${userId}`);
 }
 
 export async function POST(req: NextRequest) {
@@ -97,19 +144,21 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event;
   try {
-    const raw = await req.text(); // raw body for signature verification
+    const raw = await req.text();
     event = stripe.webhooks.constructEvent(raw, sig, endpointSecret);
   } catch (e) {
     console.error("Signature verification failed:", e);
     return new Response("Bad signature", { status: 400 });
   }
 
-  try {
-    console.log("➡️ Stripe event:", event.type);
-    const admin = getSupabaseAdmin();
+  const type = norm(event.type);
+  console.log("➡️ Stripe event (norm):", type);
 
-    // 1) After Checkout completes, map customer->user and upsert the sub
-    if (event.type === "checkout.session.completed") {
+  try {
+    const admin = getAdmin();
+
+    // A) After checkout: map customer -> user and write first sub row
+    if (type === "checkout.session.completed") {
       const sess = event.data.object as Stripe.Checkout.Session;
 
       const userId = (sess.metadata?.["supabase_user_id"] ?? null) as string | null;
@@ -140,26 +189,25 @@ export async function POST(req: NextRequest) {
       return new Response("ok", { status: 200 });
     }
 
-    // 2) Keep the subscription row current
+    // B) Keep subscription in sync
     if (
-      event.type === "customer.subscription.created" ||
-      event.type === "customer.subscription.updated" ||
-      event.type === "customer.subscription.deleted"
+      type === "customer.subscription.created" ||
+      type === "customer.subscription.updated" ||
+      type === "customer.subscription.deleted"
     ) {
       const subObj = event.data.object as Stripe.Subscription;
 
       const sub = await stripe.subscriptions.retrieve(subObj.id, {
         expand: ["items.data.price.product", "customer"],
       });
-
       await upsertSubscription(admin, sub);
 
-      // optional: keep profiles.user_type in sync
+      // Optional: keep profiles.user_type aligned
       const price = sub.items?.data?.[0]?.price as Stripe.Price | undefined;
       const role = resolveBaseRole(price, sub.metadata);
       if (role) {
-        const status = sub.status;
-        const nextType = status === "active" || status === "trialing" ? role : "member";
+        const nextType =
+          sub.status === "active" || sub.status === "trialing" ? role : "member";
         const stripeCustomerId =
           typeof sub.customer === "string" ? sub.customer : sub.customer?.id;
 
@@ -169,7 +217,6 @@ export async function POST(req: NextRequest) {
             .select("id")
             .eq("stripe_customer_id", stripeCustomerId)
             .maybeSingle();
-
           const userId = mapRow?.id;
           if (userId) {
             const { error: updErr } = await admin
@@ -185,21 +232,25 @@ export async function POST(req: NextRequest) {
       return new Response("ok", { status: 200 });
     }
 
-    // 3) Invoice events: refresh subscription periods
-    if (event.type === "invoice.paid" || event.type === "invoice.payment_failed") {
+    // C) Invoice events: refresh period/status after billing
+    if (
+      type === "invoice.payment_succeeded" ||
+      type === "invoice.payment_failed" ||
+      type === "invoice.paid" // legacy dot style
+    ) {
       const inv = event.data.object as Stripe.Invoice;
 
-      // PRIMARY (2025+): invoice.parent.subscription_details.subscription
+      // 2025+ structure (parent.subscription_details.subscription)
       let subId: string | null = null;
       const parent = (inv as any).parent;
-      if (parent?.type === "subscription_details" && parent.subscription_details?.subscription) {
+      if (parent?.subscription_details?.subscription) {
         subId =
           typeof parent.subscription_details.subscription === "string"
             ? parent.subscription_details.subscription
             : parent.subscription_details.subscription.id;
       }
 
-      // FALLBACK (older API versions): invoice.subscription
+      // Older API: invoice.subscription
       if (!subId) {
         const maybe = (inv as any).subscription;
         if (maybe) subId = typeof maybe === "string" ? maybe : maybe.id;
@@ -210,6 +261,8 @@ export async function POST(req: NextRequest) {
           expand: ["items.data.price.product", "customer"],
         });
         await upsertSubscription(admin, sub);
+      } else {
+        console.warn("Invoice had no resolvable subscription id");
       }
 
       return new Response("ok", { status: 200 });
