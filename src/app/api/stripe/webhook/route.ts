@@ -18,9 +18,6 @@ function getAdmin(): SupabaseClient<Database> {
   );
 }
 
-const toISO = (unix: number | null | undefined) =>
-  typeof unix === "number" ? new Date(unix * 1000).toISOString() : null;
-
 // Normalize Stripe event types so we handle both new underscore and classic dot styles.
 function norm(evtType: string) {
   // e.g. "invoice_payment.paid" -> "invoice.payment_succeeded"
@@ -81,6 +78,9 @@ async function ensureCustomerMapping(
   return null;
 }
 
+const toISO = (unix: number | null | undefined) =>
+  typeof unix === "number" ? new Date(unix * 1000).toISOString() : null;
+
 async function upsertSubscription(
   admin: SupabaseClient<Database>,
   sub: Stripe.Subscription
@@ -89,38 +89,58 @@ async function upsertSubscription(
     typeof sub.customer === "string" ? sub.customer : sub.customer?.id;
   if (!stripeCustomerId) return;
 
-  // Map customer → user_id (and auto-create mapping if possible)
-  let userId: string | null = null;
+  // Map stripe customer -> supabase user
   const { data: mapRow } = await admin
     .from("customers")
     .select("id")
     .eq("stripe_customer_id", stripeCustomerId)
     .maybeSingle();
 
-  userId = mapRow?.id ?? null;
+  let userId = mapRow?.id ?? null;
+
+  // Fallback to metadata if mapping not present yet
   if (!userId) {
-    userId = await ensureCustomerMapping(admin, stripeCustomerId);
+    const cust =
+      typeof sub.customer === "string"
+        ? await stripe.customers.retrieve(sub.customer)
+        : (sub.customer as Stripe.Customer);
+    const metaUserId = (cust as Stripe.Customer)?.metadata?.supabase_user_id;
+    if (metaUserId) {
+      await admin.from("customers").upsert({ id: metaUserId, stripe_customer_id: stripeCustomerId });
+      userId = metaUserId;
+    }
   }
   if (!userId) {
     console.warn("No user mapping for stripe_customer_id:", stripeCustomerId);
     return;
   }
 
-  // First item is your single base price
+  // First (main) item
   const item = sub.items?.data?.[0];
   const price = item?.price as Stripe.Price | undefined;
-  const quantity = item?.quantity ?? null;
 
-  // Period dates: Stripe (new models) place these on the Subscription Item
-  const currentPeriodStart = toISO((item as any)?.current_period_start) ?? new Date().toISOString();
-  const currentPeriodEnd = toISO((item as any)?.current_period_end) ?? new Date().toISOString();
+  // Periods (newer Stripe models put these on the item)
+  const currentPeriodStart =
+    toISO((item as any)?.current_period_start) ??
+    toISO((sub as any)?.current_period_start) ?? // fallback if your account still has them
+    new Date().toISOString();
+  const currentPeriodEnd =
+    toISO((item as any)?.current_period_end) ??
+    toISO((sub as any)?.current_period_end) ??
+    new Date().toISOString();
+
+  // Snapshots to avoid needing products/prices tables
+  const product =
+    typeof price?.product === "string"
+      ? null // we avoid an extra API call; snapshots are optional
+      : (price?.product as Stripe.Product | null);
 
   const row: TablesInsert<"subscriptions"> = {
     id: sub.id,
     user_id: userId,
     status: sub.status as Database["public"]["Enums"]["subscription_status"],
     price_id: price?.id ?? null,
-    quantity,
+    quantity: item?.quantity ?? null,
     metadata: (sub.metadata ?? {}) as any,
     cancel_at: toISO(sub.cancel_at ?? null),
     cancel_at_period_end: sub.cancel_at_period_end ?? null,
@@ -131,6 +151,18 @@ async function upsertSubscription(
     ended_at: toISO(sub.ended_at ?? null),
     trial_start: toISO(sub.trial_start ?? null),
     trial_end: toISO(sub.trial_end ?? null),
+
+    // snapshots (new columns)
+    product_id: typeof price?.product === "string" ? price?.product : product?.id ?? null,
+    product_name: product?.name ?? null,
+    price_currency: price?.currency ?? null,
+    price_unit_amount: price?.unit_amount ?? null,
+    price_interval: price?.recurring?.interval ?? null,
+    price_interval_count: price?.recurring?.interval_count ?? null,
+    price_nickname: price?.nickname ?? null,
+    price_lookup_key: (price?.lookup_key as string) ?? null,
+    price_metadata: (price?.metadata ?? {}) as any,
+    product_metadata: (product?.metadata ?? {}) as any,
   };
 
   const { error } = await admin.from("subscriptions").upsert(row);
