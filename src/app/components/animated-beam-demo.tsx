@@ -42,29 +42,29 @@ export default function AnimatedBeamDemo() {
     >
       <div className="flex size-full max-h-[300px] max-w-lg flex-col items-stretch justify-between gap-16">
         <div className="flex flex-row items-center justify-between">
-          <Circle ref={div1Ref}>
+          <Circle ref={div1Ref} className="transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.user2 />
           </Circle>
-          <Circle ref={div5Ref}>
+          <Circle ref={div5Ref} className="transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.user4 />
           </Circle>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Circle ref={div2Ref}>
+          <Circle ref={div2Ref} className="transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.user1 />
           </Circle>
-          <Circle ref={div4Ref} className="size-20">
+          <Circle ref={div4Ref} className="size-20 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.rpbx />
           </Circle>
-          <Circle ref={div6Ref}>
+          <Circle ref={div6Ref} className="transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.user5 />
           </Circle>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Circle ref={div3Ref}>
+          <Circle ref={div3Ref} className="transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.user3 />
           </Circle>
-          <Circle ref={div7Ref}>
+          <Circle ref={div7Ref} className="transition-transform duration-300 hover:scale-105 hover:shadow-xl">
             <Icons.user6 />
           </Circle>
         </div>

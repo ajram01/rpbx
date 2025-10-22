@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link"
 import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
@@ -59,7 +60,7 @@ export default async function Investor() {
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-white">Select Your Package</h4>
-                  <p className="text-white pt-2">Choose to advertise your business and subscribe monthly, or save 20% when you subscribe annually.</p>
+                  <p className="text-white pt-2">Choose an investor plan that fits your goals — subscribe monthly, or save 20% with an annual subscription.</p>
                 </div>
               </div>
 
@@ -68,8 +69,8 @@ export default async function Investor() {
                   <h4 className="text-white">2</h4>
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-white">Create Your Listing</h4>
-                  <p className="text-white pt-2">Add as much information as you like, including photos and other documents, in our easy to use listing builder.</p>
+                  <h4 className="text-white">Discover Businesses</h4>
+                  <p className="text-white pt-2">Browse listings that match your interests using filters by industry, location, and more.</p>
                 </div>
               </div>
 
@@ -78,8 +79,8 @@ export default async function Investor() {
                   <h4 className="text-white">3</h4>
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-white">Review Your Interested Buyers</h4>
-                  <p className="text-white pt-2">Buyers will contact you directly through the information you input on your listing.</p>
+                  <h4 className="text-white">Connect with Business Owners</h4>
+                  <p className="text-white pt-2">Reach out directly to business owners through their listings to explore potential investments and partnerships.</p>
                 </div>
               </div>
             </div>
@@ -112,7 +113,7 @@ export default async function Investor() {
           <div className="flex-1 flex flex-col justify-center">
             <h3>As An Investor</h3>
             <p className="py-5">Discover vetted businesses aligned with your investment goals through our easy-to-use platform. Filter listings by industry, size, and location, and connect directly with business owners—all in one secure, streamlined dashboard.</p>
-            <Button className="max-w-40">Get Started</Button>
+            <Link href="/pricing" className="max-w-40"><Button className="w-40">Get Started</Button></Link>
           </div>
 
         </div>

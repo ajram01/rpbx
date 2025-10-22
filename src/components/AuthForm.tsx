@@ -18,10 +18,10 @@ export default function AuthForm() {
         Sign In With Email
       </button>
   </Link>
-      <p className="mt-5 text-center">
+      <p className="mt-5 text-center small text-grey">
         By clicking Continue to join or sign in, you agree to RioPlex’s <Link href="/terms" className="hover:underline">Terms of Service</Link>, <Link href="/privacy" className="hover:underline">Privacy Policy</Link>, and <Link href="/cookies" className="hover:underline">Cookie Policy</Link>.
       </p>
-      <p className="mt-5 text-center">New to RioPlex? <Link href="/pricing" className="green-link">Join Now</Link></p>
+      <p className="mt-5 text-center">New to RPBX? <Link href="/pricing" className="green-link">Join Now</Link></p>
     </>
   );
 }

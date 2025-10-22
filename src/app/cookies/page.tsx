@@ -75,11 +75,10 @@ export default function Cookies() {
             <Accordion title="7. Contact Information">
               <p>
                 If you have any questions about our cookie practices, please contact us at:
-              </p>
+              </p><br />
               <p>
                 Phone: (956) 322-5942<br />
-                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link><br />
-                Mailing Address: 100 E. Nolana Ave. Suite 130 McAllen, TX 78504
+                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link>
               </p>
             </Accordion>
 
