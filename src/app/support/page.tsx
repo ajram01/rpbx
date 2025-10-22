@@ -28,8 +28,7 @@ export default function Support() {
             <Accordion title="How do I contact RioPlex Business Exchange support?">
               <p>
                 You can reach our support team by filling out the contact form on our website or emailing us directly at{" "}
-                <Link href="mailto:info@rgvisionmedia.com" className="green-link">info@rgvisionmedia.com</Link>.  
-                Our office is located at 100 E. Nolana Ave. Suite 130, McAllen, TX 78504.
+                <Link href="mailto:info@rgvisionmedia.com" className="green-link">info@rgvisionmedia.com</Link>. 
               </p>
             </Accordion>
 
@@ -65,11 +64,10 @@ export default function Support() {
             <Accordion title="Contact Information">
               <p>
                 If you have any questions, please contact us at:
-              </p>
+              </p><br />
               <p>
                 Phone: (956) 322-5942<br />
-                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link><br />
-                Mailing Address: 100 E. Nolana Ave. Suite 130 McAllen, TX 78504
+                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link>
               </p>
             </Accordion>
 

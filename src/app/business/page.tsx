@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link"
 import NavGate from "../components/NavGate";
 import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
@@ -114,7 +115,7 @@ export default async function Business() {
           <div className="flex-1 flex flex-col justify-center">
             <h3>As A Business Owner</h3>
             <p className="py-5">Discover potential investors who align with your business goals through our easy-to-use platform. Browse investor profiles, filter by industry and investment preferences, and connect with the right partners—all in one seamless dashboard.</p>
-            <Button className="max-w-40">Get Started</Button>
+            <Link href="/pricing" className="max-w-40"><Button className="w-40">Get Started</Button></Link>
           </div>
 
         </div>

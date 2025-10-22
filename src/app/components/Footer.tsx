@@ -49,7 +49,7 @@ export default function Footer() {
       </div>
       </div>
       <div className="text-center bg-white py-2">
-        <p className="black"><Link href="https://www.rgvisionmedia.com" target="_blank" className="hover:text-[#60BC9B]">Website by RGVision Media</Link></p>
+        <p className="black"><Link href="https://www.rgvisionmedia.com" target="_blank" className="hover:text-[#60BC9B]">RGVision Media</Link></p>
       </div>
 
 

@@ -27,13 +27,18 @@ export default function FAQ() {
 
             <Accordion title="How much does it cost for a Business Valuation?">
               <p>
-                The Business Valuation is priced at $1,850 for non-members and $850 for members. Reach out to us for more details and schedule your valuation today!
+                The Business Valuation is priced at $1,850 for non-members and $850 for members. Business Owner Lite trial members do not qualify for the discount during their 30-day trial. Reach out to us for more details and schedule your valuation today!
               </p><br/>
 
               <p>
                 Phone: (956) 322-5942<br />
                 Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link><br />
-                Mailing Address: 100 E. Nolana Ave. Suite 130 McAllen, TX 78504
+              </p>
+            </Accordion>
+
+            <Accordion title="How does the Business Owner 30-day free trial work?">
+              <p>
+                You’ll have full access to the Business Owner membership for 30 days at no cost. During the trial, some features are limited — you won’t be able to view investors’ full profiles, filter or sort the investor listings, see your own business listing views, access the business valuation discount, or boost your listing. After the 30 days, your regular plan charges will automatically begin unless you cancel beforehand.
               </p>
             </Accordion>
 
@@ -88,8 +93,7 @@ export default function FAQ() {
               </p><br/>
               <p>
                 Phone: (956) 322-5942<br />
-                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link><br />
-                Mailing Address: 100 E. Nolana Ave. Suite 130 McAllen, TX 78504
+                Email: <Link href="mailto:info@rioplexbizx.com" className="green-link">info@rioplexbizx.com</Link>
               </p>
             </Accordion>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -26,10 +26,9 @@ export default function Carousel() {
 
   return (
     <Swiper
-      modules={[Navigation, Pagination, Autoplay]}
-      spaceBetween={30}
+      modules={[ Pagination, Autoplay]}
+      spaceBetween={25}
       slidesPerView={1}
-      navigation
       pagination={{ clickable: true, dynamicBullets: true, }}
       autoplay={{ delay: 5000 }}
       loop
