@@ -132,7 +132,7 @@ function PricingTab(props: PricingTabProps) {
             aria-disabled={!canCheckout}
             className={`w-full inline-flex justify-center whitespace-nowrap rounded-full px-3.5 py-2.5 text-sm font-medium text-white transition-colors duration-150 ${
               canCheckout
-                ? 'bg-[#60BC9B] hover:bg-[#4ba88a] focus-visible:outline-none focus-visible:ring-[#60BC9B]'
+                ? 'bg-[#60BC9B] hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-[#60BC9B]'
                 : 'bg-slate-400 cursor-not-allowed'
             }`}
           >

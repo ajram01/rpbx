@@ -19,15 +19,11 @@ export function LoginForm({ className, next = "", ...props }: LoginFormProps) {
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login with your Apple or Google account</CardDescription>
+          <CardDescription>Login with your Email or Google account</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6">
             <div className="flex flex-col gap-4">
-              <Button type="button" variant="outline" className="w-full">
-                {/* TODO: wire to Supabase OAuth */}
-                Login with Apple
-              </Button>
               <Button type="button" variant="outline" className="w-full">
                 Login with Google
               </Button>
