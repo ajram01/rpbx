@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import AuthForm from "../../components/AuthForm";
 import VideoSection from "../components/VideoSection";
 import type { Metadata } from "next";
+import CarouselBusiness from "@/components/ui/carouselbusiness";
 
 export const metadata: Metadata = {
   title: "About Investor Accounts | RioPlex Business Exchange",
@@ -87,7 +88,8 @@ export default async function Investor() {
   
           </div>
 
-          <div className="bg-white flex-1 flex flex-col items-center rounded-2xl p-5">
+          <div className="flex flex-col items-center text-center w-full lg:w-[560px] px-4">
+            <CarouselBusiness />
   
           </div>
 
