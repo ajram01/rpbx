@@ -4,8 +4,6 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/app/components/Button";
-import Link from "next/link";
-import next from "next";
 
 export default function PaywallOverlay({
   priceId,
@@ -83,7 +81,7 @@ export default function PaywallOverlay({
           <p className="small text-neutral-500 mt-3">
             or{" "}
                 <form action="/signout" method="post">
-                  <button type="submit">Log Out</button>
+                  <Button type="submit">Log Out</Button>
                 </form>
           </p>
         </div>

@@ -27,7 +27,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
   const params = await searchParams
   const next = readParam(params, "next")
   const initialError = readParam(params, "error")
-  const message = readParam(params, "message")
   const supabase = await createClientRSC()
   
   //Use getSession() instead of getUser() for consistency
