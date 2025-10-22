@@ -78,7 +78,7 @@ export default function PaywallOverlay({
           </p>
 
           {/* tiny "log out" text link */}
-          <p className="text-xs text-neutral-500 mt-3">
+          <p className="small text-neutral-500 mt-3">
             or{" "}
                 <form action="/signout" method="post">
                   <Button type="submit">Log Out</Button>
