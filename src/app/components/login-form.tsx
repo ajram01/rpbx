@@ -45,7 +45,7 @@ export function LoginForm({ className, next = "", initialError, ...props }: Logi
     }
     if (m.includes("email not confirmed") || m.includes("email_not_confirmed")) {
       setNeedsConfirm(true);
-      return "Please confirm your email to continue.";
+      return "Please verify your email to login.";
     }
     if (m.includes("too many requests") || m.includes("rate")) {
       return "Too many attempts. Please wait a moment and try again.";
@@ -201,7 +201,7 @@ export function LoginForm({ className, next = "", initialError, ...props }: Logi
 
               {(errorMsg || infoMsg) && (
                 <p
-                  className={`text-xs ${errorMsg ? "text-red-600" : "text-green-600"}`}
+                  className={`bg-red-100 small p-2 rounded-lg ${errorMsg ? "text-red-600" : "text-green-600"}`}
                   role="alert"
                   aria-live="polite"
                 >
@@ -210,12 +210,12 @@ export function LoginForm({ className, next = "", initialError, ...props }: Logi
               )}
 
               {needsConfirm && (
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between -my-3">
                   <span className="text-xs text-neutral-600">Didn’t get the email?</span>
                   <Button
                     type="button"
                     variant="link"
-                    className="p-0 text-xs text-red-700 underline underline-offset-4"
+                    className="p-0 text-xs text-red-700 underline underline-offset-4 cursor-pointer"
                     onClick={resendVerification}
                     disabled={loading}
                   >
