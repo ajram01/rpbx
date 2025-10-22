@@ -4,6 +4,12 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import LogoLoader from './LogoLoader';
 import LogoLoaderDark from './LogoLoaderDark';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
+import { TooltipProvider } from '@radix-ui/react-tooltip';
 
 type NormalizedPrice = {
   id: string;
@@ -28,6 +34,7 @@ interface PricingTabProps {
   price: { monthly: number | null; yearly: number | null };
   planDescription: string;
   features: string[];
+  trialDays?: number;
   // unauth deep-link
   checkoutLookup?: string | null;
   // auth direct checkout
@@ -35,7 +42,7 @@ interface PricingTabProps {
   priceIdYearly?: string | null;
   isFree?: boolean;
   loggedIn: boolean;
-  onCheckout: (priceId: string) => Promise<void>;
+  onCheckout: (priceId: string, trialDays?: number) => Promise<void>;
 }
 
 interface PricingTableProps {
@@ -44,6 +51,10 @@ interface PricingTableProps {
 }
 
 function PricingTab(props: PricingTabProps) {
+
+  const trialDays = typeof props.trialDays === 'number' ? props.trialDays : 0;
+  const isTrial = trialDays > 0;
+
   const displayCents = props.yearly
     ? (props.price.yearly ?? props.price.monthly)
     : (props.price.monthly ?? props.price.yearly);
@@ -64,6 +75,10 @@ function PricingTab(props: PricingTabProps) {
 
   const canCheckout = props.loggedIn ? !!chosenPriceId : !!props.checkoutLookup;
 
+  const headlineNumber = isTrial ? '0' : displayCents != null ? (displayCents / 100).toFixed(0) : props.isFree ? '0' : '-'
+
+  const periodLabel = isTrial ? `/ ${trialDays} days` : (props.isFree && displayCents == null ? '' : period);
+
   const handleClick = async (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
     if (!props.loggedIn) {
       if (!props.checkoutLookup) e.preventDefault();
@@ -71,7 +86,7 @@ function PricingTab(props: PricingTabProps) {
     }
     e.preventDefault();
     if (!chosenPriceId) return;
-    await props.onCheckout(chosenPriceId);
+    await props.onCheckout(chosenPriceId, trialDays);
   };
 
   return (
@@ -87,18 +102,29 @@ function PricingTab(props: PricingTabProps) {
 
         <div className="mb-5">
           <div className="text-slate-900 font-semibold mb-2"><h4>{props.planName}</h4></div>
+          <TooltipProvider>
+            <div className="inline-flex items-baseline mb-1 pb-3">
+              <span className="text-slate-900 font-bold text-3xl">$</span>
+              <span className="text-slate-900 font-bold text-4xl">
+                {headlineNumber}
+              </span>
+              <span className="text-slate-500 font-medium">
+                {periodLabel}
 
-          <div className="inline-flex items-baseline mb-1">
-            <span className="text-slate-900 font-bold text-3xl">$</span>
-            <span className="text-slate-900 font-bold text-4xl">
-              {displayCents != null ? (displayCents / 100).toFixed(0) : props.isFree ? '0' : '-'}
-            </span>
-            <span className="text-slate-500 font-medium">
-              {props.isFree && displayCents == null ? '' : period}
-            </span>
-          </div>
-
-          <div className="text-sm text-slate-500 mb-5">{props.planDescription}</div>
+                {isTrial && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      ⓘ
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {`Then $${((props.price.monthly ?? props.price.yearly ?? 0) / 100).toFixed(0)}/mo unless canceled`}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                
+              </span>
+            </div>
+          </TooltipProvider>
 
           <Link
             href={href}
@@ -110,7 +136,7 @@ function PricingTab(props: PricingTabProps) {
                 : 'bg-slate-400 cursor-not-allowed'
             }`}
           >
-            {props.isFree ? 'Join Free' : (props.loggedIn ? 'Continue to Checkout' : 'Purchase Plan')}
+            {isTrial ? 'Start Free Trial' : (props.loggedIn ? 'Continue to Checkout' : 'Purchase Plan')}
           </Link>
         </div>
 
@@ -160,30 +186,31 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
     popular: boolean;
     isFree: boolean;
     sortOrder: number;
+    trialDays?: number;
   };
 
   const plans = useMemo(() => {
-    const map = new Map<string, Group>();
+      const map = new Map<string, Group>();
 
-    for (const p of prices) {
-      const stem =
-        (p.lookup_key?.replace(/_(monthly|yearly)$/i, '') ||
+      for (const p of prices) {
+        const stem = 
+          (p.lookup_key?.replace(/_(monthly|yearly)$/i, '') || 
           p.productName.toLowerCase().replace(/\s+/g, '_')) ?? 'plan';
 
-      const existing = map.get(stem);
+        const existing = map.get(stem);
 
-      const isPopular =
-        (typeof p.popular === 'boolean' && p.popular) ||
-        ((p.metadata?.popular || '').toLowerCase() === 'true');
+        const isPopular = 
+          (typeof p.popular === 'boolean' && p.popular) ||
+          ((p.metadata?.popular || '').toLowerCase() === 'true');
 
-      const isFree = (p.unit_amount ?? 0) === 0;
+        const isFree = (p.unit_amount ?? 0) === 0;
 
-      const rawOrder = (p.sortOrder as number | undefined) ?? parseInt(
-        (p.metadata?.sort_order ?? p.metadata?.order ?? ''), 10
-      );
-      const order = Number.isFinite(rawOrder as number) ? (rawOrder as number) : 999;
+        const rawOrder = 
+          (p.sortOrder as number | undefined) ?? 
+          parseInt((p.metadata?.sort_order ?? p.metadata?.order ?? ''), 10);
+        const order = Number.isFinite(rawOrder as number) ? (rawOrder as number) : 999;
 
-      const g: Group =
+        const g: Group = 
         existing ?? {
           planName: p.productName,
           planDescription: p.productDescription ?? '',
@@ -199,45 +226,78 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
           sortOrder: order,
         };
 
-      if (p.interval === 'month') {
-        g.monthly = p.unit_amount;
-        g.lookupMonthly = p.lookup_key ?? null;
-        g.priceIdMonthly = p.id;
+        if (p.interval === 'month'){
+          g.monthly = p.unit_amount;
+          g.lookupMonthly = p.lookup_key ?? null;
+          g.priceIdMonthly = p.id;
+        }
+        if (p.interval === 'year'){
+          g.yearly = p.unit_amount;
+          g.lookupYearly = p.lookup_key ?? null;
+          g.priceIdYearly = p.id;
+        }
+
+        g.popular = g.popular || isPopular;
+        g.isFree = g.isFree || isFree;
+        g.sortOrder = Math.min(g.sortOrder, order);
+
+        if (!g.features.length && p.metadata?.features){
+          g.features = p.metadata.features.split('|').map(s => s.trim()).filter(Boolean);
+        }
+
+        map.set(stem, g);
       }
-      if (p.interval === 'year') {
-        g.yearly = p.unit_amount;
-        g.lookupYearly = p.lookup_key ?? null;
-        g.priceIdYearly = p.id;
-      }
 
-      g.popular = g.popular || isPopular;
-      g.isFree = g.isFree || isFree;
-      g.sortOrder = Math.min(g.sortOrder, order);
 
-      if (!g.features.length && p.metadata?.features) {
-        g.features = p.metadata.features.split('|').map(s => s.trim()).filter(Boolean);
-      }
+      const arr = Array.from(map.values());
 
-      map.set(stem, g);
-    }
+      const legacyIdx = arr.findIndex(
+        p => p.planName === 'Business Owner Legacy' && p.monthly != null
+      );
+      const alreadyHasLite = arr.some(p => p.planName === 'Business Owner Lite');
 
-    return Array.from(map.values()).sort(
-      (a, b) => (a.sortOrder - b.sortOrder) || a.planName.localeCompare(b.planName)
-    );
-  }, [prices]);
+      if (legacyIdx !== -1 && !alreadyHasLite){
+            const legacy = arr[legacyIdx];
+            const lite: Group = {
+            planName: 'Business Owner Lite',
+            planDescription: 'Free for 30 days',
+            monthly: legacy.monthly,
+            yearly: null,
+            lookupMonthly: legacy.lookupMonthly,
+            lookupYearly: null,
+            priceIdMonthly: legacy.priceIdMonthly,
+            priceIdYearly: null,
+            features: [
+              'Get a glimpse of the investor community',
+              'Discover investor affiliations (companies & industries)',
+              'Explore real investor matches for 30 days — free',
+              'Keep connecting after your trial with our monthly plan'
+            ],
+            popular: false,
+            isFree: false,
+            sortOrder: Math.max(0, legacy.sortOrder - 1),
+            trialDays: 30,
+          };
+          arr.splice(legacyIdx, 0, lite);
+        }
+        return arr.sort(
+          (a, b) => (a.sortOrder - b.sortOrder) || a.planName.localeCompare(b.planName)
+        );
+      }, [prices]);
 
   // Show free always; otherwise require interval for selected tab
   const visiblePlans = useMemo(() => {
     return plans
+      .filter(p => p.planName !== 'Boosted Listing' && p.planName !== 'Business Owner Lite (old)')
       .filter(p => {
-        if (p.planName === "Boosted Listing") return false; // keep addons off the main picker
-        return true;
-      })
-      .filter(p => p.isFree ? true : (isAnnual ? p.yearly != null : p.monthly != null));
+        const isLite = p.planName === 'Business Owner Lite';
+        if (isLite) return !isAnnual;          // only show on Monthly toggle
+        return p.isFree ? true : (isAnnual ? p.yearly != null : p.monthly != null);
+      });
   }, [plans, isAnnual]);
 
   // POST to /api/checkout for logged-in users
-  const onCheckout = useCallback(async (priceId: string) => {
+  const onCheckout = useCallback(async (priceId: string, trialDays?: number) => {
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
@@ -245,6 +305,7 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
         body: JSON.stringify({
           priceId,
           purpose: 'base_membership',
+          trialDays,
         }),
       });
       if (!res.ok) {
@@ -309,6 +370,7 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
               planDescription={p.planDescription}
               price={{ monthly: p.monthly, yearly: p.yearly }}
               features={p.features}
+              trialDays={p.trialDays}
               // --- FIX: For unauth users, free plan falls back to whichever lookup exists
               checkoutLookup={
                 p.isFree

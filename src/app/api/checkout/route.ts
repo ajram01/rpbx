@@ -3,6 +3,7 @@ export const runtime = "nodejs";
 
 import { stripe } from "@/lib/stripe";
 import { ensureCustomer } from "@/lib/ensure-customer";
+import { triggerAsyncId } from "async_hooks";
 
 /**
  * Supports base plans (business monthly/yearly/trial, investor monthly/yearly)
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
     let cancelUrl: string | undefined;
     let listingId: string | undefined;
     let purpose: "listing_promo" | "listing_plan" | "base_membership" | undefined;
+    let trialDaysFromClient: number | undefined;
 
     if (ct.includes("application/json")) {
       const body = await req.json();
@@ -46,6 +48,8 @@ export async function POST(req: Request) {
       cancelUrl = body.cancelUrl;
       listingId = body.listingId;
       purpose = body.purpose;
+      const td = Number(body.trialDays);
+      trialDaysFromClient = Number.isFinite(td) && td > 0 ? Math.floor(td) : undefined;
     } else {
       const form = await req.formData();
       priceId = String(form.get("priceId") ?? "");
@@ -55,7 +59,10 @@ export async function POST(req: Request) {
       const p = form.get("purpose")?.toString();
       if (p === "listing_promo" || p === "listing_plan" || p === "base_membership")
         purpose = p;
+      const td = Number(form.get("trialDays"));
+      trialDaysFromClient = Number.isFinite(td) && td > 0 ? Math.floor(td) : undefined
     }
+
 
     if (!priceId) return new Response("Missing priceId", { status: 400 });
 
@@ -122,12 +129,21 @@ export async function POST(req: Request) {
     if (mdTrial && /^\d+$/.test(String(mdTrial))) {
       trialDays = parseInt(String(mdTrial), 10);
     }
-    // (Optional fallback) If you still need a hard fallback, you can add it here.
+    
+    // Allow client to override (only for base memberships)
+    if (finalPurpose === "base_membership" && typeof trialDaysFromClient === "number"){
+      trialDays = trialDaysFromClient;
+    }
+
+    // Sanitize bounds (allow 1-60 days; tweak to policy)
+    if (typeof trialDays === "number"){
+      trialDays = 30;
+    }
 
     // Ensure Stripe customer (robust mapping; reuses if exists)
     const customerId = await ensureCustomer(user);
 
-    // ⛔️ PREVENT DUPLICATE BASE SUBSCRIPTIONS
+    //PREVENT DUPLICATE BASE SUBSCRIPTIONS
     if (finalPurpose === "base_membership") {
       const existing = await stripe.subscriptions.list({
         customer: customerId,
@@ -172,6 +188,7 @@ export async function POST(req: Request) {
       purpose: finalPurpose,
       ...(listingId ? { listing_id: listingId } : {}),
       ...(resolvedRole ? { user_type_intended: resolvedRole } : {}), // harmless hint; webhook uses price again
+      ...(typeof trialDays === "number" ? { trial_days_applied: String(trialDays) } : {}),
       ...safeMeta,
     };
 
@@ -179,6 +196,7 @@ export async function POST(req: Request) {
       {
         mode: "subscription",
         customer: customerId,
+        client_reference_id: user.id,
         line_items: [{ price: priceId, quantity }],
         success_url: successUrl ?? `${origin}/welcome?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: cancelUrl ?? `${origin}/dashboard`,
