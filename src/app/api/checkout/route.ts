@@ -3,8 +3,6 @@ export const runtime = "nodejs";
 
 import { stripe } from "@/lib/stripe";
 import { ensureCustomer } from "@/lib/ensure-customer";
-import { triggerAsyncId } from "async_hooks";
-
 /**
  * Supports base plans (business monthly/yearly/trial, investor monthly/yearly)
  * and (optionally) listing promo. Enforces via Stripe Price metadata:
