@@ -90,7 +90,7 @@ function PricingTab(props: PricingTabProps) {
   };
 
   return (
-    <div className={`w-full`}>
+    <div className={`w-1/3`}>
       <div className="relative flex flex-col h-full p-6 rounded-2xl bg-white border border-slate-200 shadow shadow-slate-950/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
         {props.popular && (
           <div className="absolute top-0 right-0 mr-6 -mt-4">
@@ -109,7 +109,7 @@ function PricingTab(props: PricingTabProps) {
                 {headlineNumber}
               </span>
               <span className="text-slate-500 font-medium">
-                {periodLabel}
+                {periodLabel}{" "}
 
                 {isTrial && (
                   <Tooltip>
@@ -117,7 +117,7 @@ function PricingTab(props: PricingTabProps) {
                       ⓘ
                     </TooltipTrigger>
                     <TooltipContent>
-                      {`Then $${((props.price.monthly ?? props.price.yearly ?? 0) / 100).toFixed(0)}/mo unless canceled`}
+                      {`Automatically renews at $${((props.price.monthly ?? props.price.yearly ?? 0) / 100).toFixed(0)}/mo after 30 days. Cancel any time.`}
                     </TooltipContent>
                   </Tooltip>
                 )}
@@ -330,15 +330,15 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
         <div className="relative flex w-full p-1 bg-white rounded-full">
           <span className="absolute inset-0 m-1 pointer-events-none" aria-hidden="true">
             <span
-              className={`absolute inset-0 w-1/2 bg-[#60BC9B] rounded-full shadow-sm shadow-[#60BC9B] transition-transform duration-150 ease-in-out ${
+              className={`absolute inset-0 w-1/2 bg-[#60BC9B] rounded-full shadow-sm shadow-[#60BC9B] transition-transform duration-150 ease-in-out  ${
                 !isAnnual ? 'translate-x-0' : 'translate-x-full'
               }`}
             />
           </span>
 
           <button
-            className={`relative flex-1 text-sm font-medium h-8 rounded-full ${
-              !isAnnual ? 'text-white' : 'text-slate-500'
+            className={`relative flex-1 text-sm font-medium h-8 rounded-full  ${
+              !isAnnual ? 'text-white' : 'text-slate-500 hover:text-[#60BC9B] cursor-pointer'
             }`}
             onClick={() => setIsAnnual(false)}
             aria-pressed={!isAnnual}
@@ -348,7 +348,7 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
 
           <button
             className={`relative flex-1 text-sm font-medium h-8 rounded-full ${
-              isAnnual ? 'text-white' : 'text-slate-500'
+              isAnnual ? 'text-white' : 'text-slate-500 hover:text-[#60BC9B] cursor-pointer'
             }`}
             onClick={() => setIsAnnual(true)}
             aria-pressed={isAnnual}
@@ -360,7 +360,7 @@ export default function PricingTable({ dark, loggedIn }: PricingTableProps) {
 
       {/* Cards */}
       <div className="max-w-[1140px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex flex-row gap-6 justify-center">
           {visiblePlans.map((p) => (
             <PricingTab
               key={`${p.planName}-${isAnnual ? 'year' : 'month'}`}
