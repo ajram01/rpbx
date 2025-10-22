@@ -2,7 +2,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
-import { LoginForm } from "@/components/login-form"
+import { LoginForm } from "../components/login-form"
 import { createClientRSC } from "../../../utils/supabase/server"
 import { redirect } from 'next/navigation'
 
@@ -11,20 +11,33 @@ export const metadata: Metadata = {
   description: "Connecting Local Business Owners With Investors",
 }
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
-  const { next } = await searchParams
+type SearchParams = Promise<Record<string, string | string[] | undefined>>
+
+function readParam(
+  params: Record<string, string | string[] | undefined>,
+  key: string
+): string | undefined {
+  const v = params[key]
+  if (Array.isArray(v)) return v[0]
+  return v
+}
+
+export default async function LoginPage({ searchParams }: { searchParams: SearchParams}) {
+
+  const params = await searchParams
+  const next = readParam(params, "next")
+  const initialError = readParam(params, "error")
+  const message = readParam(params, "message")
   const supabase = await createClientRSC()
   
-  // ✅ Use getSession() instead of getUser() for consistency
-  const { data: { session }, error } = await supabase.auth.getSession()
-  
-  // Only log unexpected errors
-  if (error && error.status !== 400) {
-    console.error('Login page auth error:', error)
+  //Use getSession() instead of getUser() for consistency
+  const { data: { user }, error: sessErr } = await supabase.auth.getUser()
+
+  if (sessErr && sessErr.status !== 400){
+    console.error("Login page auth error: ", sessErr)
   }
-  
-  // Redirect if already authenticated
-  if (session?.user) redirect('/dashboard')
+
+  if (user) redirect("/dashboard")
   
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-top">
@@ -39,7 +52,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             priority
           />
         </Link>
-        <LoginForm next={next} />
+        <LoginForm next={next} initialError={initialError ?? undefined} />
       </div>
     </div>
   )
