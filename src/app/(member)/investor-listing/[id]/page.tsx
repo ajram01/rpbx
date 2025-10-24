@@ -1,6 +1,6 @@
 // app/investor-listing/[id]/page.tsx
 import NavGate from "@/app/components/NavGate";
-import Button from "../../components/Button";
+import Button from "@/app/components/Button";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { createClientRSC } from "@/../utils/supabase/server";
