@@ -1,7 +1,7 @@
 import React, { type ReactNode } from "react";
 import Link from "next/link";
 
-type Variant = "primary" | "secondary" | "charcoal" | "white";
+type Variant = "primary" | "secondary" | "charcoal" | "white" | "bland";
 
 type CommonProps = {
   variant?: Variant;
@@ -33,6 +33,7 @@ export default function Button(props: ButtonProps) {
     secondary: "bg-gray-700 hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)] text-white",
     charcoal: "bg-[#333333] hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)] text-white",
     white: "bg-white hover:bg-[var(--color-primary-hover)] text-black hover:text-white border border-black hover:border-[var(--color-primary-hover)] w-auto px-[15px]",
+    bland: "text-center small text-grey px-0 py-0"
   };
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";
   const classes = [baseStyles, variantStyles[variant], disabledStyles, className].filter(Boolean).join(" ");

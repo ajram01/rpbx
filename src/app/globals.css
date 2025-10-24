@@ -130,6 +130,10 @@ a.blue-link {
   color: #60A1BC;
 }
 
+button.small {
+    font-size: 12px;
+}
+
 p.small {
   font-size: 12px;
 }
@@ -155,6 +159,10 @@ p.text-grey {
 }
 
 li.text-grey {
+  color: #7e7d7d;
+}
+
+button.text-grey {
   color: #7e7d7d;
 }
 

@@ -118,8 +118,8 @@ export default async function Contact() {
 
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
     <form action={save}>
-      <h1 className="text-2xl font-semibold">Let’s Get to Know You</h1>
-      <p className="mt-2">Introduce yourself to the community! Share a few basics so business owners can see who’s behind the investment. A great profile helps you make authentic local connections from the start.</p>
+      <h1 className="text-2xl font-semibold">Introduce Yourself</h1>
+      <p className="mt-2">Let the community get to know you! Share a few basics so business owners can see who’s behind the investment. A great profile helps you make authentic local connections from the start.</p>
       <hr className="mb-1 mt-4" />
 
       <div className="grid grid-cols-2 gap-3 pt-4">

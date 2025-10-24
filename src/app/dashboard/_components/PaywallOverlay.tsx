@@ -71,19 +71,17 @@ export default function PaywallOverlay({
             {loading ? "Opening checkout…" : "Continue checkout"}
           </Button>
 
-          <p className="text-xs text-neutral-500 text-center">
-            <span className="text-muted-foreground">
-              You can cancel anytime.
-            </span>
-          </p>
+<span className="flex flex-row mx-auto justify-center items-center gap-1">
+  <p className="mt-1 text-center small text-grey">
+    You can cancel anytime.
+  </p>
+  <form action="/signout" method="post">
+    <button type="submit" className="small text-grey cursor-pointer hover:underline">
+      Log Out
+    </button>
+  </form>
+</span>
 
-          {/* tiny "log out" text link */}
-          <p className="small text-neutral-500 mt-3">
-            or{" "}
-                <form action="/signout" method="post">
-                  <Button type="submit">Log Out</Button>
-                </form>
-          </p>
         </div>
       </div>
     </div>

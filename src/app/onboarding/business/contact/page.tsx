@@ -52,7 +52,7 @@ async function save(formData: FormData) {
         <Progress value={30} />
       </div>
     <div className=" bg-white mx-auto max-w-lg lg:min-w-[550px] p-6 my-5 rounded-xl border border-neutral-200 shadow">
-    <Link href="/onboarding/business/set-up" className="text-sm underline hover:text-[#60BC9B]">&larr; Let’s Get to Know Your Business</Link>
+    <Link href="/onboarding/business/set-up" className="text-sm underline hover:text-[#60BC9B]">&larr; Let’s Dive Into Your Business</Link>
     <form action={save} >
       <h1 className="text-2xl font-semibold mt-2">Stay Connected & Build Trust</h1>
       <p className="mt-2">Share how investors can reach you and let them know you’re ready to provide key documents when needed. Transparency builds confidence and helps spark meaningful connections.</p>

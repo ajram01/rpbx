@@ -5,8 +5,8 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-export default function CarouselBusiness() {
-  const slides = [{link: "step1-RPBX", num: 1}, {link: "step2-business", num: 2 }, {link: "step3-business", num: 3 }];
+export default function CarouselInvestor() {
+  const slides = [{link: "step1-RPBX", num: 1}, {link: "step2-investor", num: 2 }, {link: "step3-investor", num: 3 }];
 
   return (
     <Swiper
