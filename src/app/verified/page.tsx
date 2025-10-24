@@ -3,12 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "../components/Button";
 
-export default function Verified({
-  searchParams,
-}: {
-  searchParams?: { next?: string };
-}) {
-  const next = searchParams?.next || "/dashboard";
+export default function Verified() {
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-4 lg:py-10">
       <div className="bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow text-center">
