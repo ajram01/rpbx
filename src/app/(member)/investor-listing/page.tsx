@@ -1,6 +1,6 @@
 // app/investor-listing/page.tsx (Server Component)
-import NavGate from "../components/NavGate";
-import Button from "../components/Button";
+import NavGate from "@/app/components/NavGate";
+import Button from "@/app/components/Button";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";

@@ -1,6 +1,6 @@
 // app/business-listings/page.tsx
-import NavGate from "../components/NavGate";
-import Button from "../components/Button";
+import NavGate from "@/app/components/NavGate";
+import Button from "@/app/components/Button";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";

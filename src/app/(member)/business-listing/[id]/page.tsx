@@ -1,5 +1,5 @@
 import NavGate from "@/app/components/NavGate";
-import Button from "../../components/Button";
+import Button from "@/app/components/Button";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
