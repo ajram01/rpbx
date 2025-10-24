@@ -4,7 +4,6 @@ export const revalidate = 0;
 import { redirect } from "next/navigation";
 import { createClientRSC } from "@/../utils/supabase/server";
 import { getEntitlement } from "@/lib/entitlements";
-import NavGate from "@/app/components/NavGate";
 import PaywallOverlay from "./dashboard/_components/PaywallOverlay";
 
 export default async function MemberLayout({
