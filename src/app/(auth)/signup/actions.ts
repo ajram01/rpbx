@@ -14,7 +14,7 @@ export async function signUp(formData: FormData) {
     options: {
       data: { full_name, username },
       // set in Supabase Auth settings or override here:
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/verified`,
     },
   })
   if (error) throw new Error(error.message)
