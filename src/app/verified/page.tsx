@@ -9,8 +9,6 @@ export default function Verified({
   searchParams?: { next?: string };
 }) {
   const next = searchParams?.next || "/dashboard";
-  const loginHref = `/login?next=${encodeURIComponent(next)}`;
-
   return (
     <div className="flex flex-col bg-[url('/images/backgrounds/white-bg.png')] bg-repeat bg-center min-h-screen justify-center p-4 lg:py-10">
       <div className="bg-white mx-auto max-w-lg lg:min-w-[500px] p-6 my-5 rounded-xl border border-neutral-200 shadow text-center">
