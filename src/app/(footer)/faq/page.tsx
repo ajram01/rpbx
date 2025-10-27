@@ -1,5 +1,5 @@
-import NavGate from '../components/NavGate';
-import Accordion from '../../components/ui/accordion';
+import NavGate from '../../components/NavGate';
+import Accordion from '../../../components/ui/accordion';
 import Link from 'next/link';
 import type { Metadata } from "next";
 
