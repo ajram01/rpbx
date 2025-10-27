@@ -1,6 +1,6 @@
-import NavGate from '../components/NavGate';
+import NavGate from '../../components/NavGate';
 import Link from 'next/link';
-import Accordion from '../../components/ui/accordion';
+import Accordion from '../../../components/ui/accordion';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
