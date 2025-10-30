@@ -20,7 +20,7 @@ export async function generateMetadata(
     .eq("id", id)
     .maybeSingle();
 
-  const title = data?.title || "Business Listing";
+  const title = data?.industry || "Business Listing";
   const published = data?.status === "published" && data?.is_active === true;
 
   return {
@@ -135,7 +135,6 @@ export default async function ListingPage({
           {listing.is_promoted_effective && (
             <Badge variant="secondary" className="bg-[#9ed3c3] hover:bg-[#7fb8a9] text-black flex items-center gap-1">
               <BadgeCheckIcon />
-              Promoted
             </Badge>
           )}
 

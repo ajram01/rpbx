@@ -292,7 +292,6 @@ export default async function Businesses({
                     {r.is_promoted_effective && (
                       <Badge variant="secondary" className="bg-[#9ed3c3] hover:bg-[#7fb8a9] text-black flex items-center gap-1">
                         <BadgeCheckIcon />
-                        Promoted
                       </Badge>
                     )}
                     </div>

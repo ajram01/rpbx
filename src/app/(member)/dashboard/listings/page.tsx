@@ -5,9 +5,49 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClientRSC } from "@/../utils/supabase/server";
+import { headers, cookies } from "next/headers" 
 import { getListingBadges } from "@/lib/listings/badges";
+import { Badge } from "lucide-react";
 
 // ---- SERVER ACTIONS (unchanged behaviors, just colocated) ----
+async function startEvaluation(listingId: string){
+  "use server";
+
+  const h = await headers();
+  const proto = (await h).get("x-fowarded-proto") ?? "http";
+  const host = (await h).get("x-forwarded-host") ?? (await h).get("host");
+
+  if(!host) {
+    console.error("Missing host header")
+    return redirect("/dashboard/listings?err=no_host")
+  }
+
+  const base = `${proto}://${host}`;
+  const ck = await cookies();
+
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://localhost:3000";
+
+  const res = await fetch(`${base}/api/checkout/evaluation`, {
+    method: "POST",
+    headers: { "content-type": "application/json",
+      cookie: ck.toString(),
+     },
+    body: JSON.stringify({ listingId }),
+
+    cache: "no-store",
+  });
+
+  if (!res.ok){
+    console.error("Failed to create evaluation checkout session")
+    return redirect("/dashboard/listings?err=eval_checkout")
+  }
+
+  const { url } = await res.json();
+  if (!url) return redirect("/dashboard/listings?err=no_eval_url");
+
+  redirect(url);
+}
+
 async function startBoost(listingId: string) {
   "use server";
 
@@ -114,7 +154,7 @@ export default async function OwnerListings() {
   // 1) Fetch listings
   const { data: rows } = await supabase
     .from("business_listings")
-    .select("id, title, industry, listing_image_path, status, is_active, updated_at, is_promoted")
+    .select("id, title, industry, listing_image_path, status, is_active, updated_at")
     .eq("owner_id", user.id)
     .order("updated_at", { ascending: false });
 
@@ -145,7 +185,7 @@ export default async function OwnerListings() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {rows.map((l) => {
             const updated = l.updated_at ? new Date(l.updated_at).toLocaleString() : "—";
-            const isBoosted = boosted.has(l.id) || !!l.is_promoted;
+            const isBoosted = boosted.has(l.id);
             const evalState = evalStatus.get(l.id); // 'purchased' | 'in_progress' | 'completed' | undefined
 
             return (
@@ -240,15 +280,26 @@ export default async function OwnerListings() {
                     </button>
                   </form>
 
-                  {/* Optional: destructive delete */}
-                  <form action={deleteListing.bind(null, l.id)}>
-                    <button
-                      type="submit"
-                      className="inline-flex items-center px-3 py-2 rounded-xl border border-red-300 text-red-600"
+                  {/* Evaluation CTA */}
+                  {evalState === "completed" ? (
+                    <span
+                    className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border bg-green-50 text-green-700"
+                    title="This listing has been valuated"
                     >
-                      Delete
-                    </button>
-                  </form>
+                      {/* Relplace with custom icon */}
+                      <Badge></Badge>
+                    </span>
+                  ) : (
+                    <form action={startEvaluation.bind(null, l.id)}>
+                      <button
+                      type="submit"
+                      className="inline-flex items-center px-3 py-2 rounded-xl border"
+                      title="Purchase a Professional Valuation"
+                      >
+                        Get Valuation
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
             );
